@@ -1,5 +1,7 @@
 package rename;
 
+import errorHandle.ErrorHandler;
+
 import java.util.HashMap;
 
 /**
@@ -30,7 +32,41 @@ public class Rename {
         this.specialEpisodeCases = specialEpisodeCases;
     }
 
-    public void rename(){
+    /**
+     * Algorithm to rename a media file that is given.
+     * No need to return the mediaFile as only dot operators
+     * are called on the passed in mediaFile.
+     * @param mediaFile to be renamed.
+     */
+    public void rename(MediaFile mediaFile){
+        String tempFileName = mediaFile.getOriginalFileName();
+        /*Assign file extension*/
+        mediaFile.setFileExt(getFileExt(tempFileName));
+        /*Strip away everything in parentheses and brackets.*/
+        //replace everything enclosed in []
+        tempFileName = tempFileName.replaceAll("\\([^)]*\\)","");
+        //replace everything enclosed in ()
+        tempFileName = tempFileName.replaceAll("\\[[^]]*\\]","");
+        //replace all "."
+        tempFileName = tempFileName.replaceAll("\\."," ");
+        //replace all " - "
+        tempFileName = tempFileName.replaceAll("[\\s+](-)[\\s+]"," ");
+        System.out.println(tempFileName);
+    }
 
+    /**
+     * Helper method to locate the file extension.
+     * @param fileName to search for file ext in.
+     * @return file ext if found, null otherwise.
+     */
+    private static String getFileExt(String fileName){
+        String fileExt = null;
+        try{
+            int index = fileName.lastIndexOf(".");
+            fileExt = fileName.substring(index);
+        }catch (Exception e){
+            ErrorHandler.printError(e.getClass().getName() + ": " + e.getMessage());
+        }
+        return fileExt;
     }
 }

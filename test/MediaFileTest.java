@@ -7,16 +7,6 @@ import rename.MediaFile;
 public class MediaFileTest extends TestCase{
 
     /**
-     * Construct a properly formatted horribleSubs original Filename.
-     * @param mediaName of the original name.
-     * @param episodeNumber of the original name.
-     * @return horribleSubs formatted originalName.
-     */
-    private static String buildHorribleSubsOriginalName(String mediaName, String episodeNumber){
-        return String.format("[HorribleSubs] %s - %s [720p].mkv", mediaName, episodeNumber);
-    }
-
-    /**
      * Sample test that gives valid original filename and
      * supporting pre-parsed components.
      * Testing two digit episode number given.
@@ -26,7 +16,7 @@ public class MediaFileTest extends TestCase{
     public void testMediaFileParseHorribleSubsTwoDigitEpisodeNum(){
         String mediaName = "Tokyo Ghoul";
         String episodeNumber = "01";
-        String originalFilename = buildHorribleSubsOriginalName(mediaName, episodeNumber);
+        String originalFilename = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, episodeNumber);
         MediaFile testFile = new MediaFile(originalFilename);
         testFile.setMediaName(mediaName);
         testFile.setSeasonNumber("1");
@@ -48,7 +38,7 @@ public class MediaFileTest extends TestCase{
     public void testMediaFileParseHorribleSubsThreeDigitEpisodeNum(){
         String mediaName = "Tokyo Ghoul";
         String episodeNumber = "001";
-        String originalFilename = buildHorribleSubsOriginalName(mediaName, episodeNumber);
+        String originalFilename = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, episodeNumber);
         MediaFile testFile = new MediaFile(originalFilename);
         testFile.setMediaName(mediaName);
         testFile.setSeasonNumber("1");
@@ -64,7 +54,7 @@ public class MediaFileTest extends TestCase{
      */
     public void testNullMediaName(){
         String episodeNumber = "01";
-        String originalFilename = buildHorribleSubsOriginalName(null, episodeNumber);
+        String originalFilename = TestHelperMethods.buildHorribleSubsOriginalName(null, episodeNumber);
         MediaFile testFile = new MediaFile(originalFilename);
         testFile.setMediaName(null);
         testFile.setSeasonNumber("1");
@@ -80,7 +70,7 @@ public class MediaFileTest extends TestCase{
     public void testNullSeasonNumber(){
         String mediaName = "Tokyo Ghoul";
         String episodeNumber = "01";
-        String originalFilename = buildHorribleSubsOriginalName(mediaName, episodeNumber);
+        String originalFilename = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, episodeNumber);
         MediaFile testFile = new MediaFile(originalFilename);
         testFile.setMediaName(mediaName);
         testFile.setSeasonNumber(null);
@@ -95,7 +85,7 @@ public class MediaFileTest extends TestCase{
      */
     public void testNullEpisodeNumber(){
         String mediaName = "Tokyo Ghoul";
-        String originalFilename = buildHorribleSubsOriginalName(mediaName, null);
+        String originalFilename = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, null);
         MediaFile testFile = new MediaFile(originalFilename);
         testFile.setMediaName(mediaName);
         testFile.setSeasonNumber("1");
@@ -111,7 +101,7 @@ public class MediaFileTest extends TestCase{
     public void testNullFileExt(){
         String mediaName = "Tokyo Ghoul";
         String episodeNumber = "01";
-        String originalFilename = buildHorribleSubsOriginalName(mediaName, episodeNumber);
+        String originalFilename = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, episodeNumber);
         MediaFile testFile = new MediaFile(originalFilename);
         testFile.setMediaName(mediaName);
         testFile.setSeasonNumber("1");
@@ -128,7 +118,7 @@ public class MediaFileTest extends TestCase{
     public void testOriginalFileNameExists(){
         String mediaName = "Tokyo Ghoul";
         String episodeNumber = "01";
-        String originalFilename = buildHorribleSubsOriginalName(mediaName, episodeNumber);
+        String originalFilename = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, episodeNumber);
         MediaFile testFile = new MediaFile(originalFilename);
         String expectedOriginalName = "[HorribleSubs] "+mediaName+" - "+episodeNumber+" [720p].mkv";
         assertEquals(expectedOriginalName, testFile.getOriginalFileName());

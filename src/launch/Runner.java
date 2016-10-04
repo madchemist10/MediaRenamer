@@ -22,6 +22,5 @@ public class Runner {
         HashMap<String, String> specialEpisodeCases = Utilities.loadSettingsFile(Constants.SPECIAL_EP_CASES_FILE);
         /*Instantiate rename module and execute rename.*/
         Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
-        renameModule.rename();
     }
 }
