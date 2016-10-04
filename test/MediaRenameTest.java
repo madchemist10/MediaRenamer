@@ -15,13 +15,32 @@ public class MediaRenameTest extends TestCase{
     private HashMap<String, String> specialRenameCases = Utilities.loadSettingsFile(Constants.SPECIAL_RENAME_CASES_FILE);
     private HashMap<String, String> specialEpisodeCases = Utilities.loadSettingsFile(Constants.SPECIAL_EP_CASES_FILE);
 
-    public void testMediaRenameWithSimpleCase(){
+    /**
+     * Simple test case where only episode is given in the original name.
+     */
+    public void testMediaRenameWithSimpleCaseTwoDigitEp(){
         String mediaName = "Tokyo Ghoul";
         String episodeNumber = "01";
         String originalFileName = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, episodeNumber);
         MediaFile testMediaFile = new MediaFile(originalFileName);
         Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
         renameModule.rename(testMediaFile);
+        String expectedFormattedMediaFile = mediaName+" S01E"+episodeNumber+".mkv";
+        assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
+    }
+
+    /**
+     * Simple test case where only episode is given in the original name.
+     */
+    public void testMediaRenameWithSimpleCaseThreeDigitEp(){
+        String mediaName = "Tokyo Ghoul";
+        String episodeNumber = "001";
+        String originalFileName = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, episodeNumber);
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        String expectedFormattedMediaFile = mediaName+" S01E"+episodeNumber+".mkv";
+        assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
     }
 
 }
