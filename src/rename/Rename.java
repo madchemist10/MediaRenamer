@@ -123,7 +123,7 @@ public class Rename {
      */
     private static String parseEpisodeNumber(String filename){
         /*Remove all alphabetic characters and replace with empty space*/
-        String numbersOnly = filename.replaceAll("\\p{Alpha}","");
+        String numbersOnly = filename.replaceAll("[^0-9]+","");
         numbersOnly = numbersOnly.replaceAll(" ","");   //remove all spaces
         numbersOnly = numbersOnly.trim();   //remove leading/trailing spaces
         /*The episode number will be the last 2-3 digits in the filename*/
@@ -169,7 +169,7 @@ public class Rename {
      */
     private static String parseSeasonNumber(String filename){
         String defaultSeasonNumber = "01";
-        String numbersOnly = filename.replaceAll("\\p{Alpha}","");
+        String numbersOnly = filename.replaceAll("[^0-9]+","");
         numbersOnly = numbersOnly.trim();
         /*If only two numbers found, we have only episode
         * default season is "01"*/

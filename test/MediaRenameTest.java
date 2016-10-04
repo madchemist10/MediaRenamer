@@ -117,12 +117,11 @@ public class MediaRenameTest extends TestCase{
         assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
     }
 
-
     /**
      * Media rename test for testing the replacement
      * of a given title.
      */
-    public void testMediaRenameWithRenameCase(){
+    public void testMediaRenameShAaiGWithRenameCase(){
         String mediaName = "The Big Bang Theory";
         String expectedMediaName = "BBT";
         specialRenameCases.put(mediaName, expectedMediaName);
@@ -133,6 +132,38 @@ public class MediaRenameTest extends TestCase{
         Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
         renameModule.rename(testMediaFile);
         String expectedFormattedMediaFile = expectedMediaName+" S"+seasonNumber+"E"+episodeNumber+".mkv";
+        assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
+    }
+
+    /**
+     * Media rename with season number being 10.
+     */
+    public void testMediaRenameShAaiGWithSeasonNum10(){
+        String mediaName = "The Big Bang Theory";
+        String expectedMediaName = "BBT";
+        specialRenameCases.put(mediaName, expectedMediaName);
+        String episodeNumber = "01";
+        String seasonNumber = "10";
+        String originalFileName = TestHelperMethods.buildShAaiGOriginalName(mediaName, seasonNumber, episodeNumber);
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        String expectedFormattedMediaFile = expectedMediaName+" S"+seasonNumber+"E"+episodeNumber+".mkv";
+        assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
+    }
+
+    /**
+     * Sample Big Bang Theory ettv case to rename.
+     */
+    public void testETTV_BBT_Case(){
+        String mediaName = "The Big Bang Theory";
+        String expectedMediaName = "BBT";
+        specialRenameCases.put(mediaName, expectedMediaName);
+        String originalFileName = "The.Big.Bang.Theory.S10E03.HDTV.XviD-FUM[ettv].avi";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        String expectedFormattedMediaFile = "BBT S10E03.avi";
         assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
     }
 }
