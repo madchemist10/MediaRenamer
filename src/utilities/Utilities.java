@@ -32,8 +32,10 @@ public class Utilities {
         try{
             BufferedReader br = new BufferedReader(new FileReader(filepath));
             while ((line = br.readLine()) != null){
-                String[] new_data = line.split(delimiter);
-                settingsMap.put(new_data[0],new_data[1]);
+                if(!line.contains("###")) {
+                    String[] new_data = line.split(delimiter);
+                    settingsMap.put(new_data[0], new_data[1]);
+                }
             }
             br.close();
         }catch(Exception e) {

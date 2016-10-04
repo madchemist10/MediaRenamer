@@ -26,4 +26,7 @@ public class Constants {
      * x = season number formatted for two digits.
      * y = episode number formatted for two or three digits.*/
     public static final String DEFAULT_MEDIA_NAME = MEDIA_NAME+" S"+XX+"E"+YYY+"."+FILE_EXT;
+
+    /**Default rename directory key for settings file.*/
+    public static final String DEFAULT_RENAME_DIRECTORY = "DefaultRenameDir";
 }
