@@ -2,9 +2,9 @@ import junit.framework.TestCase;
 import rename.MediaFile;
 
 /**
- * Unit tests to conduct for media renamer.
+ * Unit tests to conduct for media file class..
  */
-public class testMediaRenamer extends TestCase{
+public class MediaFileTest extends TestCase{
 
     /**
      * Construct a properly formatted horribleSubs original Filename.
