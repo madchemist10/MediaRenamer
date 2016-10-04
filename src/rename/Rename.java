@@ -76,6 +76,9 @@ public class Rename {
 
         //assign media name
         mediaFile.setMediaName(tempFileName);
+
+        /*Attempt to replace current media file name with user specified filename.*/
+        exchangeFileName(mediaFile);
     }
 
     /**
@@ -181,5 +184,18 @@ public class Rename {
         }
         //could not be determined so use default.
         return defaultSeasonNumber;
+    }
+
+    /**
+     * Helper method to exchange a given filename with the
+     * user specified filename.
+     * @param mediaFile to exchange filenames with.
+     */
+    private void exchangeFileName(MediaFile mediaFile){
+        for(String originalName: specialRenameCases.keySet()){
+            if(originalName.equals(mediaFile.getMediaName())){
+                mediaFile.setMediaName(specialRenameCases.get(originalName));
+            }
+        }
     }
 }
