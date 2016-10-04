@@ -55,6 +55,12 @@ public class Rename {
         tempFileName = tempFileName.replaceAll("\\."," ");
         //replace all " - "
         tempFileName = tempFileName.replaceAll("[\\s+](-)[\\s+]"," ");
+        //replace all x### {can be x264 or x265}
+        tempFileName = tempFileName.replaceAll("[x]\\d{3}","");
+        //replace all ###p {can be 1080p}
+        tempFileName = tempFileName.replaceAll("\\d{4}[p]","");
+        //replace all ###p {can be 720p}
+        tempFileName = tempFileName.replaceAll("\\d{3}[p]","");
 
         //assign episode number to mediaFile
         String episodeNumber = parseEpisodeNumber(tempFileName);
@@ -62,6 +68,10 @@ public class Rename {
         //assign season number to mediaFile
         String seasonNumber = parseSeasonNumber(tempFileName);
         mediaFile.setSeasonNumber(seasonNumber);
+
+        /*replace all S##E## and everything after
+        * we only want to keep what is before S##E##*/
+        tempFileName = tempFileName.replaceAll("[S]\\d{2}[E]\\d{2}.+","");
 
         /*Handle special case where season could be pretexted with
         * "S"
@@ -85,6 +95,9 @@ public class Rename {
 
         /*Attempt to replace current media file name with user specified filename.*/
         exchangeFileName(mediaFile);
+
+        /*Attempt to replace current episode number with user specified one.*/
+        verifyEpisodeNumber(mediaFile);
     }
 
     /**

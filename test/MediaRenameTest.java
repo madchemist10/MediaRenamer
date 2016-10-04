@@ -100,4 +100,39 @@ public class MediaRenameTest extends TestCase{
         assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
     }
 
+    /**
+     * Simple test case where episode & season are given in the original name.
+     * Season number is first 1 digit and episode is last 2 digits.
+     * Season is denoted with S# in the original filename.
+     */
+    public void testMediaRenameWithSimpleCase3DigitE_1S(){
+        String mediaName = "Tokyo Ghoul";
+        String episodeNumber = "01";
+        String seasonNumber = "1";
+        String originalFileName = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, seasonNumber, episodeNumber);
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        String expectedFormattedMediaFile = mediaName+" S0"+seasonNumber+"E"+episodeNumber+".mkv";
+        assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
+    }
+
+
+    /**
+     * Media rename test for testing the replacement
+     * of a given title.
+     */
+    public void testMediaRenameWithRenameCase(){
+        String mediaName = "The Big Bang Theory";
+        String expectedMediaName = "BBT";
+        specialRenameCases.put(mediaName, expectedMediaName);
+        String episodeNumber = "01";
+        String seasonNumber = "01";
+        String originalFileName = TestHelperMethods.buildShAaiGOriginalName(mediaName, seasonNumber, episodeNumber);
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        String expectedFormattedMediaFile = expectedMediaName+" S"+seasonNumber+"E"+episodeNumber+".mkv";
+        assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
+    }
 }
