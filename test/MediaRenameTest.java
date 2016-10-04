@@ -166,4 +166,22 @@ public class MediaRenameTest extends TestCase{
         String expectedFormattedMediaFile = "BBT S10E03.avi";
         assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
     }
+
+    /**
+     * Rename media file with offset for episode.
+     */
+    public void testHorribleSubsWithEpisodeOffset(){
+        String mediaName = "Mobile Suit Gundam - Iron-Blooded Orphans";
+        String episodeNumber = "26";
+        String seasonNumber = "02";
+        String originalFileName = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, episodeNumber);
+        mediaName = "Mobile Suit Gundam Iron-Blooded Orphans";
+        specialEpisodeCases.put(mediaName,"S01E25");
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        episodeNumber = "01";
+        String expectedFormattedMediaFile = mediaName+" S"+seasonNumber+"E"+episodeNumber+".mkv";
+        assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
+    }
 }
