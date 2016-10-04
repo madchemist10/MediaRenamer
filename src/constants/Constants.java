@@ -8,6 +8,11 @@ public class Constants {
     public static final String LOG_FILE = "mediaRename.log";
     /**Name of the settings file read in by the system.*/
     public static final String SETTINGS_FILE = "settings.txt";
+    /**Name of the special rename file read in by the system.*/
+    public static final String SPECIAL_RENAME_CASES_FILE = "specialRename.txt";
+    /**Name of the special episode cases file read in by the system.*/
+    public static final String SPECIAL_EP_CASES_FILE = "specialEpisodes.txt";
+
     /**Find and replace var for DEFAULT_MEDIA_NAME for mediaName*/
     public static final String MEDIA_NAME = "MEDIA_NAME";
     /**Find and replace var for DEFAULT_MEDIA_NAME for season number*/
