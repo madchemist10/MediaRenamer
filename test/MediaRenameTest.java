@@ -184,4 +184,19 @@ public class MediaRenameTest extends TestCase{
         String expectedFormattedMediaFile = mediaName+" S"+seasonNumber+"E"+episodeNumber+".mkv";
         assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
     }
+
+    /**
+     * Sample Law and Order SVU ettv case to rename.
+     */
+    public void testETTV_SVU_Case(){
+        String mediaName = "Law and Order SVU";
+        String expectedMediaName = "SVU";
+        specialRenameCases.put(mediaName, expectedMediaName);
+        String originalFileName = "Law.and.Order.SVU.S18E02.WEB-DL.XviD-FUM[ettv].avi";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        String expectedFormattedMediaFile = "SVU S18E02.avi";
+        assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
+    }
 }
