@@ -5,7 +5,7 @@ import constants.Constants;
 /**
  * Representation of a media file.
  */
-public class mediaFile {
+public class MediaFile {
     /**Original filename of this media file.*/
     private final String originalFileName;
     /**Parsed media name of this media file.*/
@@ -18,11 +18,11 @@ public class mediaFile {
     private String fileExt = null;
 
     /**
-     * Create a new mediaFile object with the original
+     * Create a new MediaFile object with the original
      * filename.
      * @param originalFileName to be assigned to this media file.
      */
-    public mediaFile(String originalFileName) {
+    public MediaFile(String originalFileName) {
         this.originalFileName = originalFileName;
     }
 
