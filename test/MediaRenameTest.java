@@ -199,4 +199,20 @@ public class MediaRenameTest extends TestCase{
         String expectedFormattedMediaFile = "SVU S18E02.avi";
         assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
     }
+
+
+    /**
+     * Sample Chicago PD ettv case to rename.
+     */
+    public void testETTV_CPD_Case(){
+        String mediaName = "Chicago PD";
+        String expectedMediaName = "CPD";
+        specialRenameCases.put(mediaName, expectedMediaName);
+        String originalFileName = "Chicago.PD.S04E02.HDTV.x264-KILLERS[ettv].mkv";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        String expectedFormattedMediaFile = "CPD S04E02.mkv";
+        assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
+    }
 }
