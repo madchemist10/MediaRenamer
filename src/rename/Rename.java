@@ -168,13 +168,15 @@ public class Rename {
         * If 3 digit episode, return first number as season number.
         * If 2 digit episode, return first two numbers as season.*/
         if(numbersOnly.length() == 4){
-            String potentialEpisode = numbersOnly.substring(2);
-            if(filename.contains(potentialEpisode)){
-                return numbersOnly.substring(0,2);
-            }
-            potentialEpisode = numbersOnly.substring(1);
+            //check 3 digit first
+            String potentialEpisode = numbersOnly.substring(1);
             if(filename.contains(potentialEpisode)){
                 return numbersOnly.substring(0,1);
+            }
+            //check 2 digit next
+            potentialEpisode = numbersOnly.substring(2);
+            if(filename.contains(potentialEpisode)){
+                return numbersOnly.substring(0,2);
             }
         }
         //could not be determined so use default.
