@@ -58,12 +58,16 @@ public class Rename {
 
         //assign episode number to mediaFile
         String episodeNumber = parseEpisodeNumber(tempFileName);
-        episodeNumber = episodeNumber.trim();
         mediaFile.setEpisodeNumber(episodeNumber);
         //assign season number to mediaFile
         String seasonNumber = parseSeasonNumber(tempFileName);
-        seasonNumber = seasonNumber.trim();
         mediaFile.setSeasonNumber(seasonNumber);
+
+        /*Handle special case where season could be pretexted with
+        * "S"
+        * Need to remove S from determined mediaName*/
+        tempFileName = tempFileName.replaceAll("[S]\\d{2}",""); //"S##"
+        tempFileName = tempFileName.replaceAll("[S]\\d","");    //"S#"
 
         //remove all numbers and we then have mediaName
         tempFileName = tempFileName.replaceAll("[0-9]","");
@@ -90,10 +94,16 @@ public class Rename {
         return fileExt;
     }
 
+    /**
+     * Episode parsing from given filename.
+     * @param filename to search for episodeNumber.
+     * @return parsed episode number if exists, otherwise null.
+     */
     private static String parseEpisodeNumber(String filename){
         /*Remove all alphabetic characters and replace with empty space*/
         String numbersOnly = filename.replaceAll("\\p{Alpha}","");
-        numbersOnly = numbersOnly.trim();   //remove spaces
+        numbersOnly = numbersOnly.replaceAll(" ","");   //remove all spaces
+        numbersOnly = numbersOnly.trim();   //remove leading/trailing spaces
         /*The episode number will be the last 2-3 digits in the filename*/
         //if the length if 2, then we know we only have episodeNumber
         if(numbersOnly.length() == 2){
@@ -110,16 +120,64 @@ public class Rename {
             }
             return numbersOnly.substring(1);
         }
-        /*if the length is 4, then we know we have 2 digit episodeNumber*/
+        /*if the length is 4, we have 2 digit episode & 2 digit season or
+        * 3 digit episode & 1 digit season*/
         if(numbersOnly.length() == 4){
-            return numbersOnly;
+            //check 3 digit first
+            String potentialEpisode = numbersOnly.substring(1);
+            if(filename.contains(potentialEpisode)){
+                return potentialEpisode;
+            }
+            //check 2 digit next
+            potentialEpisode = numbersOnly.substring(2);
+            if(filename.contains(potentialEpisode)){
+                return potentialEpisode;
+            }
         }
         //any other set of numbers and something went wrong.
         return null;
     }
 
+    /**
+     * Season parsing from given filename.
+     * Worst case, parsing could not determine season number, therefore
+     * we use default case of "01"
+     * @param filename to search for seasonNumber.
+     * @return parsed season number if exists, otherwise null.
+     */
     private static String parseSeasonNumber(String filename){
+        String defaultSeasonNumber = "01";
         String numbersOnly = filename.replaceAll("\\p{Alpha}","");
-        return numbersOnly;
+        numbersOnly = numbersOnly.trim();
+        /*If only two numbers found, we have only episode
+        * default season is "01"*/
+        if(numbersOnly.length() == 2){
+            return defaultSeasonNumber;
+        }
+        /*If three numbers found, we have single digit season & 2 digit ep
+        * or 3 digit episode number.
+        * If 3 digit episode, then use default season number.*/
+        if(numbersOnly.length() == 3){
+            if(filename.contains(numbersOnly)){
+                return defaultSeasonNumber;
+            }
+            return numbersOnly.substring(0,1);
+        }
+        /*If four numbers found, we have 2 digit season & 2 digit episode
+        * or 1 digit season & 3 digit episode.
+        * If 3 digit episode, return first number as season number.
+        * If 2 digit episode, return first two numbers as season.*/
+        if(numbersOnly.length() == 4){
+            String potentialEpisode = numbersOnly.substring(2);
+            if(filename.contains(potentialEpisode)){
+                return numbersOnly.substring(0,2);
+            }
+            potentialEpisode = numbersOnly.substring(1);
+            if(filename.contains(potentialEpisode)){
+                return numbersOnly.substring(0,1);
+            }
+        }
+        //could not be determined so use default.
+        return defaultSeasonNumber;
     }
 }
