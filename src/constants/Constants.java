@@ -8,4 +8,17 @@ public class Constants {
     public static final String LOG_FILE = "mediaRename.log";
     /**Name of the settings file read in by the system.*/
     public static final String SETTINGS_FILE = "settings.txt";
+    /**Find and replace var for DEFAULT_MEDIA_NAME for mediaName*/
+    public static final String MEDIA_NAME = "MEDIA_NAME";
+    /**Find and replace var for DEFAULT_MEDIA_NAME for season number*/
+    public static final String XX = "xx";
+    /**Find and replace var for DEFAULT_MEDIA_NAME for episode number*/
+    public static final String YYY = "yyy";
+    /**Find and replace var for DEFAULT_MEDIA_NAME for file extension*/
+    public static final String FILE_EXT = "fileExt";
+    /**Default media name format.
+     * "MEDIA_NAME SxxEyyy.fileExt"
+     * x = season number formatted for two digits.
+     * y = episode number formatted for two or three digits.*/
+    public static final String DEFAULT_MEDIA_NAME = MEDIA_NAME+" S"+XX+"E"+YYY+"."+FILE_EXT;
 }
