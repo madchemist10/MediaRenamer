@@ -69,6 +69,12 @@ public class Rename {
         tempFileName = tempFileName.replaceAll("[S]\\d{2}",""); //"S##"
         tempFileName = tempFileName.replaceAll("[S]\\d","");    //"S#"
 
+        /*Handle special case where episode could be pretexted with
+        * "E"
+        * Need to remove E from determined mediaName*/
+        tempFileName = tempFileName.replaceAll("[E]\\d{2}",""); //"E##"
+        tempFileName = tempFileName.replaceAll("[E]\\d",""); //"E#"
+
         //remove all numbers and we then have mediaName
         tempFileName = tempFileName.replaceAll("[0-9]","");
         //remove prepended or trailing spaces
@@ -195,6 +201,47 @@ public class Rename {
         for(String originalName: specialRenameCases.keySet()){
             if(originalName.equals(mediaFile.getMediaName())){
                 mediaFile.setMediaName(specialRenameCases.get(originalName));
+            }
+        }
+    }
+
+    /**
+     * Verify episode number assumes the user predefined data is correct.
+     * User input should be in format of S##E## and consist of the last
+     * episode number of the given season. This allows this parser to
+     * intelligently determine if the current parsed episode number
+     * should be offset based on user specification.
+     * @param mediaFile to verify episode number with.
+     */
+    private void verifyEpisodeNumber(MediaFile mediaFile){
+        for(String originalName: specialEpisodeCases.keySet()){
+            if(originalName.equals(mediaFile.getMediaName())){
+                String episodeNumber = mediaFile.getEpisodeNumber();
+                if(episodeNumber == null){
+                    return; //cant continue if episode number not defined.
+                }
+                //get int representation of episode number
+                int epNum = Integer.parseInt(episodeNumber);
+                String seasonNumber = mediaFile.getSeasonNumber();
+                if(seasonNumber == null){
+                    return; //cant continue if season number not defined.
+                }
+                int sNum = Integer.parseInt(seasonNumber);
+                String userSpecialCase = specialEpisodeCases.get(originalName);
+                String seasonNum = userSpecialCase.replaceAll("[E]\\d{2}","");
+                String episodeNum = userSpecialCase.replaceAll("[S]\\d{2}","");
+                seasonNum = seasonNum.replaceAll("[S]","");
+                episodeNum = episodeNum.replaceAll("[E]","");
+                int userEp = Integer.parseInt(episodeNum);
+                int userS = Integer.parseInt(seasonNum);
+                /*If we have determined that the parsed season number is equal to
+                * one + the user season number,
+                * and
+                * the parsed episode number is greater than the user defined episode
+                * decrement the current defined parsed ep by the user ep*/
+                if(sNum == userS+1 && epNum > userEp){
+                    mediaFile.setEpisodeNumber(Integer.toString(epNum - userEp));
+                }
             }
         }
     }
