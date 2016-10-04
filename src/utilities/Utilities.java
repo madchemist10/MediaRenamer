@@ -3,6 +3,7 @@ package utilities;
 import errorHandle.ErrorHandler;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
 
@@ -39,5 +40,14 @@ public class Utilities {
             ErrorHandler.printError(e.getClass().getName() + ": " + e.getMessage());
         }
         return settingsMap;
+    }
+
+    /**
+     * Check if File Exists
+     * @param filePath to be checked for existence.
+     * @return true if exists, false if not exists.
+     */
+    public static boolean fileExists(String filePath){
+        return new File(filePath).exists();
     }
 }
