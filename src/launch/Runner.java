@@ -24,6 +24,7 @@ public class Runner {
             Setup.setupSettingsFile(Constants.SETTINGS_FILE);
             ErrorHandler.printOutToFile(Constants.SETTINGS_FILE, "#" + Constants.DEFAULT_RENAME_DIRECTORY + ":");
             ErrorHandler.printOutToFile(Constants.SETTINGS_FILE, "#" + Constants.DEFAULT_MAX_EPISODE_COUNT + ":");
+            ErrorHandler.printOutToFile(Constants.SETTINGS_FILE, Constants.USER_INTERACTION+": "+Constants.TRUE);
         }
 
         if(!Utilities.fileExists(Constants.SPECIAL_RENAME_CASES_FILE)) {
@@ -49,15 +50,17 @@ public class Runner {
             return;
         }
         listFiles(new File(directory).listFiles());
+        String userInteraction = settings.get(Constants.USER_INTERACTION);
         for(File file : files){
             MediaFile mediaFile = new MediaFile(file.toString());
             renameModule.rename(mediaFile);
-            boolean renamed = file.renameTo(new File(mediaFile.toString()));
-            String debugMessage = "Debug: "+mediaFile.getOriginalFileName()+
-                    " >> "+mediaFile.toString();
-            if(renamed){
-                ErrorHandler.printOutToFile(Constants.LOG_FILE,debugMessage);
+            /*If the settings file has determined that the user wants user interaction.*/
+            if(Constants.TRUE.equals(userInteraction)){
+                userDecisionOnRename(mediaFile, file);
+                continue;   //continue to next item
             }
+            Utilities.rename(file, mediaFile.toString());
+            logRename(mediaFile);
         }
     }
 
@@ -72,5 +75,45 @@ public class Runner {
             else
                 files.add(file);
         }
+    }
+
+    /**
+     * Helper method to determine rename based on user input.
+     * Allow the user to modify the filename dynamically.
+     * @param mediaFile of the media file in question to be renamed.
+     */
+    private static void userDecisionOnRename(MediaFile mediaFile, File file){
+        System.out.println(Constants.LINE_BREAK);
+        System.out.println("The rename algorithm has determined the following new name:");
+        System.out.println("Original >> "+Utilities.parseFilenameFromPath(mediaFile.getOriginalFileName()));
+        System.out.println("New >> "+Utilities.parseFilenameFromPath(mediaFile.toString()));
+        System.out.println("Is this correct? Y/N");
+        String userInput = Utilities.userInput();
+        switch(userInput){
+            case "Y":
+            case "y":
+                Utilities.rename(file, mediaFile.toString());
+                break;
+            case "N":
+            case "n":
+                System.out.println("What is the suggested rename?");
+                System.out.println("Give full name with extension?");
+                userInput = Utilities.userInput();
+                String path = Utilities.removeFilenameFromPath(mediaFile.toString());
+                Utilities.rename(file, path+userInput);
+                break;
+        }
+    }
+
+    /**
+     * Log the contents of the file that was renamed.
+     * This method should only be called when the renaming was purely from
+     * the algorithm.
+     * @param mediaFile of the file renamed.
+     */
+    private static void logRename(MediaFile mediaFile){
+        String debugMessage = "Debug: "+mediaFile.getOriginalFileName()+
+                " >> "+mediaFile.toString();
+        ErrorHandler.printOutToFile(Constants.LOG_FILE,debugMessage);
     }
 }
