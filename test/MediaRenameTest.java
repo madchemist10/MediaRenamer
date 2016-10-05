@@ -200,7 +200,6 @@ public class MediaRenameTest extends TestCase{
         assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
     }
 
-
     /**
      * Sample Chicago PD ettv case to rename.
      */
@@ -213,6 +212,37 @@ public class MediaRenameTest extends TestCase{
         Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
         renameModule.rename(testMediaFile);
         String expectedFormattedMediaFile = "CPD S04E02.mkv";
+        assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
+    }
+
+    /**
+     * Sample NCIS LA ettv case to rename.
+     */
+    public void testETTV_NCISLA_Case(){
+        String mediaName = "NCIS Los Angeles";
+        String expectedMediaName = "NCIS:LA";
+        specialRenameCases.put(mediaName, expectedMediaName);
+        String originalFileName = "NCIS.Los.Angeles.S08E03.HDTV.XviD-FUM[ettv].avi";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        String expectedFormattedMediaFile = "NCIS:LA S08E03.avi";
+        assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
+    }
+
+    /**
+     * Sample NCIS Nola ettv case to rename.
+     */
+    public void testETTV_NCISNola_Case(){
+        String mediaName = "NCIS New Orleans";
+        String expectedMediaName = "NCIS:Nola";
+        settings.put(Constants.DEFAULT_MAX_EPISODE_COUNT,"100");
+        specialRenameCases.put(mediaName, expectedMediaName);
+        String originalFileName = "ncis.new.orleans.302.hdtv-lol[ettv].mkv";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        String expectedFormattedMediaFile = "NCIS:Nola S03E02.mkv";
         assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
     }
 }

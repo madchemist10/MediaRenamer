@@ -23,6 +23,7 @@ public class Runner {
         Setup.setupSettingsFile(Constants.SETTINGS_FILE);
         if(!Utilities.fileExists(Constants.SETTINGS_FILE)) {
             ErrorHandler.printOutToFile(Constants.SETTINGS_FILE, "#" + Constants.DEFAULT_RENAME_DIRECTORY + ":");
+            ErrorHandler.printOutToFile(Constants.SETTINGS_FILE, "#" + Constants.DEFAULT_MAX_EPISODE_COUNT + ":");
         }
 
         Setup.setupSettingsFile(Constants.SPECIAL_RENAME_CASES_FILE);

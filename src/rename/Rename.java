@@ -1,5 +1,6 @@
 package rename;
 
+import constants.Constants;
 import errorHandle.ErrorHandler;
 
 import java.util.HashMap;
@@ -63,15 +64,27 @@ public class Rename {
         tempFileName = tempFileName.replaceAll("\\d{3}[p]","");
 
         //assign episode number to mediaFile
-        String episodeNumber = parseEpisodeNumber(tempFileName);
+        String UserMaxEpisodeCount = settings.get(Constants.DEFAULT_MAX_EPISODE_COUNT);
+        int maxNum = 999;
+        if(UserMaxEpisodeCount != null){
+            maxNum = Integer.parseInt(UserMaxEpisodeCount);
+        }
+        String episodeNumber = parseEpisodeNumber(tempFileName, maxNum);
         mediaFile.setEpisodeNumber(episodeNumber);
         //assign season number to mediaFile
-        String seasonNumber = parseSeasonNumber(tempFileName);
+        String seasonNumber = parseSeasonNumber(tempFileName, maxNum);
         mediaFile.setSeasonNumber(seasonNumber);
 
         /*replace all S##E## and everything after
         * we only want to keep what is before S##E##*/
         tempFileName = tempFileName.replaceAll("[S]\\d{2}[E]\\d{2}.+","");
+
+        /*replace all #### and everything after
+        * we only want to keep anything before ####*/
+        tempFileName = tempFileName.replaceAll("\\d{4}.+","");
+        /*replace all ### and everything after
+        * we only want to keep anything before ###*/
+        tempFileName = tempFileName.replaceAll("\\d{3}.+","");
 
         /*Handle special case where season could be pretexted with
         * "S"
@@ -121,7 +134,7 @@ public class Rename {
      * @param filename to search for episodeNumber.
      * @return parsed episode number if exists, otherwise null.
      */
-    private static String parseEpisodeNumber(String filename){
+    private static String parseEpisodeNumber(String filename, int maxEpisode){
         /*Remove all alphabetic characters and replace with empty space*/
         String numbersOnly = filename.replaceAll("[^0-9]+","");
         numbersOnly = numbersOnly.replaceAll(" ","");   //remove all spaces
@@ -137,8 +150,11 @@ public class Rename {
         * exact sequence exists in the original.
         * If the exact sequence exists, then we know we have only episode number*/
         if(numbersOnly.length() == 3){
-            if(filename.contains(numbersOnly)){
-                return numbersOnly;
+            /*If the current parsed digits are less than maximum  allowed for episode*/
+            if(Integer.parseInt(numbersOnly) < maxEpisode){
+                if(filename.contains(numbersOnly)){
+                    return numbersOnly;
+                }
             }
             return numbersOnly.substring(1);
         }
@@ -167,7 +183,7 @@ public class Rename {
      * @param filename to search for seasonNumber.
      * @return parsed season number if exists, otherwise null.
      */
-    private static String parseSeasonNumber(String filename){
+    private static String parseSeasonNumber(String filename, int maxEpisode){
         String defaultSeasonNumber = "01";
         String numbersOnly = filename.replaceAll("[^0-9]+","");
         numbersOnly = numbersOnly.trim();
@@ -180,8 +196,11 @@ public class Rename {
         * or 3 digit episode number.
         * If 3 digit episode, then use default season number.*/
         if(numbersOnly.length() == 3){
-            if(filename.contains(numbersOnly)){
-                return defaultSeasonNumber;
+            /*If the current parsed digits are less than maximum allowed for episode*/
+            if(Integer.parseInt(numbersOnly) < maxEpisode) {
+                if (filename.contains(numbersOnly)) {
+                    return defaultSeasonNumber;
+                }
             }
             return numbersOnly.substring(0,1);
         }
@@ -212,7 +231,7 @@ public class Rename {
      */
     private void exchangeFileName(MediaFile mediaFile){
         for(String originalName: specialRenameCases.keySet()){
-            if(originalName.equals(mediaFile.getMediaName())){
+            if(originalName.equalsIgnoreCase(mediaFile.getMediaName())){
                 mediaFile.setMediaName(specialRenameCases.get(originalName));
             }
         }

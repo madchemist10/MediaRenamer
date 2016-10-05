@@ -29,4 +29,6 @@ public class Constants {
 
     /**Default rename directory key for settings file.*/
     public static final String DEFAULT_RENAME_DIRECTORY = "DefaultRenameDir";
+    /**Default max number of episodes to account for.*/
+    public static final String DEFAULT_MAX_EPISODE_COUNT = "MaxEpisodeCount";
 }
