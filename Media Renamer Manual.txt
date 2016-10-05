@@ -1,0 +1,96 @@
+Media Renamer Manual
+Author: MadKhemist
+Date:	10-05-16
+
+This application is designed to rename media files to a strict format:
+{Title} S{SeasonNumber}E{EpisodeNumber}.{FileExtension}
+
+To achieve this goal there are three setting files:
+settings.txt
+specialEpisodes.txt
+specialRename.txt
+
+Contained within each of these files can be a series of user specified
+specific data that interacts with the core application.
+All data inputted into these three setting files should be in the
+format of:
+{key}: {value}
+
+The keys used in the settings.txt file are pre-defined when the application
+runs for the first time (which will always fail).
+
+If a line is no longer needed but the user does not want to delete the line:
+prepend the line with "###".
+
+The default lines added to the settings files have only one "#" prepending them,
+this is to denote which lines must be defined for the application to run correctly.
+
+*************************************************
+settings.txt
+The possible flags for the settings file are:
+DefaultRenameDir
+DefaultCopyDir
+MaxEpisodeCount
+UserInteraction
+CopyFiles
+
+All flags must be given a value except:
+MaxExpisodeCount
+
+>>DefaultRenameDir
+	This is the directory the applicaition will point to for renaming files.
+>>DefaultCopyDir
+	This is the directory the applicaition will point to for copying files.
+>>MaxEpisodeCount
+	This is the maximum number of episodes that the user would like for
+	the application to recognize.
+	Valid values are any integer within the range [0-999].
+>>UserInteraction
+	This is a "TRUE"/"FALSE" flag that determines if the user would like to
+	run the program with GUI or without GUI. If the user chooses to run the
+	program without GUI, whatever values the algorithm determines will be 
+	be what the program acts upon. If the user chooses to run the program with
+	a GUI, the user will have a choice on each episode on if they would like
+	to override what the algorithm has determined.
+>>CopyFiles
+	This is a "TRUE"/"FALSE" flag that determiens if the user would like to copy
+	files to the defined {DefaultCopyDir} after the renaming has been completed.
+
+*************************************************
+specialEpisodes.txt
+
+This file is for the special edge cases where the user would like to rename
+their files different than the normal algorithm would determine the outcome,
+but based soley on the difference in episode numbers.
+Example:
+	If the user's file was resolved by the unmodified algorithm to be:
+		{title} S01E26.{fileExt}
+	and the user wanted this to be the first episode of S02, the user
+	should enter into this file (on a new line):
+		{title}: S01E25
+	This will denote that the first season associated with this title
+	only contained 25 episodes; therefore, should have an offset of 25.
+
+Example2:
+	If the user's file was resolved by the unmodified algorithm to be:
+		{title} S02E13.{fileExt}
+	and the user wanted this to be the first episode of S02, the user
+	should enter into this file (on a new line):
+		{title}: S01E12
+	This will denote that the first season associated with this title
+	only contained 12 episodes; therefore, should have an offset of 12.
+
+*************************************************
+specialRename.txt
+
+This file is for the special edge cases where the user would like to rename
+their files different than the normal algorithm would determine the outcome,
+but based soley on the difference in the title of the show.
+Example:
+	If the user's file was resolved by the unmodified algorithm to be:
+		{title} S01E01.{fileExt}
+	and the user wanted this to be the a different title than reported by
+	the algorithm, the user should enter into this file (on a new line):
+		{original title}: {new title}
+	This will denote that if the {original title} is extracted during the
+	renaming process, replace it with the {new title} found in this file.
