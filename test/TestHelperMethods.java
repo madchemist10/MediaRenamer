@@ -117,6 +117,7 @@ class TestHelperMethods {
         ErrorHandler.printOutToFile(testDirectory+"\\"+Constants.SETTINGS_FILE, Constants.DEFAULT_RENAME_DIRECTORY + ": "+testDirectory+"\\test");
         ErrorHandler.printOutToFile(testDirectory+"\\"+Constants.SETTINGS_FILE, Constants.DEFAULT_COPY_DIRECTORY + ": "+testDirectory+"\\copy");
         ErrorHandler.printOutToFile(testDirectory+"\\"+Constants.SETTINGS_FILE, Constants.USER_INTERACTION+": "+Constants.FALSE);
+        ErrorHandler.printOutToFile(testDirectory+"\\"+Constants.SETTINGS_FILE, Constants.COPY_FILES_FLAG+": "+Constants.TRUE);
         Setup.setupSettingsFile(testDirectory+"\\"+Constants.SPECIAL_EP_CASES_FILE);
         Setup.setupSettingsFile(testDirectory+"\\"+Constants.SPECIAL_RENAME_CASES_FILE);
     }
