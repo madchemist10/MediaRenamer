@@ -20,18 +20,19 @@ public class Runner {
 
     public static void main(String[] args) {
         /*Setup working directory.*/
-        Setup.setupSettingsFile(Constants.SETTINGS_FILE);
         if(!Utilities.fileExists(Constants.SETTINGS_FILE)) {
+            Setup.setupSettingsFile(Constants.SETTINGS_FILE);
             ErrorHandler.printOutToFile(Constants.SETTINGS_FILE, "#" + Constants.DEFAULT_RENAME_DIRECTORY + ":");
             ErrorHandler.printOutToFile(Constants.SETTINGS_FILE, "#" + Constants.DEFAULT_MAX_EPISODE_COUNT + ":");
         }
 
-        Setup.setupSettingsFile(Constants.SPECIAL_RENAME_CASES_FILE);
         if(!Utilities.fileExists(Constants.SPECIAL_RENAME_CASES_FILE)) {
+            Setup.setupSettingsFile(Constants.SPECIAL_RENAME_CASES_FILE);
             ErrorHandler.printOutToFile(Constants.SPECIAL_RENAME_CASES_FILE, "###OriginalName: NewName");
         }
-        Setup.setupSettingsFile(Constants.SPECIAL_EP_CASES_FILE);
+
         if(!Utilities.fileExists(Constants.SPECIAL_EP_CASES_FILE)) {
+            Setup.setupSettingsFile(Constants.SPECIAL_EP_CASES_FILE);
             ErrorHandler.printOutToFile(Constants.SPECIAL_EP_CASES_FILE, "### S##E## where S## is last season, E## is last ep of S##");
             ErrorHandler.printOutToFile(Constants.SPECIAL_EP_CASES_FILE, "###OriginalName: S##E##");
         }
