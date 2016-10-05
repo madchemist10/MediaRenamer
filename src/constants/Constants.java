@@ -36,6 +36,9 @@ public class Constants {
     public static final String DEFAULT_MAX_EPISODE_COUNT = "MaxEpisodeCount";
     /**Settings header to determine if user interaction is desired.*/
     public static final String USER_INTERACTION = "UserInteraction";
+    /**Settings header to determine if the user would like their files copied.*/
+    public static final String COPY_FILES_FLAG = "CopyFiles";
+
     /**String representation of "true" for setting flags in settings files.*/
     public static final String TRUE = "TRUE";
     /**String representation of "false" for setting flags in settings files.*/
