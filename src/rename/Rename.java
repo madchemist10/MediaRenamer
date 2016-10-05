@@ -120,11 +120,13 @@ public class Rename {
      */
     private static String getFileExt(String fileName){
         String fileExt = null;
-        try{
+        if(fileName.contains(".")) {
             int index = fileName.lastIndexOf(".");
-            fileExt = fileName.substring(index+1);  //we don't want the dot
-        }catch (Exception e){
-            ErrorHandler.printError(e.getClass().getName() + ": " + e.getMessage());
+            /*Ensure valid file extension of length 3*/
+            String tempFileExt = fileName.substring(index + 1);  //we don't want the dot
+            if(tempFileExt.length() == 3) {
+                fileExt = tempFileExt;
+            }
         }
         return fileExt;
     }
@@ -255,6 +257,7 @@ public class Rename {
                 //get int representation of episode number
                 int epNum = Integer.parseInt(episodeNumber);
                 String seasonNumber = mediaFile.getSeasonNumber();
+                //should never be null, reason why unit tests do not hit this return
                 if(seasonNumber == null){
                     return; //cant continue if season number not defined.
                 }

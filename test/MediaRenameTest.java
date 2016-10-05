@@ -288,4 +288,62 @@ public class MediaRenameTest extends TestCase{
         String expectedFormattedMediaFile = expectedMediaName+" S00E"+episodeNumber+".mkv";
         assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
     }
+
+    /**
+     * Test to attempt rename with no season or episode numbers.
+     */
+    public void testMediaRenameNoNumbers(){
+        String mediaName = "Tokyo Ghoul";
+        String episodeNumber = "";
+        String originalFileName = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, episodeNumber);
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertNull(testMediaFile.toString());
+    }
+
+    /**
+     * Test to attempt rename with no season or episode numbers.
+     * Settings file are configured.
+     */
+    public void testMediaRenameNoNumbersWithSettingsFile(){
+        String mediaName = "Tokyo Ghoul";
+        specialEpisodeCases.put(mediaName, "S01");
+        String episodeNumber = "";
+        String originalFileName = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, episodeNumber);
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertNull(testMediaFile.toString());
+    }
+
+    /**
+     * Test to attempt rename with no file ext.
+     */
+    public void testMediaRenameNoFileExt(){
+        String mediaName = "Tokyo Ghoul";
+        String episodeNumber = "01";
+        String originalFileName = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, episodeNumber);
+        originalFileName = originalFileName.replaceAll("[.mkv]",""); //remove file ext
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertNull(testMediaFile.toString());
+    }
+
+    /**
+     * Test to attempt rename with no file ext.
+     * Filename has all spaces replaced with "."
+     */
+    public void testMediaRenameNoFileExt_MultipleDot(){
+        String mediaName = "Tokyo Ghoul";
+        String episodeNumber = "01";
+        String originalFileName = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, episodeNumber);
+        originalFileName = originalFileName.replaceAll("[.mkv]",""); //remove file ext
+        originalFileName = originalFileName.replaceAll(" ",".");    //replace all space with "."
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertNull(testMediaFile.toString());
+    }
 }
