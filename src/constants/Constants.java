@@ -31,4 +31,12 @@ public class Constants {
     public static final String DEFAULT_RENAME_DIRECTORY = "DefaultRenameDir";
     /**Default max number of episodes to account for.*/
     public static final String DEFAULT_MAX_EPISODE_COUNT = "MaxEpisodeCount";
+    /**Settings header to determine if user interaction is desired.*/
+    public static final String USER_INTERACTION = "UserInteraction";
+    /**String representation of "true" for setting flags in settings files.*/
+    public static final String TRUE = "TRUE";
+    /**String representation of "false" for setting flags in settings files.*/
+    public static final String FALSE = "FALSE";
+    /**Used to divide media files in output to screen.*/
+    public static final String LINE_BREAK = "-----------------------------";
 }
