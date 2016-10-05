@@ -416,4 +416,20 @@ public class MediaRenameTest extends TestCase{
         String expectedFormattedMediaFile = expectedMediaName+" S0"+seasonNumber+"E"+episodeNumber+".mkv";
         assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
     }
+
+    /**
+     * Test with path prepended on filename, path contains numbers.
+     * Special case replacement.
+     */
+    public void testMediaRenameWithPath_Replace_AllLower(){
+        String filepath = "Z:\\Need to Watch\\Rename\\Blue.Bloods.S06E19.HDTV.x264-LOL[ettv]\\";
+        String originalFileName = "blue bloods  hdtv-lol S06E19.mp4";
+        String completePath = filepath+originalFileName;
+        specialRenameCases.put("blue bloods", "Blue Bloods");
+        MediaFile testMediaFile = new MediaFile(completePath);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        String expectedFormattedMediaFile = filepath+"Blue Bloods S06E19.mp4";
+        assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
+    }
 }

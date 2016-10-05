@@ -124,6 +124,20 @@ public class Rename {
         /*Attempt to replace current media file name with user specified filename.*/
         exchangeFileName(mediaFile);
 
+        /*if the name changed, means it was exchanged and do not do replacement
+        * if name not changed, perform replacement.*/
+        if(tempFileName.equals(mediaFile.getMediaName())){
+            filename = Utilities.parseFilenameFromPath(tempFileName);
+            filename = filename.trim();
+            /*if there is a "  " {double space} followed by a character and
+            * other characters, remove everything following the "  "{Alpha}*/
+            filename = filename.replaceAll("\\s{2}\\p{Alpha}.+","");
+            filename = filename.replaceAll("\\s{2}\\p{Alpha}","");
+            mediaFile.setMediaName(path+filename);
+            //attempt to re-exchange the filename
+            exchangeFileName(mediaFile);
+        }
+
         /*Attempt to replace current episode number with user specified one.*/
         verifyEpisodeNumber(mediaFile);
     }
@@ -254,7 +268,7 @@ public class Rename {
             String path = "";
             String tempPath = Utilities.removeFilenameFromPath(mediaFile.getMediaName());
             if(tempPath.length()>0){
-                path = tempPath+"\\";
+                path = tempPath;
             }
             if(originalName.equalsIgnoreCase(filename)){
                 mediaFile.setMediaName(path+specialRenameCases.get(originalName));
