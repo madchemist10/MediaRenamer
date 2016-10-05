@@ -10,14 +10,14 @@ import java.io.PrintWriter;
  * Responsible for setting up working directory with supporting
  * settings files.
  */
-class Setup {
+public class Setup {
 
     /**
      * Generate a new copy of the specified settings file.
      * Only build new if doesn't already exist.
      * @param filePath file to generate.
      */
-    static void setupSettingsFile(String filePath){
+    public static void setupSettingsFile(String filePath){
         try {
             if(Utilities.fileExists(filePath))
                 return;
