@@ -245,4 +245,47 @@ public class MediaRenameTest extends TestCase{
         String expectedFormattedMediaFile = "NCIS:Nola S03E02.mkv";
         assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
     }
+
+    /**
+     * Test case with number that is not episode or season
+     * contained within title.
+     * Using rename case and episode case, exchange can be done.
+     */
+    public void testMediaRenameWithSimpleCaseNumberInTitle(){
+        settings.put(Constants.DEFAULT_MAX_EPISODE_COUNT, "100");
+        String mediaName = "Danganronpa 3 - Despair Arc";
+        String expectedMediaName = "Danganronpa 3 The End of Kibougamine Gakuen - Zetsubou-hen";
+        String episodeNumber = "01";
+        String originalFileName = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, episodeNumber);
+        mediaName = "Danganronpa  Despair Arc";
+        specialRenameCases.put(mediaName, expectedMediaName);
+        specialEpisodeCases.put(expectedMediaName, "S01");
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        String expectedFormattedMediaFile = expectedMediaName+" S01E"+episodeNumber+".mkv";
+        assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
+    }
+
+    /**
+     * Test case with number that is not episode or season
+     * contained within title.
+     * Using rename case and episode case, exchange can be done.
+     * Season number is 00 to account for special episode.
+     */
+    public void testMediaRenameWithSimpleCaseNumberInTitleExchangeWithE00(){
+        settings.put(Constants.DEFAULT_MAX_EPISODE_COUNT, "100");
+        String mediaName = "Danganronpa 3 - Hope Arc";
+        String expectedMediaName = "Danganronpa 3 The End of Kibougamine Gakuen - Kibou-hen";
+        String episodeNumber = "01";
+        String originalFileName = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, episodeNumber);
+        mediaName = "Danganronpa  Hope Arc";
+        specialRenameCases.put(mediaName, expectedMediaName);
+        specialEpisodeCases.put(expectedMediaName, "S00");
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        String expectedFormattedMediaFile = expectedMediaName+" S00E"+episodeNumber+".mkv";
+        assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
+    }
 }

@@ -264,6 +264,11 @@ public class Rename {
                 String episodeNum = userSpecialCase.replaceAll("[S]\\d{2}","");
                 seasonNum = seasonNum.replaceAll("[S]","");
                 episodeNum = episodeNum.replaceAll("[E]","");
+                /*Account for when S## is given for a specific title in the config settings.*/
+                if(episodeNum.equals("") && !seasonNum.equals("")){
+                    mediaFile.setSeasonNumber(seasonNum);
+                    return;
+                }
                 int userEp = Integer.parseInt(episodeNum);
                 int userS = Integer.parseInt(seasonNum);
                 /*If we have determined that the parsed season number is equal to
