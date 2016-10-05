@@ -10,7 +10,6 @@ import utilities.Utilities;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.ErrorManager;
 
 /**
  * Top level class that kicks off the media rename application.
@@ -40,10 +39,14 @@ public class Runner {
             ErrorHandler.printOutToFile(Constants.SPECIAL_EP_CASES_FILE, "###OriginalName: S##E##");
         }
 
+        String offset = "";
+        if(args.length != 0){
+            offset = args[0]+"\\";
+        }
         /*Read in settings values.*/
-        HashMap<String, String> settings = Utilities.loadSettingsFile(Constants.SETTINGS_FILE);
-        HashMap<String, String> specialRenameCases = Utilities.loadSettingsFile(Constants.SPECIAL_RENAME_CASES_FILE);
-        HashMap<String, String> specialEpisodeCases = Utilities.loadSettingsFile(Constants.SPECIAL_EP_CASES_FILE);
+        HashMap<String, String> settings = Utilities.loadSettingsFile(offset+Constants.SETTINGS_FILE);
+        HashMap<String, String> specialRenameCases = Utilities.loadSettingsFile(offset+Constants.SPECIAL_RENAME_CASES_FILE);
+        HashMap<String, String> specialEpisodeCases = Utilities.loadSettingsFile(offset+Constants.SPECIAL_EP_CASES_FILE);
         /*Instantiate rename module and execute rename.*/
         Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
         String directory = settings.get(Constants.DEFAULT_RENAME_DIRECTORY);
