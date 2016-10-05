@@ -50,6 +50,10 @@ public class Copy {
         /*Build the complete destination path.*/
         String dest = newPath+"\\"+filename;
 
+        /*Need to create the directory if it does not exist.*/
+        if(!Utilities.fileExists(newPath)) {
+            Utilities.makeDirectory(newPath);
+        }
         /*Execute the copy command.*/
         Utilities.copyFile(mediaFile.toString(),dest);
     }
