@@ -5,6 +5,8 @@ import errorHandle.ErrorHandler;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -98,5 +100,27 @@ public class Utilities {
             temp+=splitPath[i]+"\\";
         }
         return temp;
+    }
+
+    /**
+     * Copy File from one location to another
+     * @param src of where the current file lives.
+     * @param dest of where the file should live.
+     */
+    public static void copyFile(String src, String dest){
+        try {
+            Files.copy(Paths.get(src), Paths.get(dest));
+        }catch(Exception e){
+            ErrorHandler.printError(e.getClass().getName() + ": " + e.getMessage());
+        }
+    }
+
+    /**
+     * Make directory
+     * @param directoryPath to make
+     * @return true if directory was made successfully, false on error.
+     */
+    public static boolean makeDirectory(String directoryPath){
+        return new File(directoryPath).mkdir();
     }
 }
