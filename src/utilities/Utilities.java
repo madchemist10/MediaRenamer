@@ -123,4 +123,28 @@ public class Utilities {
     public static boolean makeDirectory(String directoryPath){
         return new File(directoryPath).mkdir();
     }
+
+
+    /**
+     * Delete File from given location
+     * @param src of where the current file lives.
+     */
+    public static void deleteFile(String src){
+        File file = new File(src);
+        deleteDir(file);
+    }
+
+    /**
+     * Recursive call to delete every element in a file structure.
+     * @param file root level to delete at.
+     */
+    private static void deleteDir(File file) {
+        File[] contents = file.listFiles();
+        if (contents != null) {
+            for (File f : contents) {
+                deleteDir(f);
+            }
+        }
+        file.delete();
+    }
 }
