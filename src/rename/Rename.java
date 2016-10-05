@@ -266,7 +266,8 @@ public class Rename {
      */
     private void verifyEpisodeNumber(MediaFile mediaFile){
         for(String originalName: specialEpisodeCases.keySet()){
-            if(originalName.equals(mediaFile.getMediaName())){
+            String filename = Utilities.parseFilenameFromPath(mediaFile.getMediaName());
+            if(originalName.equals(filename)){
                 String episodeNumber = mediaFile.getEpisodeNumber();
                 if(episodeNumber == null){
                     return; //cant continue if episode number not defined.

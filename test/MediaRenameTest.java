@@ -379,4 +379,22 @@ public class MediaRenameTest extends TestCase{
         String expectedFormattedMediaFile = mediaName+" S"+seasonNumber+"E"+episodeNumber+".mkv";
         assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
     }
+
+    /**
+     * Rename media file with offset for episode.
+     * Season is season 2.
+     * Also prepend file path to beginning.
+     */
+    public void testHorribleSubsWithEpOffset_S2_FilePath(){
+        String mediaName = "Bungou Stray Dogs";
+        String seasonNumber = "02";
+        String originalFileName = "C:\\Test\\[HorribleSubs] Bungou Stray Dogs S2 - 13 [720p].mkv";
+        specialEpisodeCases.put(mediaName,"S01E12");
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        String episodeNumber = "01";
+        String expectedFormattedMediaFile = "C:\\Test\\"+mediaName+" S"+seasonNumber+"E"+episodeNumber+".mkv";
+        assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
+    }
 }
