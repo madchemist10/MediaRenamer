@@ -296,8 +296,10 @@ public class Rename {
                 * and
                 * the parsed episode number is greater than the user defined episode
                 * decrement the current defined parsed ep by the user ep*/
-                if(sNum == userS && epNum > userEp){
+                if(epNum > userEp){
                     mediaFile.setEpisodeNumber(Integer.toString(epNum - userEp));
+                }
+                if(sNum == userS){
                     mediaFile.setSeasonNumber(Integer.toString(userS+1));
                 }
             }
