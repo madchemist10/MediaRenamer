@@ -26,6 +26,7 @@ public class Runner {
             ErrorHandler.printOutToFile(Constants.SETTINGS_FILE, "#" + Constants.DEFAULT_COPY_DIRECTORY + ":");
             ErrorHandler.printOutToFile(Constants.SETTINGS_FILE, "#" + Constants.DEFAULT_MAX_EPISODE_COUNT + ":");
             ErrorHandler.printOutToFile(Constants.SETTINGS_FILE, Constants.USER_INTERACTION+": "+Constants.TRUE);
+            ErrorHandler.printOutToFile(Constants.SETTINGS_FILE, Constants.COPY_FILES_FLAG+": "+Constants.FALSE);
         }
 
         if(!Utilities.fileExists(Constants.SPECIAL_RENAME_CASES_FILE)) {
@@ -67,16 +68,20 @@ public class Runner {
             Utilities.rename(file, mediaFile.toString());
             logRename(mediaFile);
         }
-        //Begin move
-        /*Instantiate copy module and execute copy*/
-        Copy copyModule = new Copy(settings);
-        /*Remove all files in the list*/
-        files.clear();
-        listFiles(new File(directory).listFiles());
-        for(File file : files){
-            MediaFile mediaFile = new MediaFile(file.toString());
-            renameModule.rename(mediaFile);
-            copyModule.copy(mediaFile);
+
+        String copyFlag = settings.get(Constants.COPY_FILES_FLAG);
+        if(Constants.TRUE.equals(copyFlag)) {
+            //Begin move
+            /*Instantiate copy module and execute copy*/
+            Copy copyModule = new Copy(settings);
+            /*Remove all files in the list*/
+            files.clear();
+            listFiles(new File(directory).listFiles());
+            for (File file : files) {
+                MediaFile mediaFile = new MediaFile(file.toString());
+                renameModule.rename(mediaFile);
+                copyModule.copy(mediaFile);
+            }
         }
     }
 
