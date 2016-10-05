@@ -1,3 +1,6 @@
+import constants.Constants;
+import errorHandle.ErrorHandler;
+import launch.Setup;
 import utilities.Utilities;
 
 import java.io.IOException;
@@ -48,26 +51,22 @@ class TestHelperMethods {
 
     /**
      * Build the test directory
+     * @param testDirectory of root level.
+     * @param max of number of iteration or number of files to generate.
+     * @param title of the show that we are generating.
      */
-    static void generateTestDirectory(int max){
-        String testDirectory = "TestDir";
+    static void generateTestDirectory(String testDirectory, int max, String title){
         Utilities.makeDirectory(testDirectory);
-        String title = "Tokyo Ghoul";
+        Utilities.makeDirectory(testDirectory+"\\copy");
+        testDirectory += "\\test";
+        Utilities.makeDirectory(testDirectory);
         for(int i = 1; i <= max; i++){
             String episodeNumber = String.format("%2d", i).replace(" ","0");
             String originalFilename = TestHelperMethods.buildHorribleSubsOriginalName(title,episodeNumber);
             try {
-                Files.createFile(Paths.get(testDirectory+"\\"+originalFilename));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        title = "Mobile Suit Gundam - Iron-Blooded Orphans";
-        for(int i = 1; i <= max; i++){
-            String episodeNumber = String.format("%2d", i).replace(" ","0");
-            String originalFilename = TestHelperMethods.buildHorribleSubsOriginalName(title,episodeNumber);
-            try {
-                Files.createFile(Paths.get(testDirectory+"\\"+originalFilename));
+                if(!Utilities.fileExists(testDirectory+"\\"+originalFilename)) {
+                    Files.createFile(Paths.get(testDirectory + "\\" + originalFilename));
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -76,9 +75,24 @@ class TestHelperMethods {
 
     /**
      * Remove the test directory
+     * @param testDirectory of root level.
      */
-    static void destroyTestDirectory(){
-        String testDirectory = "TestDir";
-        Utilities.deleteFile(testDirectory);
+    static void destroyTestDirectory(String testDirectory){
+        Utilities.deleteFile(testDirectory+"\\test");
+        Utilities.deleteFile(testDirectory+"\\copy");
+    }
+
+    /**
+     * Generate settings files to be used in testing.
+     * Recreate if deleted.
+     * @param testDirectory root level of where we are working from.
+     */
+    static void generateTestSettingsFiles(String testDirectory){
+        Setup.setupSettingsFile(testDirectory+"\\"+Constants.SETTINGS_FILE);
+        ErrorHandler.printOutToFile(testDirectory+"\\"+Constants.SETTINGS_FILE, Constants.DEFAULT_RENAME_DIRECTORY + ": "+testDirectory+"\\test");
+        ErrorHandler.printOutToFile(testDirectory+"\\"+Constants.SETTINGS_FILE, Constants.DEFAULT_COPY_DIRECTORY + ": "+testDirectory+"\\copy");
+        ErrorHandler.printOutToFile(testDirectory+"\\"+Constants.SETTINGS_FILE, Constants.USER_INTERACTION+": "+Constants.FALSE);
+        Setup.setupSettingsFile(testDirectory+"\\"+Constants.SPECIAL_EP_CASES_FILE);
+        Setup.setupSettingsFile(testDirectory+"\\"+Constants.SPECIAL_RENAME_CASES_FILE);
     }
 }
