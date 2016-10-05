@@ -108,7 +108,7 @@ public class Rename {
         if(path.length()>0) {
             String filename = Utilities.parseFilenameFromPath(tempFileName);
             filename = filename.trim();
-            tempFileName = path + "\\" + filename;
+            tempFileName = path + filename;
         }
 
         //remove prepended or trailing spaces

@@ -346,4 +346,20 @@ public class MediaRenameTest extends TestCase{
         renameModule.rename(testMediaFile);
         assertNull(testMediaFile.toString());
     }
+
+    /**
+     * Test to test renaming when there is a filepath involved.
+     */
+    public void testRenameWithFilePath(){
+        String filepath = "C:\\Test\\";
+        String mediaName = "Tokyo Ghoul";
+        String episodeNumber = "01";
+        String originalFileName = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, episodeNumber);
+        String completePath = filepath+originalFileName;
+        MediaFile testMediaFile = new MediaFile(completePath);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        String expectedFormattedMediaFile = filepath+mediaName+" S01E"+episodeNumber+".mkv";
+        assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
+    }
 }
