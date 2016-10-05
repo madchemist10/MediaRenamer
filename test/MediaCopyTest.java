@@ -44,10 +44,29 @@ public class MediaCopyTest extends TestCase {
         String testDir = defaultTestDir;
         TestHelperMethods.generateTestSettingsFiles(testDir);
         String title = "Tokyo Ghoul";
-        TestHelperMethods.generateTestDirectory(testDir,1, title);
+        TestHelperMethods.generateTestDirectory(testDir,1, 1, title, TestHelperMethods.FORMATS.HORRIBLESUBS);
         Runner.main(new String[]{defaultTestDir});
         boolean tokyoGhoulS01E01Exists = Utilities.fileExists(testDir+"\\copy\\"+title+"\\"+title+" S01E01.mkv");
         assertTrue(tokyoGhoulS01E01Exists);
+        TestHelperMethods.destroyTestDirectory(testDir);
+    }
+
+
+    /**
+     * Test the copying of a 3 files of the same season.
+     */
+    public void testCopy3Files_SameSeason(){
+        String testDir = defaultTestDir;
+        TestHelperMethods.generateTestSettingsFiles(testDir);
+        String title = "Tokyo Ghoul";
+        int episodeMax = 3;
+        TestHelperMethods.generateTestDirectory(testDir, episodeMax, 1, title, TestHelperMethods.FORMATS.HORRIBLESUBS);
+        Runner.main(new String[]{defaultTestDir});
+        for(int i = 1; i <= episodeMax; i++) {
+            String episodeNumber = String.format("%2d", i).replace(" ","0");
+            boolean fileExists = Utilities.fileExists(testDir + "\\copy\\" + title + "\\" + title + " S01E"+episodeNumber+".mkv");
+            assertTrue(fileExists);
+        }
         TestHelperMethods.destroyTestDirectory(testDir);
     }
 }

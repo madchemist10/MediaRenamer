@@ -12,6 +12,15 @@ import java.nio.file.Paths;
 class TestHelperMethods {
 
     /**
+     * Enum to represent possible formats that can be generated.
+     */
+    public enum FORMATS{
+        HORRIBLESUBS,
+        ETTV,
+        SHAAIG
+    }
+
+    /**
      * Construct a properly formatted horribleSubs original Filename.
      * @param mediaName of the original name.
      * @param episodeNumber of the original name.
@@ -52,17 +61,33 @@ class TestHelperMethods {
     /**
      * Build the test directory
      * @param testDirectory of root level.
-     * @param max of number of iteration or number of files to generate.
+     * @param maxEp of number of iteration or number of files to generate.
+     * @param season of the show to generate, only used if nonAnime.
      * @param title of the show that we are generating.
+     * @param format of the show that is to be generated, Must be from enum.
      */
-    static void generateTestDirectory(String testDirectory, int max, String title){
+    static void generateTestDirectory(String testDirectory, int maxEp, int season, String title, FORMATS format){
         Utilities.makeDirectory(testDirectory);
         Utilities.makeDirectory(testDirectory+"\\copy");
         testDirectory += "\\test";
         Utilities.makeDirectory(testDirectory);
-        for(int i = 1; i <= max; i++){
+        String seasonNumber = String.format("%2d", season).replace(" ","0");
+        for(int i = 1; i <= maxEp; i++){
             String episodeNumber = String.format("%2d", i).replace(" ","0");
-            String originalFilename = TestHelperMethods.buildHorribleSubsOriginalName(title,episodeNumber);
+            String originalFilename = null;
+            switch(format){
+                case HORRIBLESUBS:
+                    originalFilename = TestHelperMethods.buildHorribleSubsOriginalName(title,episodeNumber);
+                    break;
+                case SHAAIG:
+                    originalFilename = TestHelperMethods.buildShAaiGOriginalName(title,seasonNumber, episodeNumber);
+                    break;
+                case ETTV:
+                    break;
+            }
+            if(originalFilename == null){
+                return;
+            }
             try {
                 if(!Utilities.fileExists(testDirectory+"\\"+originalFilename)) {
                     Files.createFile(Paths.get(testDirectory + "\\" + originalFilename));
