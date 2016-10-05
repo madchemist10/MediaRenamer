@@ -1,11 +1,14 @@
 package utilities;
 
+import constants.Constants;
 import errorHandle.ErrorHandler;
+import rename.MediaFile;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.Scanner;
 
 /**
  * Utility class to contain helper methods needed throughout
@@ -51,5 +54,51 @@ public class Utilities {
      */
     public static boolean fileExists(String filePath){
         return new File(filePath).exists();
+    }
+
+    /**
+     * Retrieve user input for a given task.
+     * @return String representation of the user's input.
+     */
+    public static String userInput(){
+        Scanner input = new Scanner(System.in);
+        return input.nextLine();
+    }
+
+    /**
+     * Perform the renaming of a given file to the .toString() of the
+     * media file. Output to log file for logging.
+     * @param file of the original file to be renamed.
+     * @param newFilename of the newly found rename.
+     * @return true if rename successful, false if failure
+     */
+    public static boolean rename(File file, String newFilename){
+        return file.renameTo(new File(newFilename));
+    }
+
+    /**
+     * Retrieve the filename portion of the path that is given.
+     * @param path to retrieve filename from.
+     * @return filename parsed from path.
+     */
+    public static String parseFilenameFromPath(String path){
+        String forwardSlash = "\\\\";
+        String[] splitPath = path.split(forwardSlash);
+        return splitPath[splitPath.length-1];
+    }
+
+    /**
+     * Parse the filename from the path.
+     * @param path to remove filename from.
+     * @return path without filename at end.
+     */
+    public static String removeFilenameFromPath(String path){
+        String forwardSlash = "\\\\";
+        String[] splitPath = path.split(forwardSlash);
+        String temp = "";
+        for(int i = 0; i < splitPath.length-1; i++){
+            temp+=splitPath[i]+"\\";
+        }
+        return temp;
     }
 }
