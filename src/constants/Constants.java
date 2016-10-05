@@ -29,6 +29,9 @@ public class Constants {
 
     /**Default rename directory key for settings file.*/
     public static final String DEFAULT_RENAME_DIRECTORY = "DefaultRenameDir";
+    /**Default copy directory key for settings file. This is where
+     * files will be moved to when they are renamed.*/
+    public static final String DEFAULT_COPY_DIRECTORY = "DefaultCopyDir";
     /**Default max number of episodes to account for.*/
     public static final String DEFAULT_MAX_EPISODE_COUNT = "MaxEpisodeCount";
     /**Settings header to determine if user interaction is desired.*/
