@@ -2,6 +2,7 @@ package rename;
 
 import constants.Constants;
 import errorHandle.ErrorHandler;
+import utilities.Utilities;
 
 import java.util.HashMap;
 
@@ -100,6 +101,16 @@ public class Rename {
 
         //remove all numbers and we then have mediaName
         tempFileName = tempFileName.replaceAll("[0-9]","");
+
+        //tempFileName could have path appended to filename
+        String path = Utilities.removeFilenameFromPath(tempFileName);
+        path = path.trim();
+        if(path.length()>0) {
+            String filename = Utilities.parseFilenameFromPath(tempFileName);
+            filename = filename.trim();
+            tempFileName = path + "\\" + filename;
+        }
+
         //remove prepended or trailing spaces
         tempFileName = tempFileName.trim();
 
@@ -233,8 +244,14 @@ public class Rename {
      */
     private void exchangeFileName(MediaFile mediaFile){
         for(String originalName: specialRenameCases.keySet()){
-            if(originalName.equalsIgnoreCase(mediaFile.getMediaName())){
-                mediaFile.setMediaName(specialRenameCases.get(originalName));
+            String filename = Utilities.parseFilenameFromPath(mediaFile.getMediaName());
+            String path = "";
+            String tempPath = Utilities.removeFilenameFromPath(mediaFile.getMediaName());
+            if(tempPath.length()>0){
+                path = tempPath+"\\";
+            }
+            if(originalName.equalsIgnoreCase(filename)){
+                mediaFile.setMediaName(path+specialRenameCases.get(originalName));
             }
         }
     }
