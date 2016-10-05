@@ -42,6 +42,14 @@ public class Rename {
      */
     public void rename(MediaFile mediaFile){
         String tempFileName = mediaFile.getOriginalFileName();
+
+        //tempFileName could have path appended to filename
+        String path = Utilities.removeFilenameFromPath(tempFileName);
+        path = path.trim();
+
+        String filename = Utilities.parseFilenameFromPath(tempFileName);
+        tempFileName = filename.trim();
+
         /*Assign file extension*/
         mediaFile.setFileExt(getFileExt(tempFileName));
         //remove file extension from temp filename
@@ -102,17 +110,13 @@ public class Rename {
         //remove all numbers and we then have mediaName
         tempFileName = tempFileName.replaceAll("[0-9]","");
 
-        //tempFileName could have path appended to filename
-        String path = Utilities.removeFilenameFromPath(tempFileName);
-        path = path.trim();
-        if(path.length()>0) {
-            String filename = Utilities.parseFilenameFromPath(tempFileName);
-            filename = filename.trim();
-            tempFileName = path + filename;
-        }
-
         //remove prepended or trailing spaces
         tempFileName = tempFileName.trim();
+
+        //join the path back to the original if we should do so
+        if(path.length()>0) {
+            tempFileName = path + tempFileName;
+        }
 
         //assign media name
         mediaFile.setMediaName(tempFileName);
@@ -148,6 +152,7 @@ public class Rename {
      * @return parsed episode number if exists, otherwise null.
      */
     private static String parseEpisodeNumber(String filename, int maxEpisode){
+        filename = Utilities.parseFilenameFromPath(filename);
         /*Remove all alphabetic characters and replace with empty space*/
         String numbersOnly = filename.replaceAll("[^0-9]+","");
         numbersOnly = numbersOnly.replaceAll(" ","");   //remove all spaces
@@ -197,6 +202,7 @@ public class Rename {
      * @return parsed season number if exists, otherwise null.
      */
     private static String parseSeasonNumber(String filename, int maxEpisode){
+        filename = Utilities.parseFilenameFromPath(filename);
         String defaultSeasonNumber = "01";
         String numbersOnly = filename.replaceAll("[^0-9]+","");
         numbersOnly = numbersOnly.trim();
