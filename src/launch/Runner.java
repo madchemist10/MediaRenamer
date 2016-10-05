@@ -1,6 +1,7 @@
 package launch;
 
 import constants.Constants;
+import copy.Copy;
 import errorHandle.ErrorHandler;
 import rename.MediaFile;
 import rename.Rename;
@@ -23,6 +24,7 @@ public class Runner {
         if(!Utilities.fileExists(Constants.SETTINGS_FILE)) {
             Setup.setupSettingsFile(Constants.SETTINGS_FILE);
             ErrorHandler.printOutToFile(Constants.SETTINGS_FILE, "#" + Constants.DEFAULT_RENAME_DIRECTORY + ":");
+            ErrorHandler.printOutToFile(Constants.SETTINGS_FILE, "#" + Constants.DEFAULT_COPY_DIRECTORY + ":");
             ErrorHandler.printOutToFile(Constants.SETTINGS_FILE, "#" + Constants.DEFAULT_MAX_EPISODE_COUNT + ":");
             ErrorHandler.printOutToFile(Constants.SETTINGS_FILE, Constants.USER_INTERACTION+": "+Constants.TRUE);
         }
@@ -61,6 +63,17 @@ public class Runner {
             }
             Utilities.rename(file, mediaFile.toString());
             logRename(mediaFile);
+        }
+        //Begin move
+        /*Instantiate copy module and execute copy*/
+        Copy copyModule = new Copy(settings);
+        /*Remove all files in the list*/
+        files.clear();
+        listFiles(new File(directory).listFiles());
+        for(File file : files){
+            MediaFile mediaFile = new MediaFile(file.toString());
+            renameModule.rename(mediaFile);
+            copyModule.copy(mediaFile);
         }
     }
 
