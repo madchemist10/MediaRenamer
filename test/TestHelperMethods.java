@@ -17,7 +17,8 @@ class TestHelperMethods {
     public enum FORMATS{
         HORRIBLESUBS,
         ETTV,
-        SHAAIG
+        SHAAIG,
+        ANIMERG
     }
 
     /**
@@ -41,6 +42,15 @@ class TestHelperMethods {
         return String.format("[HorribleSubs] %s - S%s %s [720p].mkv", mediaName, seasonNumber ,episodeNumber);
     }
 
+    /**
+     * Construct a properly formatted animeRG original Filename.
+     * @param mediaName of the original name.
+     * @param episodeNumber of the original name.
+     * @return animeRG formatted originalName.
+     */
+    static String buildAnimeRGOriginalName(String mediaName, String episodeNumber){
+        return String.format("[AnimeRG] %s - %s [1080p][HEVC][TheBiscuitMan].mkv", mediaName, episodeNumber);
+    }
 
     /**
      * Construct a properly formatted ShAaNiG original Filename.
@@ -77,12 +87,15 @@ class TestHelperMethods {
             String originalFilename = null;
             switch(format){
                 case HORRIBLESUBS:
-                    originalFilename = TestHelperMethods.buildHorribleSubsOriginalName(title,episodeNumber);
+                    originalFilename = TestHelperMethods.buildHorribleSubsOriginalName(title, episodeNumber);
                     break;
                 case SHAAIG:
-                    originalFilename = TestHelperMethods.buildShAaiGOriginalName(title,seasonNumber, episodeNumber);
+                    originalFilename = TestHelperMethods.buildShAaiGOriginalName(title, seasonNumber, episodeNumber);
                     break;
                 case ETTV:
+                    break;
+                case ANIMERG:
+                    originalFilename = TestHelperMethods.buildAnimeRGOriginalName(title, episodeNumber);
                     break;
             }
             if(originalFilename == null){

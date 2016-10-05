@@ -397,4 +397,23 @@ public class MediaRenameTest extends TestCase{
         String expectedFormattedMediaFile = "C:\\Test\\"+mediaName+" S"+seasonNumber+"E"+episodeNumber+".mkv";
         assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
     }
+
+    /**
+     * Simple test case where episode & season are given in the original name.
+     * Season number is first 1 digit and episode is last 2 digits.
+     * Season is denoted with S# in the original filename.
+     */
+    public void testMediaRenameWithSimpleCaseAnimeRG(){
+        String mediaName = "Alderamin on the Sky";
+        String episodeNumber = "12";
+        String seasonNumber = "1";
+        String originalFileName = TestHelperMethods.buildAnimeRGOriginalName(mediaName, episodeNumber);
+        String expectedMediaName = "Nejimaki Seirei Senki Tenkyou no Alderamin";
+        specialRenameCases.put(mediaName,expectedMediaName);
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        String expectedFormattedMediaFile = expectedMediaName+" S0"+seasonNumber+"E"+episodeNumber+".mkv";
+        assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
+    }
 }
