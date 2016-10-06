@@ -57,9 +57,9 @@ public class Rename {
         //remove prepended or trailing spaces
         tempFileName = tempFileName.trim();
         /*Strip away everything in parentheses and brackets.*/
-        //replace everything enclosed in []
-        tempFileName = tempFileName.replaceAll("\\([^)]*\\)","");
         //replace everything enclosed in ()
+        tempFileName = tempFileName.replaceAll("\\([^)]*\\)","");
+        //replace everything enclosed in []
         tempFileName = tempFileName.replaceAll("\\[[^]]*\\]","");
         //replace all "."
         tempFileName = tempFileName.replaceAll("\\."," ");
