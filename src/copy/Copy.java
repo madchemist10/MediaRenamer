@@ -4,6 +4,7 @@ import constants.Constants;
 import rename.MediaFile;
 import utilities.Utilities;
 
+import java.io.File;
 import java.util.HashMap;
 
 /**
@@ -54,12 +55,15 @@ public class Copy {
         if(!Utilities.fileExists(newPath)) {
             Utilities.makeDirectory(newPath);
         }
+        long originalFileSize = new File(mediaFile.toString()).length();
         /*Execute the copy command.*/
         Utilities.copyWithProgress(mediaFile.toString(),dest);
 
-        /*If the transferred file exists, and the original
+        long copiedFileSize = new File(dest).length();
+        /*If the transferred file exists and the file size
+        * is equal to the original, and the original
         * still exists, delete the original.*/
-        if(Utilities.fileExists(dest)) {
+        if(Utilities.fileExists(dest) && originalFileSize == copiedFileSize) {
             if (Utilities.fileExists(mediaFile.toString())) {
                 Utilities.deleteFile(mediaFile.toString());
             }
