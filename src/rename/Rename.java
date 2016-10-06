@@ -64,13 +64,11 @@ public class Rename {
         //replace all "."
         tempFileName = tempFileName.replaceAll("\\."," ");
         //replace all " - "
-        tempFileName = tempFileName.replaceAll("[\\s+](-)[\\s+]"," ");
+        tempFileName = tempFileName.replaceAll("\\s+(-)\\s+"," ");
         //replace all x### {can be x264 or x265}
-        tempFileName = tempFileName.replaceAll("[x]\\d{3}","");
-        //replace all ###p {can be 1080p}
-        tempFileName = tempFileName.replaceAll("\\d{4}[p]","");
-        //replace all ###p {can be 720p}
-        tempFileName = tempFileName.replaceAll("\\d{3}[p]","");
+        tempFileName = tempFileName.replaceAll("x\\d{3}","");
+        //replace all ####p {can be 1080p, or 720p}
+        tempFileName = tempFileName.replaceAll("\\d{3,4}p","");
 
         //assign episode number to mediaFile
         String UserMaxEpisodeCount = settings.get(Constants.DEFAULT_MAX_EPISODE_COUNT);
@@ -86,26 +84,21 @@ public class Rename {
 
         /*replace all S##E## and everything after
         * we only want to keep what is before S##E##*/
-        tempFileName = tempFileName.replaceAll("[S]\\d{2}[E]\\d{2}.+","");
+        tempFileName = tempFileName.replaceAll("S\\d{2}E\\d{2}.+","");
 
         /*replace all #### and everything after
         * we only want to keep anything before ####*/
-        tempFileName = tempFileName.replaceAll("\\d{4}.+","");
-        /*replace all ### and everything after
-        * we only want to keep anything before ###*/
-        tempFileName = tempFileName.replaceAll("\\d{3}.+","");
+        tempFileName = tempFileName.replaceAll("\\d{3,4}.+","");
 
         /*Handle special case where season could be pretexted with
         * "S"
         * Need to remove S from determined mediaName*/
-        tempFileName = tempFileName.replaceAll("[S]\\d{2}",""); //"S##"
-        tempFileName = tempFileName.replaceAll("[S]\\d","");    //"S#"
+        tempFileName = tempFileName.replaceAll("[S]\\d{1,2}",""); //"S##"
 
         /*Handle special case where episode could be pretexted with
         * "E"
         * Need to remove E from determined mediaName*/
-        tempFileName = tempFileName.replaceAll("[E]\\d{2}",""); //"E##"
-        tempFileName = tempFileName.replaceAll("[E]\\d",""); //"E#"
+        tempFileName = tempFileName.replaceAll("[E]\\d{1,2}",""); //"E##"
 
         //remove all numbers and we then have mediaName
         tempFileName = tempFileName.replaceAll("[0-9]","");
