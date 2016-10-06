@@ -55,7 +55,7 @@ public class Copy {
             Utilities.makeDirectory(newPath);
         }
         /*Execute the copy command.*/
-        Utilities.copyFile(mediaFile.toString(),dest);
+        Utilities.copyWithProgress(mediaFile.toString(),dest);
 
         /*If the transferred file exists, and the original
         * still exists, delete the original.*/
