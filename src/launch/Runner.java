@@ -81,6 +81,11 @@ public class Runner {
                 MediaFile mediaFile = new MediaFile(file.toString());
                 renameModule.rename(mediaFile);
                 copyModule.copy(mediaFile);
+                /*Let the user know where the file was stored.*/
+                String filename = Utilities.parseFilenameFromPath(mediaFile.toString());
+                String path = Utilities.removeFilenameFromPath(mediaFile.toString());
+                String folder = Utilities.parseFilenameFromPath(path);
+                System.out.println("File copied: "+filename+" to dir: {CopyDir}\\"+folder);
             }
         }
     }
@@ -107,7 +112,7 @@ public class Runner {
         System.out.println(Constants.LINE_BREAK);
         System.out.println("The rename algorithm has determined the following new name:");
         System.out.println("Original >> "+Utilities.parseFilenameFromPath(mediaFile.getOriginalFileName()));
-        System.out.println("New >> "+Utilities.parseFilenameFromPath(mediaFile.toString()));
+        System.out.println("New      >> "+Utilities.parseFilenameFromPath(mediaFile.toString()));
         System.out.println("Is this correct? Y/N");
         String userInput = Utilities.userInput();
         switch(userInput){
