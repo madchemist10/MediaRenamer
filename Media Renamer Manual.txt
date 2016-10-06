@@ -2,9 +2,20 @@ Media Renamer Manual
 Author: MadKhemist
 Date:	10-05-16
 
+Overview:
 This application is designed to rename media files to a strict format:
 {Title} S{SeasonNumber}E{EpisodeNumber}.{FileExtension}
 
+
+Table of Contents:
+1.  Settings
+2.  Rename Module
+3.  Copy Module
+
+
+=========================
+=       Settings        =
+=========================
 To achieve this goal there are three setting files:
 settings.txt
 specialEpisodes.txt
@@ -35,12 +46,12 @@ UserInteraction
 CopyFiles
 
 All flags must be given a value except:
-MaxExpisodeCount
+MaxEpisodeCount
 
 >>DefaultRenameDir
-	This is the directory the applicaition will point to for renaming files.
+	This is the directory the application will point to for renaming files.
 >>DefaultCopyDir
-	This is the directory the applicaition will point to for copying files.
+	This is the directory the application will point to for copying files.
 >>MaxEpisodeCount
 	This is the maximum number of episodes that the user would like for
 	the application to recognize.
@@ -53,7 +64,7 @@ MaxExpisodeCount
 	a GUI, the user will have a choice on each episode on if they would like
 	to override what the algorithm has determined.
 >>CopyFiles
-	This is a "TRUE"/"FALSE" flag that determiens if the user would like to copy
+	This is a "TRUE"/"FALSE" flag that determines if the user would like to copy
 	files to the defined {DefaultCopyDir} after the renaming has been completed.
 
 *************************************************
@@ -61,7 +72,7 @@ specialEpisodes.txt
 
 This file is for the special edge cases where the user would like to rename
 their files different than the normal algorithm would determine the outcome,
-but based soley on the difference in episode numbers.
+but based solely on the difference in episode numbers.
 Example:
 	If the user's file was resolved by the unmodified algorithm to be:
 		{title} S01E26.{fileExt}
@@ -85,7 +96,7 @@ specialRename.txt
 
 This file is for the special edge cases where the user would like to rename
 their files different than the normal algorithm would determine the outcome,
-but based soley on the difference in the title of the show.
+but based solely on the difference in the title of the show.
 Example:
 	If the user's file was resolved by the unmodified algorithm to be:
 		{title} S01E01.{fileExt}
@@ -94,3 +105,28 @@ Example:
 		{original title}: {new title}
 	This will denote that if the {original title} is extracted during the
 	renaming process, replace it with the {new title} found in this file.
+
+
+==============================
+=       Rename Module        =
+==============================
+
+The rename module is the executable section that attempts to determine
+how to rename the media file in the format of {title} S{sNum}E{eNum}.{fileExt}.
+
+============================
+=       Copy Module        =
+============================
+
+The copy module is the executable section that attempts to copy a renamed
+file from the source directory specified in the settings file, to the destination
+folder specified in the settings file.
+Example:
+    File Renamed = {src}\{title} S{sNum}E{eNum}.{fileExt}
+    Copied to = {copyDir}\{title}\{title} S{sNum}E{eNum}.{fileExt}
+
+The file will be placed in a subfolder of the {copyDir} with the name of the folder
+being the same as the {title} of the media file.
+
+After the copy has completed, if the file that should exist in the destination,
+exists, then the original file is deleted.
