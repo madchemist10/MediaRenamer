@@ -5,6 +5,7 @@ import errorHandle.ErrorHandler;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -126,10 +127,11 @@ public class Utilities {
 
 
     /**
-     * Delete File from given location
-     * @param src of where the current file lives.
+     * Delete Folder from given location.
+     * Remove folder and all containing files.
+     * @param src of where the current folder lives.
      */
-    public static void deleteFile(String src){
+    public static void deleteFolder(String src){
         File file = new File(src);
         deleteDir(file);
     }
@@ -146,5 +148,17 @@ public class Utilities {
             }
         }
         file.delete();
+    }
+
+    /**
+     * Delete file from given location
+     * @param src of where the current file lives
+     */
+    public static void deleteFile(String src){
+        try {
+            Files.delete(Paths.get(src));
+        } catch (IOException e) {
+            ErrorHandler.printError(e.getClass().getName() + ": " + e.getMessage());
+        }
     }
 }
