@@ -46,8 +46,7 @@ public class MediaCopyTest extends TestCase {
         String title = "Tokyo Ghoul";
         TestHelperMethods.generateTestDirectory(testDir,1, 1, title, TestHelperMethods.FORMATS.HORRIBLESUBS);
         Runner.main(new String[]{defaultTestDir});
-        boolean tokyoGhoulS01E01Exists = Utilities.fileExists(testDir+"\\copy\\"+title+"\\"+title+" S01E01.mkv");
-        assertTrue(tokyoGhoulS01E01Exists);
+        assertTrue(Utilities.fileExists(testDir+"\\copy\\"+title+"\\"+title+" S01E01.mkv"));
         TestHelperMethods.destroyTestDirectory(testDir);
     }
 
@@ -64,9 +63,25 @@ public class MediaCopyTest extends TestCase {
         Runner.main(new String[]{defaultTestDir});
         for(int i = 1; i <= episodeMax; i++) {
             String episodeNumber = String.format("%2d", i).replace(" ","0");
-            boolean fileExists = Utilities.fileExists(testDir + "\\copy\\" + title + "\\" + title + " S01E"+episodeNumber+".mkv");
-            assertTrue(fileExists);
+            assertTrue(Utilities.fileExists(testDir + "\\copy\\" + title + "\\" + title + " S01E"+episodeNumber+".mkv"));
         }
+        TestHelperMethods.destroyTestDirectory(testDir);
+    }
+
+    /**
+     * Test the copying of a single file.
+     * Test deletion of original file and existence of new.
+     */
+    public void testCopySingleFile_DeleteOriginal(){
+        String testDir = defaultTestDir;
+        TestHelperMethods.generateTestSettingsFiles(testDir);
+        String title = "Tokyo Ghoul";
+        TestHelperMethods.generateTestDirectory(testDir,1, 1, title, TestHelperMethods.FORMATS.HORRIBLESUBS);
+        Runner.main(new String[]{defaultTestDir});
+        //new file exists
+        assertTrue(Utilities.fileExists(testDir+"\\copy\\"+title+"\\"+title+" S01E01.mkv"));
+        //old file does not exist
+        assertTrue(!Utilities.fileExists(testDir+"\\test\\"+title+" S01E01.mkv"));
         TestHelperMethods.destroyTestDirectory(testDir);
     }
 }

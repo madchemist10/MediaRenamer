@@ -56,5 +56,13 @@ public class Copy {
         }
         /*Execute the copy command.*/
         Utilities.copyFile(mediaFile.toString(),dest);
+
+        /*If the transferred file exists, and the original
+        * still exists, delete the original.*/
+        if(Utilities.fileExists(dest)) {
+            if (Utilities.fileExists(mediaFile.toString())) {
+                Utilities.deleteFile(mediaFile.toString());
+            }
+        }
     }
 }

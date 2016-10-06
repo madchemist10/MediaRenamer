@@ -116,8 +116,8 @@ class TestHelperMethods {
      * @param testDirectory of root level.
      */
     static void destroyTestDirectory(String testDirectory){
-        Utilities.deleteFile(testDirectory+"\\test");
-        Utilities.deleteFile(testDirectory+"\\copy");
+        Utilities.deleteFolder(testDirectory+"\\test");
+        Utilities.deleteFolder(testDirectory+"\\copy");
     }
 
     /**
