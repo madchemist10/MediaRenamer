@@ -45,4 +45,6 @@ public class Constants {
     public static final String FALSE = "FALSE";
     /**Used to divide media files in output to screen.*/
     public static final String LINE_BREAK = "-----------------------------";
+    /**Default byte buffer size for copying data.*/
+    public static final int DEFAULT_BYTE_BUFFER_SIZE = 4096;
 }
