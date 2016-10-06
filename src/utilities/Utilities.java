@@ -1,11 +1,9 @@
 package utilities;
 
+import constants.Constants;
 import errorHandle.ErrorHandler;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -114,6 +112,82 @@ public class Utilities {
         }catch(Exception e){
             ErrorHandler.printError(e.getClass().getName() + ": " + e.getMessage());
         }
+    }
+
+    /**
+     * Get Input Stream
+     * @param filePath of where to retrieve input stream from.
+     * @return FileInputStream of the filePath
+     */
+    public static FileInputStream getInputStream(String filePath){
+        FileInputStream inputStream;
+        try{
+            inputStream = new FileInputStream(filePath);
+        }catch(Exception e){
+            ErrorHandler.printError(e.getClass().getName() + ": " + e.getMessage());
+            return null;
+        }
+        return inputStream;
+    }
+
+    /**
+     * Get Output Stream
+     * @param filePath of where to retrieve output stream from.
+     * @return FileOutputStream of the filePath
+     */
+    public static FileOutputStream getOutputStream(String filePath){
+        FileOutputStream outputStream;
+        try{
+            outputStream = new FileOutputStream(filePath);
+        }catch(Exception e){
+            ErrorHandler.printError(e.getClass().getName() + ": " + e.getMessage());
+            return null;
+        }
+        return outputStream;
+    }
+
+    /**
+     * Copy File from one location to another with progress.
+     * @param src of where the current file lives.
+     * @param dest of where the file should live.
+     */
+    public static void copyWithProgress(String src, String dest){
+        File srcFile = new File(src);
+        long fileSize = srcFile.length();
+        FileInputStream srcStream = getInputStream(src);
+        FileOutputStream destStream = getOutputStream(dest);
+        if (srcStream == null || destStream == null)
+            return;
+        byte[] byteBuffer = new byte[Constants.DEFAULT_BYTE_BUFFER_SIZE];
+        try {
+            int bytesRead;
+            long totalBytesRead = 0;
+            while ((bytesRead = srcStream.read(byteBuffer, 0, byteBuffer.length)) != -1) {
+                totalBytesRead+=bytesRead;
+                destStream.write(byteBuffer,0,bytesRead);
+                double percentComplete = ((double)totalBytesRead/(double)fileSize)*100;
+                String output = String.format("%.0f",percentComplete);
+                writeToCMD(""+output+"%\r");
+                byteBuffer = new byte[Constants.DEFAULT_BYTE_BUFFER_SIZE];
+            }
+        }catch(Exception e){
+            ErrorHandler.printError(e.getClass().getName() + ": " + e.getMessage());
+        }
+        try{
+            srcStream.close();
+            destStream.close();
+        }catch(Exception e){
+            ErrorHandler.printError(e.getClass().getName() + ": " + e.getMessage());
+        }
+        System.out.println("Transfer complete.");
+    }
+
+    /**
+     * Output data to standard out in command prompt.
+     * @param output of string to send to cmd.
+     */
+    public static void writeToCMD(String output) throws Exception{
+        System.out.print(output);
     }
 
     /**
