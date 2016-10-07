@@ -432,4 +432,29 @@ public class MediaRenameTest extends TestCase{
         String expectedFormattedMediaFile = filepath+"Blue Bloods S06E19.mp4";
         assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
     }
+
+    /**
+     * Test a media entry that is already renamed.
+     * Path precedes the media file.
+     */
+    public void testMediaRenameFileAlreadyRenamed_WithPath(){
+        String filepath = "C:\\test\\Tokyo Ghoul\\";
+        String originalFileName = "Tokyo Ghoul S01E01.mkv";
+        String completePath = filepath+originalFileName;
+        MediaFile testMediaFile = new MediaFile(completePath);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals(completePath, testMediaFile.toString());
+    }
+
+    /**
+     * Test a media entry that is already renamed.
+     */
+    public void testMediaRenameFileAlreadyRenamed(){
+        String originalFileName = "Tokyo Ghoul S01E01.mkv";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals(originalFileName, testMediaFile.toString());
+    }
 }
