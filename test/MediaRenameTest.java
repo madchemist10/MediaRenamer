@@ -457,4 +457,15 @@ public class MediaRenameTest extends TestCase{
         renameModule.rename(testMediaFile);
         assertEquals(originalFileName, testMediaFile.toString());
     }
+
+    /**
+     * Test for parsing the year from a movie.
+     */
+    public void testMediaRenameMovieFileCorrectOutput(){
+        String originalFileName = "Movie 1999.mkv";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals(originalFileName, testMediaFile.toString());
+    }
 }

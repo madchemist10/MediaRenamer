@@ -4,6 +4,9 @@ import constants.Constants;
 import errorHandle.ErrorHandler;
 import utilities.Utilities;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -78,9 +81,14 @@ public class Rename {
         }
         String episodeNumber = parseEpisodeNumber(tempFileName, maxNum);
         mediaFile.setEpisodeNumber(episodeNumber);
+
         //assign season number to mediaFile
         String seasonNumber = parseSeasonNumber(tempFileName, maxNum);
         mediaFile.setSeasonNumber(seasonNumber);
+
+        //assign year to mediaFile
+        String year = parseYear(tempFileName);
+        mediaFile.setYear(year);
 
         /*replace all S##E## and everything after
         * we only want to keep what is before S##E##*/
@@ -248,6 +256,39 @@ public class Rename {
         }
         //could not be determined so use default.
         return defaultSeasonNumber;
+    }
+
+    /**
+     * Helper method to parse the year from a given filename.
+     * @param filename to have year parsed from.
+     * @return year parsed from the filename.
+     */
+    private static String parseYear(String filename){
+        filename = Utilities.parseFilenameFromPath(filename);
+        String numbersOnly = filename.replaceAll("[^0-9]+","");
+        numbersOnly = numbersOnly.trim();
+        /*All numbers in filename equal to 4, we have potentially found a year.*/
+        if(numbersOnly.length() == 4){
+            if(filename.contains(numbersOnly)){
+                if(validateYear(numbersOnly)) {
+                    return numbersOnly;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Helper method to validate that the given year
+     * value is after 1950 and value is this year or earlier.
+     * @param year to validate.
+     * @return true if 1950 < year <= currentYear; false otherwise
+     */
+    private static boolean validateYear(String year){
+        int yearVal = Integer.parseInt(year);
+        Calendar now = Calendar.getInstance();
+        int currentYear = now.get(Calendar.YEAR);
+        return yearVal > 1950 && yearVal <= currentYear;
     }
 
     /**

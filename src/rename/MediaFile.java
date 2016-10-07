@@ -16,6 +16,8 @@ public class MediaFile {
     private String seasonNumber = null;
     /**Parsed fileExt of this media file.*/
     private String fileExt = null;
+    /**Parsed year for this media file. Only used in movie cases.*/
+    private String year = null;
 
     /**
      * Create a new MediaFile object with the original
@@ -59,6 +61,14 @@ public class MediaFile {
     }
 
     /**
+     * Assign new value to this media file's year.
+     * @param year to be assigned to this media file.
+     */
+    void setYear(String year) {
+        this.year = year;
+    }
+
+    /**
      * Retrieve this media file's original filename.
      * @return the original file name for this media file.
      */
@@ -80,7 +90,7 @@ public class MediaFile {
      * If not null, format for either 3 digit or 2 digit episode number.
      * @return formatted episode number for this media file.
      */
-    public String getEpisodeNumber() {
+    String getEpisodeNumber() {
         if(episodeNumber == null){
             return null;
         }
@@ -98,7 +108,7 @@ public class MediaFile {
      * If not null, format for 2 digit season number.
      * @return formatted season number for this media file.
      */
-    public String getSeasonNumber() {
+    String getSeasonNumber() {
         if(seasonNumber == null){
             return null;
         }
@@ -109,8 +119,16 @@ public class MediaFile {
      * Retrieve this media file's file ext.
      * @return the parsed fileExt of this media file.
      */
-    public String getFileExt() {
+    String getFileExt() {
         return fileExt;
+    }
+
+    /**
+     * Retrieve this media file's year.
+     * @return the parsed year of this media file.
+     */
+    private String getYear() {
+        return year;
     }
 
     /**
@@ -120,7 +138,7 @@ public class MediaFile {
      */
     @Override
     public String toString() {
-        if(getMediaName() != null && getSeasonNumber() != null && getEpisodeNumber() != null && getFileExt() != null){
+        if(getMediaName() != null && getSeasonNumber() != null && getEpisodeNumber() != null && getFileExt() != null && getYear() == null){
             String preBuiltMedia = Constants.DEFAULT_MEDIA_NAME;
             preBuiltMedia = preBuiltMedia.replace(Constants.MEDIA_NAME, getMediaName());
             preBuiltMedia = preBuiltMedia.replace(Constants.XX, getSeasonNumber());
@@ -128,7 +146,13 @@ public class MediaFile {
             preBuiltMedia = preBuiltMedia.replace(Constants.FILE_EXT, getFileExt());
             return preBuiltMedia;
         }
+        if(getMediaName() != null && getFileExt() != null && getYear() != null){
+            String preBuiltMedia = Constants.DEFAULT_MEDIA_NAME;
+            preBuiltMedia = preBuiltMedia.replace(Constants.MEDIA_NAME, getMediaName());
+            preBuiltMedia = preBuiltMedia.replace("S"+Constants.XX+"E"+Constants.YYY, getYear());
+            preBuiltMedia = preBuiltMedia.replace(Constants.FILE_EXT, getFileExt());
+            return preBuiltMedia;
+        }
         return null;
     }
-
 }
