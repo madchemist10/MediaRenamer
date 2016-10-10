@@ -516,4 +516,20 @@ public class MediaRenameTest extends TestCase{
         renameModule.rename(testMediaFile);
         assertEquals(path+"2 Broke Girls S03E22.mkv", testMediaFile.toString());
     }
+
+    /**
+     * Test media rename when replacement and episode are
+     * given. If Season is 1 from algorithm and and
+     * season 1 is what we want, but episodes need offset,
+     * we given settings S00E{offset}
+     */
+    public void testMediaRename_EpisodeReplacement(){
+        String originalFileName = "Bubuki Buranki - 14.mkv";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        specialRenameCases.put("Bubuki Buranki","Bubuki Buranki Hoshi no Kyojin");
+        specialEpisodeCases.put("Bubuki Buranki Hoshi no Kyojin","S00E12");
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("Bubuki Buranki Hoshi no Kyojin S01E02.mkv", testMediaFile.toString());
+    }
 }
