@@ -15,6 +15,11 @@ public class MediaRenameTest extends TestCase{
     private HashMap<String, String> specialRenameCases = Utilities.loadSettingsFile(Constants.SPECIAL_RENAME_CASES_FILE);
     private HashMap<String, String> specialEpisodeCases = Utilities.loadSettingsFile(Constants.SPECIAL_EP_CASES_FILE);
 
+    public void setUp() throws Exception{
+        settings.put(Constants.DEFAULT_MAX_EPISODE_COUNT, "100");
+        super.setUp();
+    }
+
     /**
      * Simple test case where only episode is given in the original name.
      * Episode is three digits long.
@@ -236,7 +241,6 @@ public class MediaRenameTest extends TestCase{
     public void testETTV_NCISNola_Case(){
         String mediaName = "NCIS New Orleans";
         String expectedMediaName = "NCIS:Nola";
-        settings.put(Constants.DEFAULT_MAX_EPISODE_COUNT,"100");
         specialRenameCases.put(mediaName, expectedMediaName);
         String originalFileName = "ncis.new.orleans.302.hdtv-lol[ettv].mkv";
         MediaFile testMediaFile = new MediaFile(originalFileName);
@@ -253,7 +257,6 @@ public class MediaRenameTest extends TestCase{
      * Attempt to have algorithm process based on maximum episode count permitted.
      */
     public void testMediaRenameWithSimpleCaseNumberInTitle_MAX_EP_COUNT(){
-        settings.put(Constants.DEFAULT_MAX_EPISODE_COUNT, "100");
         String mediaName = "Danganronpa 3 - Despair Arc";
         String expectedMediaName = "Danganronpa 3 The End of Kibougamine Gakuen - Zetsubou-hen";
         String episodeNumber = "01";
@@ -295,7 +298,6 @@ public class MediaRenameTest extends TestCase{
      * Season number is 00 to account for special episode.
      */
     public void testMediaRenameWithSimpleCaseNumberInTitleExchangeWithE00(){
-        settings.put(Constants.DEFAULT_MAX_EPISODE_COUNT, "100");
         String mediaName = "Danganronpa 3 - Hope Arc";
         String expectedMediaName = "Danganronpa 3 The End of Kibougamine Gakuen - Kibou-hen";
         String episodeNumber = "01";
