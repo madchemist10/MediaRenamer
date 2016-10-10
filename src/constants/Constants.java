@@ -12,6 +12,8 @@ public class Constants {
     public static final String SPECIAL_RENAME_CASES_FILE = "specialRename.txt";
     /**Name of the special episode cases file read in by the system.*/
     public static final String SPECIAL_EP_CASES_FILE = "specialEpisodes.txt";
+    /**Name of the media division file read in and wrote to by system.*/
+    public static final String MEDIA_DIVISION_FILE = "mediaDivision.txt";
 
     /**Find and replace var for DEFAULT_MEDIA_NAME for mediaName*/
     public static final String MEDIA_NAME = "MEDIA_NAME";
@@ -38,6 +40,9 @@ public class Constants {
     public static final String USER_INTERACTION = "UserInteraction";
     /**Settings header to determine if the user would like their files copied.*/
     public static final String COPY_FILES_FLAG = "CopyFiles";
+    /**Settings header to determine if the user would like the copied output
+     * to be plex divided by media type. User input required for each unique set.*/
+    public static final String MEDIA_DIVISION = "MediaDivision";
 
     /**String representation of "true" for setting flags in settings files.*/
     public static final String TRUE = "TRUE";
@@ -47,4 +52,9 @@ public class Constants {
     public static final String LINE_BREAK = "-----------------------------";
     /**Default byte buffer size for copying data.*/
     public static final int DEFAULT_BYTE_BUFFER_SIZE = 4096;
+
+    /**Media type of Anime*/
+    public static final String ANIME = "ANIME";
+    /**Media type of TV Show*/
+    public static final String TV_SHOW = "TV_SHOW";
 }
