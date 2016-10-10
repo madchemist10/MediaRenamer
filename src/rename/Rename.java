@@ -218,7 +218,8 @@ public class Rename {
         * through this algorithm.*/
         if(numbersOnly.length() > 4){
             if(filename.contains(numbersOnly.substring(0,1)+" ")){
-                String temp = filename.replaceAll(numbersOnly.substring(0,1),"").trim();
+                //replace first in case actual number is part of episode
+                String temp = filename.replaceFirst(numbersOnly.substring(0,1)+" ","").trim();
                 return parseEpisodeNumber(temp,maxEpisode);
             }
         }
@@ -278,8 +279,9 @@ public class Rename {
         * that the first character belongs to the title, reprocess the last digits
         * through this algorithm.*/
         if(numbersOnly.length() > 4){
-            if(filename.contains(numbersOnly.substring(0,1))){
-                String temp = filename.replaceAll(numbersOnly.substring(0,1),"").trim();
+            if(filename.contains(numbersOnly.substring(0,1)+" ")){
+                //replace first in case actual number is part of season
+                String temp = filename.replaceFirst(numbersOnly.substring(0,1)+" ","").trim();
                 return parseSeasonNumber(temp,maxEpisode);
             }
         }

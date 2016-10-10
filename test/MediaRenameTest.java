@@ -501,4 +501,17 @@ public class MediaRenameTest extends TestCase{
         renameModule.rename(testMediaFile);
         assertEquals(path+"2 Broke Girls S03E01.mkv", testMediaFile.toString());
     }
+
+    /**
+     * Test media rename with media file where first character is number.
+     * Episode is same as character from filename.
+     */
+    public void testMediaRename_2BrokeGirls_EP_22(){
+        String path = "Z:\\Need to Watch\\Rename\\2.Broke.Girls.Season.3.Complete.1080p.WebRip.x265.HEVC-zsewdc\\S03\\";
+        String originalFileName = "2.Broke.Girls.S03E22.1080p.WebRip.x265.HEVC-zsewdc.mkv";
+        MediaFile testMediaFile = new MediaFile(path+originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals(path+"2 Broke Girls S03E22.mkv", testMediaFile.toString());
+    }
 }
