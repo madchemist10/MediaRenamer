@@ -101,15 +101,19 @@ public class Rename {
         /*Handle special case where season could be pretexted with
         * "S"
         * Need to remove S from determined mediaName*/
-        tempFileName = tempFileName.replaceAll("[S]\\d{1,2}",""); //"S##"
+        tempFileName = tempFileName.replaceAll("S\\d{1,2}",""); //"S##"
 
         /*Handle special case where episode could be pretexted with
         * "E"
         * Need to remove E from determined mediaName*/
-        tempFileName = tempFileName.replaceAll("[E]\\d{1,2}",""); //"E##"
+        tempFileName = tempFileName.replaceAll("E\\d{1,2}",""); //"E##"
 
-        //remove all numbers and we then have mediaName
-        tempFileName = tempFileName.replaceAll("[0-9]","");
+        /*Attempt to replace instance of episode number*/
+        if(episodeNumber != null){
+            tempFileName = tempFileName.replaceAll(episodeNumber,"");
+        }
+        /*Attempt to replace instance of season number*/
+        tempFileName = tempFileName.replaceAll(seasonNumber, "");
 
         //remove prepended or trailing spaces
         tempFileName = tempFileName.trim();
@@ -205,6 +209,19 @@ public class Rename {
                 return potentialEpisode;
             }
         }
+        /*If we reached this far, the format is not normal, there are too
+        * many numbers in the string. Using some simple predictive knowledge,
+        * if the first character of the numbers found exists by itself (with
+        * space following), it is
+        * possible that this number belongs to the title. If we act on this assumption
+        * that the first character belongs to the title, reprocess the last digits
+        * through this algorithm.*/
+        if(numbersOnly.length() > 4){
+            if(filename.contains(numbersOnly.substring(0,1)+" ")){
+                String temp = filename.replaceAll(numbersOnly.substring(0,1),"").trim();
+                return parseEpisodeNumber(temp,maxEpisode);
+            }
+        }
         //any other set of numbers and something went wrong.
         return null;
     }
@@ -252,6 +269,18 @@ public class Rename {
             potentialEpisode = numbersOnly.substring(2);
             if(filename.contains(potentialEpisode)){
                 return numbersOnly.substring(0,2);
+            }
+        }
+        /*If we reached this far, the format is not normal, there are too
+        * many numbers in the string. Using some simple predictive knowledge,
+        * if the first character of the numbers found exists by itself, it is
+        * possible that this number belongs to the title. If we act on this assumption
+        * that the first character belongs to the title, reprocess the last digits
+        * through this algorithm.*/
+        if(numbersOnly.length() > 4){
+            if(filename.contains(numbersOnly.substring(0,1))){
+                String temp = filename.replaceAll(numbersOnly.substring(0,1),"").trim();
+                return parseSeasonNumber(temp,maxEpisode);
             }
         }
         //could not be determined so use default.

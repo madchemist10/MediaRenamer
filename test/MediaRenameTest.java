@@ -250,9 +250,30 @@ public class MediaRenameTest extends TestCase{
      * Test case with number that is not episode or season
      * contained within title.
      * Using rename case and episode case, exchange can be done.
+     * Attempt to have algorithm process based on maximum episode count permitted.
+     */
+    public void testMediaRenameWithSimpleCaseNumberInTitle_MAX_EP_COUNT(){
+        settings.put(Constants.DEFAULT_MAX_EPISODE_COUNT, "100");
+        String mediaName = "Danganronpa 3 - Despair Arc";
+        String expectedMediaName = "Danganronpa 3 The End of Kibougamine Gakuen - Zetsubou-hen";
+        String episodeNumber = "01";
+        String originalFileName = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, episodeNumber);
+        mediaName = "Danganronpa  Despair Arc";
+        specialRenameCases.put(mediaName, expectedMediaName);
+        specialEpisodeCases.put(expectedMediaName, "S01");
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        String expectedFormattedMediaFile = expectedMediaName+" S01E"+episodeNumber+".mkv";
+        assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
+    }
+
+    /**
+     * Test case with number that is not episode or season
+     * contained within title.
+     * Using rename case and episode case, exchange can be done.
      */
     public void testMediaRenameWithSimpleCaseNumberInTitle(){
-        settings.put(Constants.DEFAULT_MAX_EPISODE_COUNT, "100");
         String mediaName = "Danganronpa 3 - Despair Arc";
         String expectedMediaName = "Danganronpa 3 The End of Kibougamine Gakuen - Zetsubou-hen";
         String episodeNumber = "01";
@@ -467,5 +488,17 @@ public class MediaRenameTest extends TestCase{
         Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
         renameModule.rename(testMediaFile);
         assertEquals(originalFileName, testMediaFile.toString());
+    }
+
+    /**
+     * Test media rename with media file where first character is number.
+     */
+    public void testMediaRename_2BrokeGirls(){
+        String path = "Z:\\Need to Watch\\Rename\\2.Broke.Girls.Season.3.Complete.1080p.WebRip.x265.HEVC-zsewdc\\S03\\";
+        String originalFileName = "2.Broke.Girls.S03E01.1080p.WebRip.x265.HEVC-zsewdc.mkv";
+        MediaFile testMediaFile = new MediaFile(path+originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals(path+"2 Broke Girls S03E01.mkv", testMediaFile.toString());
     }
 }
