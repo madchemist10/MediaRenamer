@@ -64,7 +64,7 @@ public class Copy {
         if(!Utilities.fileExists(newPath)) {
             Utilities.makeDirectory(newPath);
         }
-        long originalFileSize = new File(mediaFile.toString()).length();
+        long originalFileSize = new File(mediaFile.toString().replace(mediaType,"")).length();
         /*Execute the copy command.*/
         Utilities.copyWithProgress(mediaFile.toString().replace(mediaType,""),dest);
 

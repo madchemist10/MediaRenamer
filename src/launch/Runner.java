@@ -114,7 +114,11 @@ public class Runner {
                 System.out.println(mediaFile.toString());
                 boolean copy = true;
                 if(Constants.TRUE.equals(userInteraction)){
-                    copy = userDecisionOnCopy(mediaFile);
+                    String destination = settings.get(Constants.DEFAULT_COPY_DIRECTORY);
+                    if(destination == null){
+                        destination = "";
+                    }
+                    copy = userDecisionOnCopy(mediaFile, destination);
                 }
                 if(copy) {
                     copyModule.copy(mediaFile);
@@ -173,10 +177,21 @@ public class Runner {
      * Helper method to determine copy based on user input.
      * @param mediaFile of the media file in question to be copied.
      */
-    private static boolean userDecisionOnCopy(MediaFile mediaFile){
+    private static boolean userDecisionOnCopy(MediaFile mediaFile, String destination){
         System.out.println(Constants.LINE_BREAK);
         System.out.println("The copy algorithm has determined the following path:");
-        System.out.println(mediaFile.toString());
+        String mediaType = "";
+        String tempMediaType = mediaFile.getMediaType();
+        if(tempMediaType != null){
+            mediaType = tempMediaType+"\\";
+        }
+        String path = mediaType +
+                Utilities.parseFilenameFromPath(mediaFile.getMediaName())+
+                "\\"+Utilities.parseFilenameFromPath(mediaFile.toString());
+        if(destination != null){
+            path = destination+"\\"+path;
+        }
+        System.out.println(path);
         System.out.println("Is this correct? Y/N");
         String userInput = Utilities.userInput();
         switch(userInput){
