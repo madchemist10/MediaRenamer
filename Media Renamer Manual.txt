@@ -1,6 +1,6 @@
 Media Renamer Manual
 Author: MadKhemist
-Date:	10-05-16
+Date:	10-10-16
 
 Overview:
 This application is designed to rename media files to a strict format:
@@ -20,6 +20,7 @@ To achieve this goal there are three setting files:
 settings.txt
 specialEpisodes.txt
 specialRename.txt
+mediaDivison.txt
 
 Contained within each of these files can be a series of user specified
 specific data that interacts with the core application.
@@ -44,6 +45,7 @@ DefaultCopyDir
 MaxEpisodeCount
 UserInteraction
 CopyFiles
+MediaDivision
 
 All flags must be given a value except:
 MaxEpisodeCount
@@ -66,6 +68,9 @@ MaxEpisodeCount
 >>CopyFiles
 	This is a "TRUE"/"FALSE" flag that determines if the user would like to copy
 	files to the defined {DefaultCopyDir} after the renaming has been completed.
+>>MediaDivision
+	This is a "TRUE"/"FALSE" flag that determines if the user would like the
+	copy algorithm to separate media based on mediaTypes.
 
 *************************************************
 specialEpisodes.txt
@@ -105,7 +110,18 @@ Example:
 		{original title}: {new title}
 	This will denote that if the {original title} is extracted during the
 	renaming process, replace it with the {new title} found in this file.
+*************************************************
+mediaDivision.txt
 
+This file is for defining which media belongs to which media type.
+Example:
+	If the user wishes to separate {TitleA} to the sub-{copyDir}:
+	{TitleA}: {copyDir}
+
+If the user does not specify in this file a specific media type
+for the given file, the applicaiton will query the user for the
+information and write the data out to the file. Subsequent files
+with the same media name, will use this defined media type.
 
 ==============================
 =       Rename Module        =
@@ -130,3 +146,7 @@ being the same as the {title} of the media file.
 
 After the copy has completed, if the file that should exist in the destination,
 exists, then the original file is deleted.
+
+Modification to CopyModule:
+	If the user has specified mediaDivision, the destination of the copied file
+	will reflect the subdirectory set by the user.
