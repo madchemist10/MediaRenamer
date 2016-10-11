@@ -6,6 +6,8 @@ import utilities.Utilities;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  */
@@ -131,14 +133,29 @@ class HelperMethodsTest {
     static void generateTestSettingsFiles(String testDirectory){
         if(!Utilities.fileExists(testDirectory+"\\"+Constants.SETTINGS_FILE)) {
             Setup.setupSettingsFile(testDirectory + "\\" + Constants.SETTINGS_FILE);
-            ErrorHandler.printOutToFile(testDirectory + "\\" + Constants.SETTINGS_FILE, Constants.DEFAULT_RENAME_DIRECTORY + ": " + testDirectory + "\\test");
-            ErrorHandler.printOutToFile(testDirectory + "\\" + Constants.SETTINGS_FILE, Constants.DEFAULT_COPY_DIRECTORY + ": " + testDirectory + "\\copy");
-            ErrorHandler.printOutToFile(testDirectory + "\\" + Constants.SETTINGS_FILE, Constants.USER_INTERACTION + ": " + Constants.FALSE);
-            ErrorHandler.printOutToFile(testDirectory + "\\" + Constants.SETTINGS_FILE, Constants.COPY_FILES_FLAG + ": " + Constants.TRUE);
-            ErrorHandler.printOutToFile(testDirectory + "\\" + Constants.SETTINGS_FILE, Constants.MEDIA_DIVISION + ": " + Constants.TRUE);
+            Map<String, String> settingsMap = new HashMap<>();
+            settingsMap.put(Constants.DEFAULT_RENAME_DIRECTORY, testDirectory+"\\test");
+            settingsMap.put(Constants.DEFAULT_COPY_DIRECTORY, testDirectory+"\\copy");
+            settingsMap.put(Constants.USER_INTERACTION, Constants.FALSE);
+            settingsMap.put(Constants.COPY_FILES_FLAG, Constants.TRUE);
+            settingsMap.put(Constants.MEDIA_DIVISION, Constants.TRUE);
+            settingsMap.put(Constants.ERROR_HANDLER, Constants.TRUE);
+            generateSettingsFileFromMap(testDirectory, settingsMap);
         }
         Setup.setupSettingsFile(testDirectory+"\\"+Constants.SPECIAL_EP_CASES_FILE);
         Setup.setupSettingsFile(testDirectory+"\\"+Constants.SPECIAL_RENAME_CASES_FILE);
         Setup.setupSettingsFile(testDirectory+"\\"+Constants.MEDIA_DIVISION_FILE);
+    }
+
+    /**
+     * Generation of settings file to a testDirectory from a given map.
+     * @param testDirectory of where settings file is located.
+     * @param settingsMap of system settings.
+     */
+    static void generateSettingsFileFromMap(String testDirectory, Map<String, String> settingsMap){
+        for(String key: settingsMap.keySet()){
+            String value = settingsMap.get(key);
+            ErrorHandler.printOutToFile(testDirectory+"\\"+Constants.SETTINGS_FILE,key+": "+value);
+        }
     }
 }

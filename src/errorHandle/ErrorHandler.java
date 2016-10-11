@@ -11,12 +11,17 @@ import java.io.PrintWriter;
  */
 public class ErrorHandler {
 
+    /**Flag to be set if the user has specified to use error handler.*/
+    public static boolean errorHandle = true;
+
     /**
      * Default error recording method.
      * @param error string to output to default log file.
      */
     public static void printError(String error) {
-        printOutToFile(Constants.LOG_FILE,error);
+        if(errorHandle) {
+            printOutToFile(Constants.LOG_FILE, error);
+        }
     }
 
     /**

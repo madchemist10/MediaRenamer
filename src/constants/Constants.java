@@ -43,6 +43,9 @@ public class Constants {
     /**Settings header to determine if the user would like the copied output
      * to be plex divided by media type. User input required for each unique set.*/
     public static final String MEDIA_DIVISION = "MediaDivision";
+    /**Settings header to determine if the user would like to use the
+     * error handler.*/
+    public static final String ERROR_HANDLER = "ErrorHandler";
 
     /**String representation of "true" for setting flags in settings files.*/
     public static final String TRUE = "TRUE";

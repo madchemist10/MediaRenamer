@@ -52,7 +52,7 @@ public class TestUtilityStaticMethodTests extends TestCase {
         HelperMethodsTest.generateTestSettingsFiles(testDir);
         assertTrue(Utilities.fileExists(settingsPath));
         HashMap<String,String> settings = Utilities.loadSettingsFile(settingsPath);
-        assertEquals(5,settings.size());
+        assertTrue(5 <= settings.size());
         assertTrue(settings.containsKey(Constants.DEFAULT_RENAME_DIRECTORY));
         assertTrue(settings.containsKey(Constants.DEFAULT_COPY_DIRECTORY));
         assertTrue(settings.containsKey(Constants.USER_INTERACTION));

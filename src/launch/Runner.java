@@ -8,8 +8,6 @@ import rename.Rename;
 import utilities.Utilities;
 
 import java.io.File;
-import java.io.InputStream;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -37,6 +35,7 @@ public class Runner {
             ErrorHandler.printOutToFile(offset+Constants.SETTINGS_FILE, Constants.USER_INTERACTION+": "+Constants.TRUE);
             ErrorHandler.printOutToFile(offset+Constants.SETTINGS_FILE, Constants.COPY_FILES_FLAG+": "+Constants.FALSE);
             ErrorHandler.printOutToFile(offset+Constants.SETTINGS_FILE, Constants.MEDIA_DIVISION+": "+Constants.FALSE);
+            ErrorHandler.printOutToFile(offset+Constants.SETTINGS_FILE, Constants.ERROR_HANDLER+": "+Constants.TRUE);
         }
 
         if(!Utilities.fileExists(offset+Constants.SPECIAL_RENAME_CASES_FILE)) {
@@ -65,6 +64,14 @@ public class Runner {
             Utilities.getPrintStream().println(Constants.DIRECTORY_NULL);
             return;
         }
+        /*Set if the user has chosen to user error handler.*/
+        String errorHandle = settings.get(Constants.ERROR_HANDLER);
+        if(Constants.TRUE.equals(errorHandle)){
+            ErrorHandler.errorHandle = true;
+        } else if(Constants.FALSE.equals(errorHandle)){
+            ErrorHandler.errorHandle = false;
+        }
+
         /*Instantiate rename module and execute rename.*/
         Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
         listFiles(new File(directory).listFiles());
