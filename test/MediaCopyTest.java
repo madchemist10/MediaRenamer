@@ -21,6 +21,7 @@ public class MediaCopyTest extends TestCase {
      */
     public void setUp() throws Exception{
         sequential.lock();
+        TestHelperMethods.generateTestSettingsFiles(defaultTestDir);
         super.setUp();
     }
 
@@ -38,12 +39,10 @@ public class MediaCopyTest extends TestCase {
      * Test the copying of a single file.
      */
     public void testCopySingleFile(){
-        String testDir = defaultTestDir;
-        TestHelperMethods.generateTestSettingsFiles(testDir);
         String title = "Bloodivores";
-        TestHelperMethods.generateTestDirectory(testDir,1, 1, title, TestHelperMethods.FORMATS.HORRIBLESUBS);
+        TestHelperMethods.generateTestDirectory(defaultTestDir,1, 1, title, TestHelperMethods.FORMATS.HORRIBLESUBS);
         Runner.main(new String[]{defaultTestDir});
-        assertTrue(Utilities.fileExists(testDir+"\\copy\\"+title+"\\"+title+" S01E01.mkv"));
+        assertTrue(Utilities.fileExists(defaultTestDir+"\\copy\\"+title+"\\"+title+" S01E01.mkv"));
     }
 
 
@@ -51,15 +50,13 @@ public class MediaCopyTest extends TestCase {
      * Test the copying of a 3 files of the same season.
      */
     public void testCopy3Files_SameSeason(){
-        String testDir = defaultTestDir;
-        TestHelperMethods.generateTestSettingsFiles(testDir);
         String title = "Bloodivores";
         int episodeMax = 3;
-        TestHelperMethods.generateTestDirectory(testDir, episodeMax, 1, title, TestHelperMethods.FORMATS.HORRIBLESUBS);
+        TestHelperMethods.generateTestDirectory(defaultTestDir, episodeMax, 1, title, TestHelperMethods.FORMATS.HORRIBLESUBS);
         Runner.main(new String[]{defaultTestDir});
         for(int i = 1; i <= episodeMax; i++) {
             String episodeNumber = String.format("%2d", i).replace(" ","0");
-            assertTrue(Utilities.fileExists(testDir + "\\copy\\" + title + "\\" + title + " S01E"+episodeNumber+".mkv"));
+            assertTrue(Utilities.fileExists(defaultTestDir + "\\copy\\" + title + "\\" + title + " S01E"+episodeNumber+".mkv"));
         }
     }
 
@@ -68,31 +65,27 @@ public class MediaCopyTest extends TestCase {
      * Test deletion of original file and existence of new.
      */
     public void testCopySingleFile_DeleteOriginal(){
-        String testDir = defaultTestDir;
-        TestHelperMethods.generateTestSettingsFiles(testDir);
         String title = "Bloodivores";
-        TestHelperMethods.generateTestDirectory(testDir,1, 1, title, TestHelperMethods.FORMATS.HORRIBLESUBS);
+        TestHelperMethods.generateTestDirectory(defaultTestDir,1, 1, title, TestHelperMethods.FORMATS.HORRIBLESUBS);
         Runner.main(new String[]{defaultTestDir});
         //new file exists
-        assertTrue(Utilities.fileExists(testDir+"\\copy\\"+title+"\\"+title+" S01E01.mkv"));
+        assertTrue(Utilities.fileExists(defaultTestDir+"\\copy\\"+title+"\\"+title+" S01E01.mkv"));
         //old file does not exist
-        assertTrue(!Utilities.fileExists(testDir+"\\test\\"+title+" S01E01.mkv"));
+        assertTrue(!Utilities.fileExists(defaultTestDir+"\\test\\"+title+" S01E01.mkv"));
     }
 
     /**
      * Test the copying of a multiple file.
      */
     public void testCopySingleFileToMediaTypeDirectory(){
-        String testDir = defaultTestDir;
-        TestHelperMethods.generateTestSettingsFiles(testDir);
-        ErrorHandler.printOutToFile(testDir+"\\mediaDivision.txt","Tokyo Ghoul: Anime");
+        ErrorHandler.printOutToFile(defaultTestDir+"\\mediaDivision.txt","Tokyo Ghoul: Anime");
         String title = "Tokyo Ghoul";
-        TestHelperMethods.generateTestDirectory(testDir,1, 1, title, TestHelperMethods.FORMATS.HORRIBLESUBS);
-        Utilities.makeDirectory(testDir+"\\copy\\Anime\\");
+        TestHelperMethods.generateTestDirectory(defaultTestDir,1, 1, title, TestHelperMethods.FORMATS.HORRIBLESUBS);
+        Utilities.makeDirectory(defaultTestDir+"\\copy\\Anime\\");
         Runner.main(new String[]{defaultTestDir});
         //new file exists
-        assertTrue(Utilities.fileExists(testDir+"\\copy\\Anime\\"+title+"\\"+title+" S01E01.mkv"));
+        assertTrue(Utilities.fileExists(defaultTestDir+"\\copy\\Anime\\"+title+"\\"+title+" S01E01.mkv"));
         //old file does not exist
-        assertTrue(!Utilities.fileExists(testDir+"\\test\\"+title+" S01E01.mkv"));
+        assertTrue(!Utilities.fileExists(defaultTestDir+"\\test\\"+title+" S01E01.mkv"));
     }
 }

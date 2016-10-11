@@ -532,4 +532,16 @@ public class MediaRenameTest extends TestCase{
         renameModule.rename(testMediaFile);
         assertEquals("Bubuki Buranki Hoshi no Kyojin S01E02.mkv", testMediaFile.toString());
     }
+
+    /**
+     * Test media rename with a movie that has audio channels in
+     * filename.
+     */
+    public void testMediaRenameMovie_ShAaNiG_6CH(){
+        String originalFileName = "Pans.Labyrinth.2006.REMASTERED.1080p.BluRay.6CH.ShAaNiG.mkv";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("Pans Labyrinth 2006.mkv", testMediaFile.toString());
+    }
 }

@@ -306,6 +306,24 @@ public class Rename {
                 }
             }
         }
+        /*If the length of numbers found is more than four, then a number may be buried within
+        * the filename that does not belong. Chop off the first and recheck, chop off the last and recheck.*/
+        if(numbersOnly.length() > 4){
+            //continue to chop off front to determine year.
+            String tempFileName = filename.replaceFirst(numbersOnly.substring(0,1),"");
+            String tempYearFront = parseYear(tempFileName);
+            //continue to chop off back to determine year.
+            String reverseString = new StringBuilder(filename).reverse().toString();
+            tempFileName = reverseString.replaceFirst(numbersOnly.substring(numbersOnly.length()-1),"");
+            tempFileName = new StringBuilder(tempFileName).reverse().toString();
+            String tempYearBack = parseYear(tempFileName);
+            if(tempYearFront == null && tempYearBack != null){
+                return tempYearBack;
+            }
+            if(tempYearFront != null && tempYearBack == null){
+                return tempYearFront;
+            }
+        }
         return null;
     }
 
