@@ -52,4 +52,10 @@ public class Constants {
     public static final String LINE_BREAK = "-----------------------------";
     /**Default byte buffer size for copying data.*/
     public static final int DEFAULT_BYTE_BUFFER_SIZE = 4096;
+
+    /*Runner constants*/
+    public static final String DIRECTORY_NULL = "Directory is null.";
+    public static final String NO_FILES_TO_RENAME = "No files to Rename.";
+    public static final String MEDIA_RENAME_COMPLETE = "Media Renamed.";
+    public static final String MEDIA_COPY_COMPLETE = "Media Copied.";
 }

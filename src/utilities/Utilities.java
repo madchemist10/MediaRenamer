@@ -66,11 +66,29 @@ public class Utilities {
     }
 
     /**
+     * Allow the providing of system.in as InputStream.
+     * Allows for full testing of runner.
+     * @return System.in
+     */
+    private static InputStream getInputStream(){
+        return System.in;
+    }
+
+    /**
+     * Allow the providing of system.out as OutputStream.
+     * Allows for full testing of runner.
+     * @return getPrintStream()
+     */
+    public static PrintStream getPrintStream(){
+        return System.out;
+    }
+
+    /**
      * Retrieve user input for a given task.
      * @return String representation of the user's input.
      */
     public static String userInput(){
-        Scanner input = new Scanner(System.in);
+        Scanner input = new Scanner(getInputStream());
         return input.nextLine();
     }
 

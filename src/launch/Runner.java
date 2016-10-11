@@ -8,6 +8,8 @@ import rename.Rename;
 import utilities.Utilities;
 
 import java.io.File;
+import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -60,12 +62,16 @@ public class Runner {
         HashMap<String, String> mediaDivisionCases = Utilities.loadSettingsFile(offset+Constants.MEDIA_DIVISION_FILE);
         String directory = settings.get(Constants.DEFAULT_RENAME_DIRECTORY);
         if(directory == null){
-            System.out.println("Directory is null.");
+            Utilities.getPrintStream().println(Constants.DIRECTORY_NULL);
             return;
         }
         /*Instantiate rename module and execute rename.*/
         Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
         listFiles(new File(directory).listFiles());
+        if(files.size() == 0){
+            Utilities.getPrintStream().println(Constants.NO_FILES_TO_RENAME);
+            return;
+        }
         String userInteraction = settings.get(Constants.USER_INTERACTION);
         for(File file : files){
             MediaFile mediaFile = new MediaFile(file.toString());
@@ -76,6 +82,7 @@ public class Runner {
                 continue;   //continue to next item
             }
             Utilities.rename(file, mediaFile.toString());
+            Utilities.getPrintStream().println(Constants.MEDIA_RENAME_COMPLETE);
             logRename(mediaFile);
         }
 
@@ -102,7 +109,7 @@ public class Runner {
                     String mediaType = mediaDivisionCases.get(mediaName);
                     if(mediaType == null){
                         if(Constants.TRUE.equals(userInteraction)) {
-                            System.out.println(mediaName);
+                            Utilities.getPrintStream().println(mediaName);
                             mediaType = getMediaTypeFromUser();
                             ErrorHandler.printOutToFile(Constants.MEDIA_DIVISION_FILE, mediaName + ": " + mediaType);
                             //allows for multiple of same file.
@@ -114,7 +121,7 @@ public class Runner {
                         mediaFile.setMediaType(mediaType);
                     }
                 }
-                System.out.println(mediaFile.toString());
+                Utilities.getPrintStream().println(mediaFile.toString());
                 boolean copy = true;
                 if(Constants.TRUE.equals(userInteraction)){
                     String destination = settings.get(Constants.DEFAULT_COPY_DIRECTORY);
@@ -129,7 +136,8 @@ public class Runner {
                     String filename = Utilities.parseFilenameFromPath(mediaFile.toString());
                     String path = Utilities.removeFilenameFromPath(mediaFile.toString());
                     String folder = Utilities.parseFilenameFromPath(path);
-                    System.out.println("File copied: " + filename + " to dir: {CopyDir}\\" + folder);
+                    Utilities.getPrintStream().println("File copied: " + filename + " to dir: {CopyDir}\\" + folder);
+                    Utilities.getPrintStream().println(Constants.MEDIA_COPY_COMPLETE);
                 }
             }
         }
@@ -154,11 +162,11 @@ public class Runner {
      * @param mediaFile of the media file in question to be renamed.
      */
     private static void userDecisionOnRename(MediaFile mediaFile, File file){
-        System.out.println(Constants.LINE_BREAK);
-        System.out.println("The rename algorithm has determined the following new name:");
-        System.out.println("Original >> "+Utilities.parseFilenameFromPath(mediaFile.getOriginalFileName()));
-        System.out.println("New      >> "+Utilities.parseFilenameFromPath(mediaFile.toString()));
-        System.out.println("Is this correct? Y/N");
+        Utilities.getPrintStream().println(Constants.LINE_BREAK);
+        Utilities.getPrintStream().println("The rename algorithm has determined the following new name:");
+        Utilities.getPrintStream().println("Original >> "+Utilities.parseFilenameFromPath(mediaFile.getOriginalFileName()));
+        Utilities.getPrintStream().println("New      >> "+Utilities.parseFilenameFromPath(mediaFile.toString()));
+        Utilities.getPrintStream().println("Is this correct? Y/N");
         String userInput = Utilities.userInput();
         switch(userInput){
             case "Y":
@@ -167,8 +175,8 @@ public class Runner {
                 break;
             case "N":
             case "n":
-                System.out.println("What is the suggested rename?");
-                System.out.println("Give full name with extension?");
+                Utilities.getPrintStream().println("What is the suggested rename?");
+                Utilities.getPrintStream().println("Give full name with extension?");
                 userInput = Utilities.userInput();
                 String path = Utilities.removeFilenameFromPath(mediaFile.toString());
                 Utilities.rename(file, path+userInput);
@@ -181,8 +189,8 @@ public class Runner {
      * @param mediaFile of the media file in question to be copied.
      */
     private static boolean userDecisionOnCopy(MediaFile mediaFile, String destination){
-        System.out.println(Constants.LINE_BREAK);
-        System.out.println("The copy algorithm has determined the following path:");
+        Utilities.getPrintStream().println(Constants.LINE_BREAK);
+        Utilities.getPrintStream().println("The copy algorithm has determined the following path:");
         String mediaType = "";
         String tempMediaType = mediaFile.getMediaType();
         if(tempMediaType != null){
@@ -194,8 +202,8 @@ public class Runner {
         if(destination != null){
             path = destination+"\\"+path;
         }
-        System.out.println(path);
-        System.out.println("Is this correct? Y/N");
+        Utilities.getPrintStream().println(path);
+        Utilities.getPrintStream().println("Is this correct? Y/N");
         String userInput = Utilities.userInput();
         switch(userInput){
             case "Y":
@@ -225,7 +233,8 @@ public class Runner {
      * @return user specified media type.
      */
     private static String getMediaTypeFromUser(){
-        System.out.println("What is the Media type?");
+        Utilities.getPrintStream().println("What is the Media type?");
         return Utilities.userInput();
     }
+
 }
