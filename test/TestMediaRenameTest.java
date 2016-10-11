@@ -9,7 +9,7 @@ import java.util.HashMap;
 /**
  * Set of tests to test the rename module.
  */
-public class MediaRenameTest extends TestCase{
+public class TestMediaRenameTest extends TestCase{
     /*Read in settings values.*/
     private HashMap<String, String> settings = Utilities.loadSettingsFile(Constants.SETTINGS_FILE);
     private HashMap<String, String> specialRenameCases = Utilities.loadSettingsFile(Constants.SPECIAL_RENAME_CASES_FILE);
@@ -28,7 +28,7 @@ public class MediaRenameTest extends TestCase{
     public void testMediaRenameWithSimpleCase3DigitE(){
         String mediaName = "Tokyo Ghoul";
         String episodeNumber = "001";
-        String originalFileName = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, episodeNumber);
+        String originalFileName = HelperMethodsTest.buildHorribleSubsOriginalName(mediaName, episodeNumber);
         MediaFile testMediaFile = new MediaFile(originalFileName);
         Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
         renameModule.rename(testMediaFile);
@@ -44,7 +44,7 @@ public class MediaRenameTest extends TestCase{
         String mediaName = "Tokyo Ghoul";
         String episodeNumber = "01";
         String seasonNumber = "01";
-        String originalFileName = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, episodeNumber);
+        String originalFileName = HelperMethodsTest.buildHorribleSubsOriginalName(mediaName, episodeNumber);
         MediaFile testMediaFile = new MediaFile(originalFileName);
         Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
         renameModule.rename(testMediaFile);
@@ -60,7 +60,7 @@ public class MediaRenameTest extends TestCase{
         String mediaName = "Tokyo Ghoul";
         String episodeNumber = "001";
         String seasonNumber = "1";
-        String originalFileName = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, seasonNumber, episodeNumber);
+        String originalFileName = HelperMethodsTest.buildHorribleSubsOriginalName(mediaName, seasonNumber, episodeNumber);
         MediaFile testMediaFile = new MediaFile(originalFileName);
         Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
         renameModule.rename(testMediaFile);
@@ -78,7 +78,7 @@ public class MediaRenameTest extends TestCase{
         String mediaName = "Tokyo Ghoul";
         String episodeNumber = "01";
         String seasonNumber = "01";
-        String originalFileName = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, seasonNumber, episodeNumber);
+        String originalFileName = HelperMethodsTest.buildHorribleSubsOriginalName(mediaName, seasonNumber, episodeNumber);
         MediaFile testMediaFile = new MediaFile(originalFileName);
         Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
         renameModule.rename(testMediaFile);
@@ -97,7 +97,7 @@ public class MediaRenameTest extends TestCase{
         String episodeNumber = "001";
         String seasonNumber = "1";
         String combinedSeasonEpisode = seasonNumber+episodeNumber;
-        String originalFileName = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, combinedSeasonEpisode);
+        String originalFileName = HelperMethodsTest.buildHorribleSubsOriginalName(mediaName, combinedSeasonEpisode);
         MediaFile testMediaFile = new MediaFile(originalFileName);
         Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
         renameModule.rename(testMediaFile);
@@ -114,7 +114,7 @@ public class MediaRenameTest extends TestCase{
         String mediaName = "Tokyo Ghoul";
         String episodeNumber = "01";
         String seasonNumber = "1";
-        String originalFileName = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, seasonNumber, episodeNumber);
+        String originalFileName = HelperMethodsTest.buildHorribleSubsOriginalName(mediaName, seasonNumber, episodeNumber);
         MediaFile testMediaFile = new MediaFile(originalFileName);
         Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
         renameModule.rename(testMediaFile);
@@ -132,7 +132,7 @@ public class MediaRenameTest extends TestCase{
         specialRenameCases.put(mediaName, expectedMediaName);
         String episodeNumber = "01";
         String seasonNumber = "01";
-        String originalFileName = TestHelperMethods.buildShAaiGOriginalName(mediaName, seasonNumber, episodeNumber);
+        String originalFileName = HelperMethodsTest.buildShAaiGOriginalName(mediaName, seasonNumber, episodeNumber);
         MediaFile testMediaFile = new MediaFile(originalFileName);
         Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
         renameModule.rename(testMediaFile);
@@ -149,7 +149,7 @@ public class MediaRenameTest extends TestCase{
         specialRenameCases.put(mediaName, expectedMediaName);
         String episodeNumber = "01";
         String seasonNumber = "10";
-        String originalFileName = TestHelperMethods.buildShAaiGOriginalName(mediaName, seasonNumber, episodeNumber);
+        String originalFileName = HelperMethodsTest.buildShAaiGOriginalName(mediaName, seasonNumber, episodeNumber);
         MediaFile testMediaFile = new MediaFile(originalFileName);
         Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
         renameModule.rename(testMediaFile);
@@ -179,7 +179,7 @@ public class MediaRenameTest extends TestCase{
         String mediaName = "Mobile Suit Gundam - Iron-Blooded Orphans";
         String episodeNumber = "26";
         String seasonNumber = "02";
-        String originalFileName = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, episodeNumber);
+        String originalFileName = HelperMethodsTest.buildHorribleSubsOriginalName(mediaName, episodeNumber);
         mediaName = "Mobile Suit Gundam Iron-Blooded Orphans";
         specialEpisodeCases.put(mediaName,"S01E25");
         MediaFile testMediaFile = new MediaFile(originalFileName);
@@ -260,7 +260,7 @@ public class MediaRenameTest extends TestCase{
         String mediaName = "Danganronpa 3 - Despair Arc";
         String expectedMediaName = "Danganronpa 3 The End of Kibougamine Gakuen - Zetsubou-hen";
         String episodeNumber = "01";
-        String originalFileName = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, episodeNumber);
+        String originalFileName = HelperMethodsTest.buildHorribleSubsOriginalName(mediaName, episodeNumber);
         mediaName = "Danganronpa  Despair Arc";
         specialRenameCases.put(mediaName, expectedMediaName);
         specialEpisodeCases.put(expectedMediaName, "S01");
@@ -280,7 +280,7 @@ public class MediaRenameTest extends TestCase{
         String mediaName = "Danganronpa 3 - Despair Arc";
         String expectedMediaName = "Danganronpa 3 The End of Kibougamine Gakuen - Zetsubou-hen";
         String episodeNumber = "01";
-        String originalFileName = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, episodeNumber);
+        String originalFileName = HelperMethodsTest.buildHorribleSubsOriginalName(mediaName, episodeNumber);
         mediaName = "Danganronpa  Despair Arc";
         specialRenameCases.put(mediaName, expectedMediaName);
         specialEpisodeCases.put(expectedMediaName, "S01");
@@ -301,7 +301,7 @@ public class MediaRenameTest extends TestCase{
         String mediaName = "Danganronpa 3 - Hope Arc";
         String expectedMediaName = "Danganronpa 3 The End of Kibougamine Gakuen - Kibou-hen";
         String episodeNumber = "01";
-        String originalFileName = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, episodeNumber);
+        String originalFileName = HelperMethodsTest.buildHorribleSubsOriginalName(mediaName, episodeNumber);
         mediaName = "Danganronpa  Hope Arc";
         specialRenameCases.put(mediaName, expectedMediaName);
         specialEpisodeCases.put(expectedMediaName, "S00");
@@ -318,7 +318,7 @@ public class MediaRenameTest extends TestCase{
     public void testMediaRenameNoNumbers(){
         String mediaName = "Tokyo Ghoul";
         String episodeNumber = "";
-        String originalFileName = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, episodeNumber);
+        String originalFileName = HelperMethodsTest.buildHorribleSubsOriginalName(mediaName, episodeNumber);
         MediaFile testMediaFile = new MediaFile(originalFileName);
         Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
         renameModule.rename(testMediaFile);
@@ -333,7 +333,7 @@ public class MediaRenameTest extends TestCase{
         String mediaName = "Tokyo Ghoul";
         specialEpisodeCases.put(mediaName, "S01");
         String episodeNumber = "";
-        String originalFileName = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, episodeNumber);
+        String originalFileName = HelperMethodsTest.buildHorribleSubsOriginalName(mediaName, episodeNumber);
         MediaFile testMediaFile = new MediaFile(originalFileName);
         Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
         renameModule.rename(testMediaFile);
@@ -346,7 +346,7 @@ public class MediaRenameTest extends TestCase{
     public void testMediaRenameNoFileExt(){
         String mediaName = "Tokyo Ghoul";
         String episodeNumber = "01";
-        String originalFileName = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, episodeNumber);
+        String originalFileName = HelperMethodsTest.buildHorribleSubsOriginalName(mediaName, episodeNumber);
         originalFileName = originalFileName.replaceAll("[.mkv]",""); //remove file ext
         MediaFile testMediaFile = new MediaFile(originalFileName);
         Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
@@ -361,7 +361,7 @@ public class MediaRenameTest extends TestCase{
     public void testMediaRenameNoFileExt_MultipleDot(){
         String mediaName = "Tokyo Ghoul";
         String episodeNumber = "01";
-        String originalFileName = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, episodeNumber);
+        String originalFileName = HelperMethodsTest.buildHorribleSubsOriginalName(mediaName, episodeNumber);
         originalFileName = originalFileName.replaceAll("[.mkv]",""); //remove file ext
         originalFileName = originalFileName.replaceAll(" ",".");    //replace all space with "."
         MediaFile testMediaFile = new MediaFile(originalFileName);
@@ -377,7 +377,7 @@ public class MediaRenameTest extends TestCase{
         String filepath = "C:\\Test\\";
         String mediaName = "Tokyo Ghoul";
         String episodeNumber = "01";
-        String originalFileName = TestHelperMethods.buildHorribleSubsOriginalName(mediaName, episodeNumber);
+        String originalFileName = HelperMethodsTest.buildHorribleSubsOriginalName(mediaName, episodeNumber);
         String completePath = filepath+originalFileName;
         MediaFile testMediaFile = new MediaFile(completePath);
         Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
@@ -430,7 +430,7 @@ public class MediaRenameTest extends TestCase{
         String mediaName = "Alderamin on the Sky";
         String episodeNumber = "12";
         String seasonNumber = "1";
-        String originalFileName = TestHelperMethods.buildAnimeRGOriginalName(mediaName, episodeNumber);
+        String originalFileName = HelperMethodsTest.buildAnimeRGOriginalName(mediaName, episodeNumber);
         String expectedMediaName = "Nejimaki Seirei Senki Tenkyou no Alderamin";
         specialRenameCases.put(mediaName,expectedMediaName);
         MediaFile testMediaFile = new MediaFile(originalFileName);

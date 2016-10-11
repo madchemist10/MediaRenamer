@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 
 /**
  */
-class TestHelperMethods {
+class HelperMethodsTest {
 
     /**
      * Enum to represent possible formats that can be generated.
@@ -87,15 +87,15 @@ class TestHelperMethods {
             String originalFilename = null;
             switch(format){
                 case HORRIBLESUBS:
-                    originalFilename = TestHelperMethods.buildHorribleSubsOriginalName(title, episodeNumber);
+                    originalFilename = HelperMethodsTest.buildHorribleSubsOriginalName(title, episodeNumber);
                     break;
                 case SHAAIG:
-                    originalFilename = TestHelperMethods.buildShAaiGOriginalName(title, seasonNumber, episodeNumber);
+                    originalFilename = HelperMethodsTest.buildShAaiGOriginalName(title, seasonNumber, episodeNumber);
                     break;
                 case ETTV:
                     break;
                 case ANIMERG:
-                    originalFilename = TestHelperMethods.buildAnimeRGOriginalName(title, episodeNumber);
+                    originalFilename = HelperMethodsTest.buildAnimeRGOriginalName(title, episodeNumber);
                     break;
             }
             if(originalFilename == null){

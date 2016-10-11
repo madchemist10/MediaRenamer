@@ -5,7 +5,7 @@ import utilities.Utilities;
  * Set of tests to test the correctness of static methods
  * from the Utility Class.
  */
-public class UtilityStaticMethodTests extends TestCase {
+public class TestUtilityStaticMethodTests extends TestCase {
 
     /**
      * Simple test to test that the filename is parsed

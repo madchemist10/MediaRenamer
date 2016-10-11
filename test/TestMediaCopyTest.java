@@ -1,6 +1,7 @@
 import errorHandle.ErrorHandler;
 import junit.framework.TestCase;
 import launch.Runner;
+import org.junit.Test;
 import utilities.Utilities;
 
 import java.util.concurrent.locks.Lock;
@@ -9,7 +10,7 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * Set of test cases for testing the copy functionality.
  */
-public class MediaCopyTest extends TestCase {
+public class TestMediaCopyTest extends TestCase {
     /**Lock for ensuring one unit test executes at a time.*/
     private Lock sequential = new ReentrantLock();
     /**Default test directory for these tests.*/
@@ -21,7 +22,7 @@ public class MediaCopyTest extends TestCase {
      */
     public void setUp() throws Exception{
         sequential.lock();
-        TestHelperMethods.generateTestSettingsFiles(defaultTestDir);
+        HelperMethodsTest.generateTestSettingsFiles(defaultTestDir);
         super.setUp();
     }
 
@@ -30,7 +31,7 @@ public class MediaCopyTest extends TestCase {
      * @throws Exception if teardown failed.
      */
     public void tearDown() throws Exception{
-        TestHelperMethods.destroyTestDirectory(defaultTestDir);
+        HelperMethodsTest.destroyTestDirectory(defaultTestDir);
         sequential.unlock();
         super.tearDown();
     }
@@ -40,7 +41,7 @@ public class MediaCopyTest extends TestCase {
      */
     public void testCopySingleFile(){
         String title = "Bloodivores";
-        TestHelperMethods.generateTestDirectory(defaultTestDir,1, 1, title, TestHelperMethods.FORMATS.HORRIBLESUBS);
+        HelperMethodsTest.generateTestDirectory(defaultTestDir,1, 1, title, HelperMethodsTest.FORMATS.HORRIBLESUBS);
         Runner.main(new String[]{defaultTestDir});
         assertTrue(Utilities.fileExists(defaultTestDir+"\\copy\\"+title+"\\"+title+" S01E01.mkv"));
     }
@@ -52,7 +53,7 @@ public class MediaCopyTest extends TestCase {
     public void testCopy3Files_SameSeason(){
         String title = "Bloodivores";
         int episodeMax = 3;
-        TestHelperMethods.generateTestDirectory(defaultTestDir, episodeMax, 1, title, TestHelperMethods.FORMATS.HORRIBLESUBS);
+        HelperMethodsTest.generateTestDirectory(defaultTestDir, episodeMax, 1, title, HelperMethodsTest.FORMATS.HORRIBLESUBS);
         Runner.main(new String[]{defaultTestDir});
         for(int i = 1; i <= episodeMax; i++) {
             String episodeNumber = String.format("%2d", i).replace(" ","0");
@@ -66,7 +67,7 @@ public class MediaCopyTest extends TestCase {
      */
     public void testCopySingleFile_DeleteOriginal(){
         String title = "Bloodivores";
-        TestHelperMethods.generateTestDirectory(defaultTestDir,1, 1, title, TestHelperMethods.FORMATS.HORRIBLESUBS);
+        HelperMethodsTest.generateTestDirectory(defaultTestDir,1, 1, title, HelperMethodsTest.FORMATS.HORRIBLESUBS);
         Runner.main(new String[]{defaultTestDir});
         //new file exists
         assertTrue(Utilities.fileExists(defaultTestDir+"\\copy\\"+title+"\\"+title+" S01E01.mkv"));
@@ -80,7 +81,7 @@ public class MediaCopyTest extends TestCase {
     public void testCopySingleFileToMediaTypeDirectory(){
         ErrorHandler.printOutToFile(defaultTestDir+"\\mediaDivision.txt","Tokyo Ghoul: Anime");
         String title = "Tokyo Ghoul";
-        TestHelperMethods.generateTestDirectory(defaultTestDir,1, 1, title, TestHelperMethods.FORMATS.HORRIBLESUBS);
+        HelperMethodsTest.generateTestDirectory(defaultTestDir,1, 1, title, HelperMethodsTest.FORMATS.HORRIBLESUBS);
         Utilities.makeDirectory(defaultTestDir+"\\copy\\Anime\\");
         Runner.main(new String[]{defaultTestDir});
         //new file exists
