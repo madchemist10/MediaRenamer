@@ -118,6 +118,7 @@ class TestHelperMethods {
     static void destroyTestDirectory(String testDirectory){
         Utilities.deleteFolder(testDirectory+"\\test");
         Utilities.deleteFolder(testDirectory+"\\copy");
+        Utilities.deleteFile(testDirectory+"\\"+Constants.MEDIA_DIVISION_FILE);
     }
 
     /**
@@ -126,12 +127,16 @@ class TestHelperMethods {
      * @param testDirectory root level of where we are working from.
      */
     static void generateTestSettingsFiles(String testDirectory){
-        Setup.setupSettingsFile(testDirectory+"\\"+Constants.SETTINGS_FILE);
-        ErrorHandler.printOutToFile(testDirectory+"\\"+Constants.SETTINGS_FILE, Constants.DEFAULT_RENAME_DIRECTORY + ": "+testDirectory+"\\test");
-        ErrorHandler.printOutToFile(testDirectory+"\\"+Constants.SETTINGS_FILE, Constants.DEFAULT_COPY_DIRECTORY + ": "+testDirectory+"\\copy");
-        ErrorHandler.printOutToFile(testDirectory+"\\"+Constants.SETTINGS_FILE, Constants.USER_INTERACTION+": "+Constants.FALSE);
-        ErrorHandler.printOutToFile(testDirectory+"\\"+Constants.SETTINGS_FILE, Constants.COPY_FILES_FLAG+": "+Constants.TRUE);
+        if(!Utilities.fileExists(testDirectory+"\\"+Constants.SETTINGS_FILE)) {
+            Setup.setupSettingsFile(testDirectory + "\\" + Constants.SETTINGS_FILE);
+            ErrorHandler.printOutToFile(testDirectory + "\\" + Constants.SETTINGS_FILE, Constants.DEFAULT_RENAME_DIRECTORY + ": " + testDirectory + "\\test");
+            ErrorHandler.printOutToFile(testDirectory + "\\" + Constants.SETTINGS_FILE, Constants.DEFAULT_COPY_DIRECTORY + ": " + testDirectory + "\\copy");
+            ErrorHandler.printOutToFile(testDirectory + "\\" + Constants.SETTINGS_FILE, Constants.USER_INTERACTION + ": " + Constants.FALSE);
+            ErrorHandler.printOutToFile(testDirectory + "\\" + Constants.SETTINGS_FILE, Constants.COPY_FILES_FLAG + ": " + Constants.TRUE);
+            ErrorHandler.printOutToFile(testDirectory + "\\" + Constants.SETTINGS_FILE, Constants.MEDIA_DIVISION + ": " + Constants.TRUE);
+        }
         Setup.setupSettingsFile(testDirectory+"\\"+Constants.SPECIAL_EP_CASES_FILE);
         Setup.setupSettingsFile(testDirectory+"\\"+Constants.SPECIAL_RENAME_CASES_FILE);
+        Setup.setupSettingsFile(testDirectory+"\\"+Constants.MEDIA_DIVISION_FILE);
     }
 }

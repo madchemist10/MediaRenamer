@@ -1,6 +1,7 @@
 package rename;
 
 import constants.Constants;
+import utilities.Utilities;
 
 /**
  * Representation of a media file.
@@ -18,6 +19,8 @@ public class MediaFile {
     private String fileExt = null;
     /**Parsed year for this media file. Only used in movie cases.*/
     private String year = null;
+    /**Media type of this mediaFile.*/
+    private String mediaType = null;
 
     /**
      * Create a new MediaFile object with the original
@@ -68,6 +71,13 @@ public class MediaFile {
         this.year = year;
     }
 
+    /**
+     * Assign new value to this media file's mediaType.
+     * @param mediaType to be assigned to this media file.
+     */
+    public void setMediaType(String mediaType) {
+        this.mediaType = mediaType;
+    }
     /**
      * Retrieve this media file's original filename.
      * @return the original file name for this media file.
@@ -132,27 +142,50 @@ public class MediaFile {
     }
 
     /**
+     * Retrieve this media file's mediaType.
+     * @return the parsed year of this media file.
+     */
+    public String getMediaType() {
+        return mediaType;
+    }
+
+    /**
      * If all valid fields are not null, build and return formatted output.
      * If any of valid fields are null, return null.
+     * If mediaType is defined, use mediaType.
      * @return null or formatted output.
      */
     @Override
     public String toString() {
+        String preBuiltMedia = toOriginalString();
+        if(getMediaType() != null){
+            String path = Utilities.removeFilenameFromPath(preBuiltMedia);
+            String filename = Utilities.parseFilenameFromPath(preBuiltMedia);
+            preBuiltMedia = path+getMediaType()+"\\"+filename;
+        }
+        return preBuiltMedia;
+    }
+
+    /**
+     * If all valid fields are not null, build and return formatted output.
+     * If any of valid fields are null, return null.
+     * @return null or formatted output.
+     */
+    public String toOriginalString(){
+        String preBuiltMedia = null;
         if(getMediaName() != null && getSeasonNumber() != null && getEpisodeNumber() != null && getFileExt() != null && getYear() == null){
-            String preBuiltMedia = Constants.DEFAULT_MEDIA_NAME;
+            preBuiltMedia = Constants.DEFAULT_MEDIA_NAME;
             preBuiltMedia = preBuiltMedia.replace(Constants.MEDIA_NAME, getMediaName());
             preBuiltMedia = preBuiltMedia.replace(Constants.XX, getSeasonNumber());
             preBuiltMedia = preBuiltMedia.replace(Constants.YYY, getEpisodeNumber());
             preBuiltMedia = preBuiltMedia.replace(Constants.FILE_EXT, getFileExt());
-            return preBuiltMedia;
         }
         if(getMediaName() != null && getFileExt() != null && getYear() != null){
-            String preBuiltMedia = Constants.DEFAULT_MEDIA_NAME;
+            preBuiltMedia = Constants.DEFAULT_MEDIA_NAME;
             preBuiltMedia = preBuiltMedia.replace(Constants.MEDIA_NAME, getMediaName());
             preBuiltMedia = preBuiltMedia.replace("S"+Constants.XX+"E"+Constants.YYY, getYear());
             preBuiltMedia = preBuiltMedia.replace(Constants.FILE_EXT, getFileExt());
-            return preBuiltMedia;
         }
-        return null;
+        return preBuiltMedia;
     }
 }

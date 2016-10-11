@@ -41,7 +41,16 @@ public class Copy {
 
         /*Determine the new destination path from the user specified destination
         * plus the new folder determination.*/
-        String newPath = destination+"\\"+newFolder;
+        String mediaType = "";
+        String tempMediaType = mediaFile.getMediaType();
+        if(tempMediaType != null){
+            mediaType = tempMediaType+"\\";
+        }
+        String preNewPath = destination+"\\"+mediaType;
+        if(!Utilities.fileExists(preNewPath)){
+            Utilities.makeDirectory(preNewPath);
+        }
+        String newPath = preNewPath+newFolder;
         newPath = newPath.trim();
 
         /*Extract the filename of the file to be copied.*/
@@ -57,15 +66,15 @@ public class Copy {
         }
         long originalFileSize = new File(mediaFile.toString()).length();
         /*Execute the copy command.*/
-        Utilities.copyWithProgress(mediaFile.toString(),dest);
+        Utilities.copyWithProgress(mediaFile.toString().replace(mediaType,""),dest);
 
         long copiedFileSize = new File(dest).length();
         /*If the transferred file exists and the file size
         * is equal to the original, and the original
         * still exists, delete the original.*/
         if(Utilities.fileExists(dest) && originalFileSize == copiedFileSize) {
-            if (Utilities.fileExists(mediaFile.toString())) {
-                Utilities.deleteFile(mediaFile.toString());
+            if (Utilities.fileExists(mediaFile.toString().replace(mediaType,""))) {
+                Utilities.deleteFile(mediaFile.toString().replace(mediaType,""));
             }
         }
     }

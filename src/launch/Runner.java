@@ -27,6 +27,7 @@ public class Runner {
             ErrorHandler.printOutToFile(Constants.SETTINGS_FILE, "#" + Constants.DEFAULT_MAX_EPISODE_COUNT + ":");
             ErrorHandler.printOutToFile(Constants.SETTINGS_FILE, Constants.USER_INTERACTION+": "+Constants.TRUE);
             ErrorHandler.printOutToFile(Constants.SETTINGS_FILE, Constants.COPY_FILES_FLAG+": "+Constants.FALSE);
+            ErrorHandler.printOutToFile(Constants.SETTINGS_FILE, Constants.MEDIA_DIVISION+": "+Constants.FALSE);
         }
 
         if(!Utilities.fileExists(Constants.SPECIAL_RENAME_CASES_FILE)) {
@@ -40,6 +41,11 @@ public class Runner {
             ErrorHandler.printOutToFile(Constants.SPECIAL_EP_CASES_FILE, "###OriginalName: S##E##");
         }
 
+        if(!Utilities.fileExists(Constants.MEDIA_DIVISION_FILE)){
+            Setup.setupSettingsFile(Constants.MEDIA_DIVISION_FILE);
+            ErrorHandler.printOutToFile(Constants.MEDIA_DIVISION_FILE, "### Media Division format = {Title}: {Type}");
+        }
+
         String offset = "";
         if(args.length != 0){
             offset = args[0]+"\\";
@@ -48,6 +54,7 @@ public class Runner {
         HashMap<String, String> settings = Utilities.loadSettingsFile(offset+Constants.SETTINGS_FILE);
         HashMap<String, String> specialRenameCases = Utilities.loadSettingsFile(offset+Constants.SPECIAL_RENAME_CASES_FILE);
         HashMap<String, String> specialEpisodeCases = Utilities.loadSettingsFile(offset+Constants.SPECIAL_EP_CASES_FILE);
+        HashMap<String, String> mediaDivisionCases = Utilities.loadSettingsFile(offset+Constants.MEDIA_DIVISION_FILE);
         /*Instantiate rename module and execute rename.*/
         Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
         String directory = settings.get(Constants.DEFAULT_RENAME_DIRECTORY);
@@ -77,15 +84,46 @@ public class Runner {
             /*Remove all files in the list*/
             files.clear();
             listFiles(new File(directory).listFiles());
+            String mediaDivision = settings.get(Constants.MEDIA_DIVISION);
+            boolean division = false;
+            if(Constants.TRUE.equals(mediaDivision)){
+                division = true;
+            }
             for (File file : files) {
                 MediaFile mediaFile = new MediaFile(file.toString());
                 renameModule.rename(mediaFile);
-                copyModule.copy(mediaFile);
-                /*Let the user know where the file was stored.*/
-                String filename = Utilities.parseFilenameFromPath(mediaFile.toString());
-                String path = Utilities.removeFilenameFromPath(mediaFile.toString());
-                String folder = Utilities.parseFilenameFromPath(path);
-                System.out.println("File copied: "+filename+" to dir: {CopyDir}\\"+folder);
+                //get media name from complete filename
+                String mediaName = Utilities.parseFilenameFromPath(mediaFile.getMediaName());
+                //if user settings is to divide media based on type
+                if(division){
+                    String mediaType = mediaDivisionCases.get(mediaName);
+                    if(mediaType == null){
+                        if(Constants.TRUE.equals(userInteraction)) {
+                            System.out.println(mediaName);
+                            mediaType = getMediaTypeFromUser();
+                            ErrorHandler.printOutToFile(Constants.MEDIA_DIVISION_FILE, mediaName + ": " + mediaType);
+                            //allows for multiple of same file.
+                            mediaDivisionCases.put(mediaName,mediaType);
+                        }
+                    }
+                    //assign media type if determined.
+                    if(mediaType != null) {
+                        mediaFile.setMediaType(mediaType);
+                    }
+                }
+                System.out.println(mediaFile.toString());
+                boolean copy = true;
+                if(Constants.TRUE.equals(userInteraction)){
+                    copy = userDecisionOnCopy(mediaFile);
+                }
+                if(copy) {
+                    copyModule.copy(mediaFile);
+                    /*Let the user know where the file was stored.*/
+                    String filename = Utilities.parseFilenameFromPath(mediaFile.toString());
+                    String path = Utilities.removeFilenameFromPath(mediaFile.toString());
+                    String folder = Utilities.parseFilenameFromPath(path);
+                    System.out.println("File copied: " + filename + " to dir: {CopyDir}\\" + folder);
+                }
             }
         }
     }
@@ -132,6 +170,27 @@ public class Runner {
     }
 
     /**
+     * Helper method to determine copy based on user input.
+     * @param mediaFile of the media file in question to be copied.
+     */
+    private static boolean userDecisionOnCopy(MediaFile mediaFile){
+        System.out.println(Constants.LINE_BREAK);
+        System.out.println("The copy algorithm has determined the following path:");
+        System.out.println(mediaFile.toString());
+        System.out.println("Is this correct? Y/N");
+        String userInput = Utilities.userInput();
+        switch(userInput){
+            case "Y":
+            case "y":
+                return true;
+            case "N":
+            case "n":
+            default:
+                return false;
+        }
+    }
+
+    /**
      * Log the contents of the file that was renamed.
      * This method should only be called when the renaming was purely from
      * the algorithm.
@@ -141,5 +200,14 @@ public class Runner {
         String debugMessage = "Debug: "+mediaFile.getOriginalFileName()+
                 " >> "+mediaFile.toString();
         ErrorHandler.printOutToFile(Constants.LOG_FILE,debugMessage);
+    }
+
+    /**
+     * Retrieve media type from user.
+     * @return user specified media type.
+     */
+    private static String getMediaTypeFromUser(){
+        System.out.println("What is the Media type?");
+        return Utilities.userInput();
     }
 }

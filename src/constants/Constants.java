@@ -52,9 +52,4 @@ public class Constants {
     public static final String LINE_BREAK = "-----------------------------";
     /**Default byte buffer size for copying data.*/
     public static final int DEFAULT_BYTE_BUFFER_SIZE = 4096;
-
-    /**Media type of Anime*/
-    public static final String ANIME = "ANIME";
-    /**Media type of TV Show*/
-    public static final String TV_SHOW = "TV_SHOW";
 }

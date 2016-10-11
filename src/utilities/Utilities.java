@@ -207,7 +207,11 @@ public class Utilities {
      */
     public static void deleteFolder(String src){
         File file = new File(src);
-        deleteDir(file);
+        try {
+            deleteDir(file);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -233,6 +237,7 @@ public class Utilities {
             Files.delete(Paths.get(src));
         } catch (IOException e) {
             ErrorHandler.printError(e.getClass().getName() + ": " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }
