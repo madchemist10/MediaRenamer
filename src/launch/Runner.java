@@ -19,49 +19,52 @@ public class Runner {
     private static ArrayList<File> files = new ArrayList<>();
 
     public static void main(String[] args) {
-        /*Setup working directory.*/
-        if(!Utilities.fileExists(Constants.SETTINGS_FILE)) {
-            Setup.setupSettingsFile(Constants.SETTINGS_FILE);
-            ErrorHandler.printOutToFile(Constants.SETTINGS_FILE, "#" + Constants.DEFAULT_RENAME_DIRECTORY + ":");
-            ErrorHandler.printOutToFile(Constants.SETTINGS_FILE, "#" + Constants.DEFAULT_COPY_DIRECTORY + ":");
-            ErrorHandler.printOutToFile(Constants.SETTINGS_FILE, "#" + Constants.DEFAULT_MAX_EPISODE_COUNT + ":");
-            ErrorHandler.printOutToFile(Constants.SETTINGS_FILE, Constants.USER_INTERACTION+": "+Constants.TRUE);
-            ErrorHandler.printOutToFile(Constants.SETTINGS_FILE, Constants.COPY_FILES_FLAG+": "+Constants.FALSE);
-            ErrorHandler.printOutToFile(Constants.SETTINGS_FILE, Constants.MEDIA_DIVISION+": "+Constants.FALSE);
-        }
 
-        if(!Utilities.fileExists(Constants.SPECIAL_RENAME_CASES_FILE)) {
-            Setup.setupSettingsFile(Constants.SPECIAL_RENAME_CASES_FILE);
-            ErrorHandler.printOutToFile(Constants.SPECIAL_RENAME_CASES_FILE, "###OriginalName: NewName");
-        }
-
-        if(!Utilities.fileExists(Constants.SPECIAL_EP_CASES_FILE)) {
-            Setup.setupSettingsFile(Constants.SPECIAL_EP_CASES_FILE);
-            ErrorHandler.printOutToFile(Constants.SPECIAL_EP_CASES_FILE, "### S##E## where S## is last season, E## is last ep of S##");
-            ErrorHandler.printOutToFile(Constants.SPECIAL_EP_CASES_FILE, "###OriginalName: S##E##");
-        }
-
-        if(!Utilities.fileExists(Constants.MEDIA_DIVISION_FILE)){
-            Setup.setupSettingsFile(Constants.MEDIA_DIVISION_FILE);
-            ErrorHandler.printOutToFile(Constants.MEDIA_DIVISION_FILE, "### Media Division format = {Title}: {Type}");
-        }
-
+        /*Command line argument #1 is an offset directory to look for settings files.*/
         String offset = "";
         if(args.length != 0){
             offset = args[0]+"\\";
         }
+
+        /*Setup working directory.*/
+        if(!Utilities.fileExists(offset+Constants.SETTINGS_FILE)) {
+            Setup.setupSettingsFile(offset+Constants.SETTINGS_FILE);
+            ErrorHandler.printOutToFile(offset+Constants.SETTINGS_FILE, "#" + Constants.DEFAULT_RENAME_DIRECTORY + ":");
+            ErrorHandler.printOutToFile(offset+Constants.SETTINGS_FILE, "#" + Constants.DEFAULT_COPY_DIRECTORY + ":");
+            ErrorHandler.printOutToFile(offset+Constants.SETTINGS_FILE, "#" + Constants.DEFAULT_MAX_EPISODE_COUNT + ":");
+            ErrorHandler.printOutToFile(offset+Constants.SETTINGS_FILE, Constants.USER_INTERACTION+": "+Constants.TRUE);
+            ErrorHandler.printOutToFile(offset+Constants.SETTINGS_FILE, Constants.COPY_FILES_FLAG+": "+Constants.FALSE);
+            ErrorHandler.printOutToFile(offset+Constants.SETTINGS_FILE, Constants.MEDIA_DIVISION+": "+Constants.FALSE);
+        }
+
+        if(!Utilities.fileExists(offset+Constants.SPECIAL_RENAME_CASES_FILE)) {
+            Setup.setupSettingsFile(offset+Constants.SPECIAL_RENAME_CASES_FILE);
+            ErrorHandler.printOutToFile(offset+Constants.SPECIAL_RENAME_CASES_FILE, "###OriginalName: NewName");
+        }
+
+        if(!Utilities.fileExists(offset+Constants.SPECIAL_EP_CASES_FILE)) {
+            Setup.setupSettingsFile(offset+Constants.SPECIAL_EP_CASES_FILE);
+            ErrorHandler.printOutToFile(offset+Constants.SPECIAL_EP_CASES_FILE, "### S##E## where S## is last season, E## is last ep of S##");
+            ErrorHandler.printOutToFile(offset+Constants.SPECIAL_EP_CASES_FILE, "###OriginalName: S##E##");
+        }
+
+        if(!Utilities.fileExists(offset+Constants.MEDIA_DIVISION_FILE)){
+            Setup.setupSettingsFile(offset+Constants.MEDIA_DIVISION_FILE);
+            ErrorHandler.printOutToFile(offset+Constants.MEDIA_DIVISION_FILE, "### Media Division format = {Title}: {Type}");
+        }
+
         /*Read in settings values.*/
         HashMap<String, String> settings = Utilities.loadSettingsFile(offset+Constants.SETTINGS_FILE);
         HashMap<String, String> specialRenameCases = Utilities.loadSettingsFile(offset+Constants.SPECIAL_RENAME_CASES_FILE);
         HashMap<String, String> specialEpisodeCases = Utilities.loadSettingsFile(offset+Constants.SPECIAL_EP_CASES_FILE);
         HashMap<String, String> mediaDivisionCases = Utilities.loadSettingsFile(offset+Constants.MEDIA_DIVISION_FILE);
-        /*Instantiate rename module and execute rename.*/
-        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
         String directory = settings.get(Constants.DEFAULT_RENAME_DIRECTORY);
         if(directory == null){
             System.out.println("Directory is null.");
             return;
         }
+        /*Instantiate rename module and execute rename.*/
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
         listFiles(new File(directory).listFiles());
         String userInteraction = settings.get(Constants.USER_INTERACTION);
         for(File file : files){

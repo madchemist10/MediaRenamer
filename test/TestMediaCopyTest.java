@@ -1,7 +1,6 @@
 import errorHandle.ErrorHandler;
 import junit.framework.TestCase;
 import launch.Runner;
-import org.junit.Test;
 import utilities.Utilities;
 
 import java.util.concurrent.locks.Lock;
@@ -14,7 +13,7 @@ public class TestMediaCopyTest extends TestCase {
     /**Lock for ensuring one unit test executes at a time.*/
     private Lock sequential = new ReentrantLock();
     /**Default test directory for these tests.*/
-    private static String defaultTestDir = "TestDir";
+    private static String defaultTestDir = HelperMethodsTest.TESTDIR;
 
     /**
      * Acquire the lock to begin test execution.

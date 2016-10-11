@@ -34,9 +34,19 @@ public class Utilities {
         try{
             BufferedReader br = new BufferedReader(new FileReader(filepath));
             while ((line = br.readLine()) != null){
-                if(!line.contains("###")) {
+                if(!line.startsWith("###")) {
                     String[] new_data = line.split(delimiter);
-                    settingsMap.put(new_data[0], new_data[1]);
+                    String key = new_data[0];
+                    String value = "";
+                    //we have valid key and value
+                    if(new_data.length == 2){
+                        value = new_data[1];
+                        settingsMap.put(key,value);
+                    }
+                    //we only have a key
+                    if(new_data.length == 1){
+                        settingsMap.put(key,value);
+                    }
                 }
             }
             br.close();
@@ -210,7 +220,7 @@ public class Utilities {
         try {
             deleteDir(file);
         }catch(Exception e){
-            e.printStackTrace();
+            ErrorHandler.printError(e.getClass().getName() + ": " + e.getMessage());
         }
     }
 
@@ -237,7 +247,6 @@ public class Utilities {
             Files.delete(Paths.get(src));
         } catch (IOException e) {
             ErrorHandler.printError(e.getClass().getName() + ": " + e.getMessage());
-            e.printStackTrace();
         }
     }
 }
