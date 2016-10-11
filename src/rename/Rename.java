@@ -366,10 +366,10 @@ public class Rename {
                 }
                 int sNum = Integer.parseInt(seasonNumber);
                 String userSpecialCase = specialEpisodeCases.get(originalName);
-                String seasonNum = userSpecialCase.replaceAll("[E]\\d{2}","");
-                String episodeNum = userSpecialCase.replaceAll("[S]\\d{2}","");
-                seasonNum = seasonNum.replaceAll("[S]","");
-                episodeNum = episodeNum.replaceAll("[E]","");
+                String seasonNum = userSpecialCase.replaceAll("E\\d{2}","");
+                String episodeNum = userSpecialCase.replaceAll("S\\d{2}","");
+                seasonNum = seasonNum.replaceAll("S","");
+                episodeNum = episodeNum.replaceAll("E","");
                 /*Account for when S## is given for a specific title in the config settings.*/
                 if(episodeNum.equals("") && !seasonNum.equals("")){
                     mediaFile.setSeasonNumber(seasonNum);
