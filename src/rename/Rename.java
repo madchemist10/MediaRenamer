@@ -57,6 +57,7 @@ public class Rename {
         mediaFile.setFileExt(getFileExt(tempFileName));
         //remove file extension from temp filename
         tempFileName = tempFileName.replace("."+mediaFile.getFileExt(),"");
+
         //remove prepended or trailing spaces
         tempFileName = tempFileName.trim();
         /*Strip away everything in parentheses and brackets.*/
@@ -90,23 +91,16 @@ public class Rename {
         String year = parseYear(tempFileName);
         mediaFile.setYear(year);
 
-        /*replace all S##E## and everything after
-        * we only want to keep what is before S##E##*/
-        tempFileName = tempFileName.replaceAll("S\\d{2}E\\d{2}.+","");
-
-        /*replace all #### and everything after
-        * we only want to keep anything before ####*/
-        tempFileName = tempFileName.replaceAll("\\d{3,4}.+","");
-
-        /*Handle special case where season could be pretexted with
-        * "S"
-        * Need to remove S from determined mediaName*/
-        tempFileName = tempFileName.replaceAll("S\\d{1,2}",""); //"S##"
-
-        /*Handle special case where episode could be pretexted with
-        * "E"
-        * Need to remove E from determined mediaName*/
-        tempFileName = tempFileName.replaceAll("E\\d{1,2}",""); //"E##"
+        /*Remove the following cases:
+        * where stuff can be any alphabetic char, space, or "-"
+        * S#{stuff}
+        * S##{stuff}
+        * E#{stuff}
+        * E##{stuff}
+        * ###{stuff}
+        * ####{stuff}
+        */
+        tempFileName = tempFileName.replaceAll("(((S|E)\\d{1,2})+|\\d{3,4})[-\\w\\s]+","");
 
         /*Attempt to replace instance of episode number*/
         if(episodeNumber != null){
@@ -136,8 +130,7 @@ public class Rename {
             filename = filename.trim();
             /*if there is a "  " {double space} followed by a character and
             * other characters, remove everything following the "  "{Alpha}*/
-            filename = filename.replaceAll("\\s{2}\\p{Alpha}.+","");
-            filename = filename.replaceAll("\\s{2}\\p{Alpha}","");
+            filename = filename.replaceAll("\\s{2}[-\\s\\w]+","");
             mediaFile.setMediaName(path+filename);
             //attempt to re-exchange the filename
             exchangeFileName(mediaFile);
