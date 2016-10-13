@@ -590,4 +590,16 @@ public class TestMediaRenameTest extends TestCase{
         renameModule.rename(testMediaFile);
         assertEquals("Clannad S00E01.mkv", testMediaFile.toString());
     }
+
+    /**
+     * Test case where the filename contains the keyword episode.
+     * Apostrophes are in the filename.
+     */
+    public void testMediaRenameEpisodeKeyWord_Apostrophe(){
+        String originalFileName = "[Kōritsu].Clannad.Episode.06.The.Sister`s.Founder`s.Festival.1080p.Dual.Audio.Bluray.(95F009A9).mkv";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("Clannad S01E06.mkv", testMediaFile.toString());
+    }
 }

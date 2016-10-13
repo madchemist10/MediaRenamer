@@ -73,6 +73,8 @@ public class Rename {
         tempFileName = tempFileName.replaceAll("x\\d{3}","");
         //replace all ####p {can be 1080p, or 720p}
         tempFileName = tempFileName.replaceAll("\\d{3,4}p","");
+        //replace all smart quotes
+        tempFileName = tempFileName.replaceAll("`","'");
 
         //assign episode number to mediaFile
         String UserMaxEpisodeCount = settings.get(Constants.DEFAULT_MAX_EPISODE_COUNT);
@@ -100,7 +102,7 @@ public class Rename {
         * ###{stuff}
         * ####{stuff}
         */
-        tempFileName = tempFileName.replaceAll("(((S|E)\\d{1,2})+|\\d{3,4})[-\\w\\s]+","");
+        tempFileName = tempFileName.replaceAll("(((S|E)\\d{1,2})+|\\d{3,4})[-\\w\\s']+","");
 
         /*Replace all instances of the keyword "Episode "*/
         tempFileName = tempFileName.replaceAll("(Episode|episode)\\s*","");
@@ -141,7 +143,7 @@ public class Rename {
             filename = filename.trim();
             /*if there is a "  " {double space} followed by a character and
             * other characters, remove everything following the "  "{Alpha}*/
-            filename = filename.replaceAll("\\s{2}[-\\s\\w]+","");
+            filename = filename.replaceAll("\\s{2}[-\\s\\w']+","");
             mediaFile.setMediaName(path+filename);
             //attempt to re-exchange the filename
             exchangeFileName(mediaFile);

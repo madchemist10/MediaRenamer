@@ -12,19 +12,35 @@ import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  */
 public class TestRunnerTest extends TestCase {
     /**Default test directory for testing*/
     private String testDir = HelperMethodsTest.TESTDIR;
+    /**Lock for ensuring one unit test executes at a time.*/
+    private Lock sequential = new ReentrantLock();
+
+
+    /**
+     * Acquire the lock to begin test execution.
+     * @throws Exception if setup failed.
+     */
+    public void setUp() throws Exception{
+        sequential.lock();
+        super.setUp();
+    }
 
     /**
      * Ensure the test directory is clean for next test.
+     * Release the lock to stop test execution.
      * @throws Exception if tear down fails.
      */
     public void tearDown() throws Exception{
         HelperMethodsTest.destroyTestDirectory(testDir);
+        sequential.unlock();
         super.tearDown();
     }
 
