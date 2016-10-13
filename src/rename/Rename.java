@@ -102,6 +102,17 @@ public class Rename {
         */
         tempFileName = tempFileName.replaceAll("(((S|E)\\d{1,2})+|\\d{3,4})[-\\w\\s]+","");
 
+        /*Replace all instances of the keyword "Episode "*/
+        tempFileName = tempFileName.replaceAll("(Episode|episode)\\s*","");
+
+        /*If the filename contains the keyword special or Special,
+        * then season number must be 0.
+        * Only if the keyword special appears as the last word in the filename.*/
+        if(tempFileName.contains("Special") || tempFileName.contains("special")){
+            mediaFile.setSeasonNumber("0");
+            tempFileName = tempFileName.replaceAll("(Special|special)\\s*","");
+        }
+
         /*Attempt to replace instance of episode number*/
         if(episodeNumber != null){
             tempFileName = tempFileName.replaceAll(episodeNumber,"");
@@ -170,8 +181,8 @@ public class Rename {
         numbersOnly = numbersOnly.replaceAll(" ","");   //remove all spaces
         numbersOnly = numbersOnly.trim();   //remove leading/trailing spaces
         /*The episode number will be the last 2-3 digits in the filename*/
-        //if the length if 2, then we know we only have episodeNumber
-        if(numbersOnly.length() == 2){
+        //if the length is 1 or 2, then we know we only have episodeNumber
+        if(numbersOnly.length() == 2 || numbersOnly.length() == 1){
             return numbersOnly;
         }
         /*if the length is 3, then we know we have 3 digit episodeNumber or

@@ -544,4 +544,50 @@ public class TestMediaRenameTest extends TestCase{
         renameModule.rename(testMediaFile);
         assertEquals("Pans Labyrinth 2006.mkv", testMediaFile.toString());
     }
+
+    /**
+     * Test case where the filename contains the keyword Episode.
+     */
+    public void testMediaRenameEpisodeKeyWord(){
+        String originalFileName = "[Kōritsu].Clannad.Episode.01.On.a.Slope.with.Falling.Cherry.Blossoms.1080p.Dual.Audio.Bluray.(8C127EE1).mkv";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("Clannad S01E01.mkv", testMediaFile.toString());
+    }
+
+    /**
+     * Test case where the filename contains the keyword Special.
+     * Should result in season number being 0.
+     */
+    public void testMediaRenameSpecialKeyWord(){
+        String originalFileName = "[Kōritsu].Clannad.Special.1.It.Happened.During.Summer.Vacation.1080p.Dual.Audio.Bluray.(A25142DF).mkv";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("Clannad S00E01.mkv", testMediaFile.toString());
+    }
+
+    /**
+     * Test case where the filename contains the keyword episode.
+     */
+    public void testMediaRenameLowerEpisodeKeyWord(){
+        String originalFileName = "[Kōritsu].Clannad.episode.01.On.a.Slope.with.Falling.Cherry.Blossoms.1080p.Dual.Audio.Bluray.(8C127EE1).mkv";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("Clannad S01E01.mkv", testMediaFile.toString());
+    }
+
+    /**
+     * Test case where the filename contains the keyword special.
+     * Should result in season number being 0.
+     */
+    public void testMediaRenameLowerSpecialKeyWord(){
+        String originalFileName = "[Kōritsu].Clannad.special.1.It.Happened.During.Summer.Vacation.1080p.Dual.Audio.Bluray.(A25142DF).mkv";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("Clannad S00E01.mkv", testMediaFile.toString());
+    }
 }
