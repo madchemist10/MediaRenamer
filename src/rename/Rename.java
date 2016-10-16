@@ -1,12 +1,9 @@
 package rename;
 
 import constants.Constants;
-import errorHandle.ErrorHandler;
 import utilities.Utilities;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -61,13 +58,11 @@ public class Rename {
         //remove prepended or trailing spaces
         tempFileName = tempFileName.trim();
         /*Strip away everything in parentheses and brackets.*/
-        //replace everything enclosed in ()
-        tempFileName = tempFileName.replaceAll("\\([^)]*\\)","");
-        //replace everything enclosed in []
-        tempFileName = tempFileName.replaceAll("\\[[^]]*\\]","");
-        //replace all "."
-        tempFileName = tempFileName.replaceAll("\\."," ");
-        //replace all " - "
+        //replace everything enclosed in () or []
+        tempFileName = tempFileName.replaceAll("(\\([^)]*\\))|(\\[[^]]*\\])","");
+        //replace all ". or _ or ;" followed by one or more spaces
+        tempFileName = tempFileName.replaceAll("[._;]\\s*"," ");
+        //replace all " - " need minimum of one space on either side
         tempFileName = tempFileName.replaceAll("\\s+(-)\\s+"," ");
         //replace all x### {can be x264 or x265}
         tempFileName = tempFileName.replaceAll("x\\d{3}","");
@@ -109,10 +104,15 @@ public class Rename {
 
         /*If the filename contains the keyword special or Special,
         * then season number must be 0.
-        * Only if the keyword special appears as the last word in the filename.*/
-        if(tempFileName.contains("Special") || tempFileName.contains("special")){
+        * Only if the keyword special appears as the last word in the filename.
+        * Other keywords that symbolize special episode are "OVA", "OAD", "ONA"*/
+        if(tempFileName.contains("Special") ||
+                tempFileName.contains("special") ||
+                tempFileName.contains("OVA") ||
+                tempFileName.contains("OAD") ||
+                tempFileName.contains("ONA")){
             mediaFile.setSeasonNumber("0");
-            tempFileName = tempFileName.replaceAll("(Special|special)\\s*","");
+            tempFileName = tempFileName.replaceAll("(Special|special|OVA|OAD|ONA)\\s*","");
         }
 
         /*Attempt to replace instance of episode number*/

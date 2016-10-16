@@ -602,4 +602,19 @@ public class TestMediaRenameTest extends TestCase{
         renameModule.rename(testMediaFile);
         assertEquals("Clannad S01E06.mkv", testMediaFile.toString());
     }
+
+    //[Kōritsu].Clannad.Episode.16.3.on.3.1080p.Dual.Audio.Bluray.(845198A7)
+    //special case, need to add test case.
+
+    /**
+     * Test case where filename contains underscore as well as special episode keyword.
+     *
+     */
+    public void test_1_MediaRename_Steins_Gate(){
+        String originalFileName = "[DeadFish] Steins;Gate_ Soumei Eichi no Cognitive Computing - 01 - ONA [720p][AAC].mkv";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("Steins Gate Soumei Eichi no Cognitive Computing S00E01.mkv", testMediaFile.toString());
+    }
 }
