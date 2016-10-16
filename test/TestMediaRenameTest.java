@@ -608,7 +608,6 @@ public class TestMediaRenameTest extends TestCase{
 
     /**
      * Test case where filename contains underscore as well as special episode keyword.
-     *
      */
     public void test_1_MediaRename_Steins_Gate(){
         String originalFileName = "[DeadFish] Steins;Gate_ Soumei Eichi no Cognitive Computing - 01 - ONA [720p][AAC].mkv";
@@ -616,5 +615,16 @@ public class TestMediaRenameTest extends TestCase{
         Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
         renameModule.rename(testMediaFile);
         assertEquals("Steins Gate Soumei Eichi no Cognitive Computing S00E01.mkv", testMediaFile.toString());
+    }
+
+    /**
+     * Test case where filename contains underscore as well as special episode keyword.
+     */
+    public void test_2_MediaRename_Steins_Gate(){
+        String originalFileName = "[AnimeRG] Gekijouban Steins;Gate - Fuka Ryouiki no Deja vu (2013) [1080p] [FLAC5.1][x265] [10bit] [FK99].mkv";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("Gekijouban Steins Gate Fuka Ryouiki no Deja vu 2013.mkv", testMediaFile.toString());
     }
 }

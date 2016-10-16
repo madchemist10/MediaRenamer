@@ -118,6 +118,32 @@ public class Rename {
         /*Attempt to replace instance of episode number*/
         if(episodeNumber != null){
             tempFileName = tempFileName.replaceAll(episodeNumber,"");
+        }else{
+            /*It is possible that episode number could not be found because one of the
+            * previous parsing algorithm components removed the numbers.
+            * It is most likely that the numbers could have been a year and was
+            * bound within (). So remove the first instance of ( and ).
+            * Create a new temporary mediaFile and re run the algorithm.
+            * A new mediaFile is created to preserve the original filepath
+            * for renaming purposes of the original MediaFile. After the algorithm
+            * passes these set of checks, assign the new mediaName, SeasonNum, EpisodeNum,
+            * and Year to the original mediaFile.*/
+            String originalFileName = mediaFile.getOriginalFileName();
+            originalFileName = originalFileName.replaceFirst("\\(","");
+            originalFileName = originalFileName.replaceFirst("\\)","");
+            if(!tempFileName.equals(originalFileName)) {
+                MediaFile tempMediaFile = new MediaFile(originalFileName);
+                rename(tempMediaFile);
+                if (tempMediaFile.toString() != null) {
+                    mediaFile.setMediaName(tempMediaFile.getMediaName());
+                    mediaFile.setEpisodeNumber(tempMediaFile.getEpisodeNumber());
+                    mediaFile.setYear(tempMediaFile.getYear());
+                    mediaFile.setSeasonNumber(tempMediaFile.getSeasonNumber());
+                    /*Safe to return here as the media algorithm has finished
+                    * from the recursive call.*/
+                    return;
+                }
+            }
         }
         /*Attempt to replace instance of season number*/
         tempFileName = tempFileName.replaceAll(seasonNumber, "");

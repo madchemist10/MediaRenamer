@@ -137,7 +137,7 @@ public class MediaFile {
      * Retrieve this media file's year.
      * @return the parsed year of this media file.
      */
-    private String getYear() {
+    String getYear() {
         return year;
     }
 
