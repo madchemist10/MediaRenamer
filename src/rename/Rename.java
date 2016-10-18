@@ -71,6 +71,27 @@ public class Rename {
         //replace all smart quotes
         tempFileName = tempFileName.replaceAll("`","'");
 
+        /*It is possible the season number and episode number could be separated
+        * by an x in the case of S#xE##; or any letter for that matter. To handle
+        * this case, we need to replace the {char} with a space so that the
+        * episode and season number parser can handle the numbers properly.*/
+        //Step 1: split filename by pattern {digit}{non-digit}{digit}
+        String[] tempRemove = tempFileName.split("(\\d+[^0-9]\\d+)");
+        //if we have at least 1 value to remove (should be a word or set of words)
+        if(tempRemove.length > 0){
+            String numberReplacement = tempFileName;
+            //Step 2: replace all instances of the strings found in step 1
+            for(String str: tempRemove){
+                numberReplacement = numberReplacement.replaceAll(str,"");
+            }
+            numberReplacement = numberReplacement.trim();
+            //Step 3: replace all elements that are not digits with spaces
+            String newNumberToReplace = numberReplacement.replaceAll("[^0-9]"," ");
+            /*Step 4: replace first instance where the original pattern found in step 1
+            * with the new pattern that excludes the non-numerical character {# ##}*/
+            tempFileName = tempFileName.replaceFirst(numberReplacement,newNumberToReplace);
+        }
+
         /*It is possible that the show title is followed by numbers that
         * are not apart of the episode or season numbers. Search through the special
         * case settings files and determine if the show title contains numbers.
@@ -149,7 +170,7 @@ public class Rename {
             originalFileName = originalFileName.replaceFirst("\\(","");
             originalFileName = originalFileName.replaceFirst("\\)","");
             //remove anything in [] or () and only leave numbers 0-9
-            String numbers = originalFileName.replaceAll("((\\([^)]*\\))|(\\[[^]]*\\]))","").replaceAll("[^0-9]+","").trim();
+            String numbers = originalFileName.replaceAll("((\\([^)]*\\))|(\\[[^]]*\\])|(\\{[^}]*\\}))","").replaceAll("[^0-9]+","").trim();
             if(numbers.length() == 0){
                 return;
             }
