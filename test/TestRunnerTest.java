@@ -108,7 +108,7 @@ public class TestRunnerTest extends TestCase {
         settingsMap.put(Constants.ERROR_HANDLER, Constants.TRUE);
         HelperMethodsTest.generateSettingsFileFromMap(testDirectory, settingsMap);
         HelperMethodsTest.generateTestSettingsFiles(testDirectory);
-        ErrorHandler.printOutToFile(testDirectory+"\\mediaDivision.txt","Tokyo Ghoul: Anime");
+        ErrorHandler.printOutToFile(testDirectory+"\\mediaDivision.txt","One Punch Man: Anime");
         byte[] buff = new byte[2048];
         ByteArrayInputStream myIn = new ByteArrayInputStream(buff);
         System.setIn(myIn);
@@ -118,11 +118,11 @@ public class TestRunnerTest extends TestCase {
         RunnerHelperThread myRunner = new RunnerHelperThread(myIn,outputBuffer);
         Thread runnerHelper = new Thread(myRunner);
         runnerHelper.start();
-        String title = "Tokyo Ghoul";
+        String title = "One Punch Man";
         HelperMethodsTest.generateTestDirectory(testDir, 1, 1, title, HelperMethodsTest.FORMATS.HORRIBLESUBS);
         Runner.main(new String[]{testDir});
         Awaitility.await().until(waitForCopyComplete(myRunner));
         assertTrue(myRunner.copyComplete);
-        assertTrue(Utilities.fileExists(testDir+"\\copy\\Anime\\Tokyo Ghoul\\Tokyo Ghoul S01E01.mkv"));
+        assertTrue(Utilities.fileExists(testDir+"\\copy\\Anime\\One Punch Man\\One Punch Man S01E01.mkv"));
     }
 }
