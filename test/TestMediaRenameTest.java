@@ -657,4 +657,16 @@ public class TestMediaRenameTest extends TestCase{
         renameModule.rename(testMediaFile);
         assertEquals(path+"Mob Psycho 100 S01E01.mkv", testMediaFile.toString());
     }
+
+    /**
+     * Test case where filename has unique season/episode scheme of
+     * S#xE##; followed by episode title.
+     */
+    public void test_1_MediaRename_Claymore(){
+        String originalFileName = "Claymore - 1x01 - Great Sword [1080p] [Dual Audio5.1][HEVC][10bit] {bk}.mkv";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("Claymore S01E01.mkv", testMediaFile.toString());
+    }
 }

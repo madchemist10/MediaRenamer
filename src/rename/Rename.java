@@ -59,7 +59,7 @@ public class Rename {
         tempFileName = tempFileName.trim();
         /*Strip away everything in parentheses and brackets.*/
         //replace everything enclosed in () or []
-        tempFileName = tempFileName.replaceAll("(\\([^)]*\\))|(\\[[^]]*\\])","");
+        tempFileName = tempFileName.replaceAll("(\\([^)]*\\))|(\\[[^]]*\\])|(\\{[^}]*\\})","");
         //replace all ". or _ or ;" followed by one or more spaces
         tempFileName = tempFileName.replaceAll("[._;]\\s*"," ");
         //replace all " - " need minimum of one space on either side
