@@ -618,7 +618,7 @@ public class TestMediaRenameTest extends TestCase{
     }
 
     /**
-     * Test case where filename contains underscore as well as special episode keyword.
+     * Test case where filename contains year within parenthesis.
      */
     public void test_2_MediaRename_Steins_Gate(){
         String originalFileName = "[AnimeRG] Gekijouban Steins;Gate - Fuka Ryouiki no Deja vu (2013) [1080p] [FLAC5.1][x265] [10bit] [FK99].mkv";
@@ -626,5 +626,35 @@ public class TestMediaRenameTest extends TestCase{
         Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
         renameModule.rename(testMediaFile);
         assertEquals("Gekijouban Steins Gate Fuka Ryouiki no Deja vu 2013.mkv", testMediaFile.toString());
+    }
+
+    /**
+     * Test case where filename is Mob Psycho 100.
+     * Title has number within. Uses special rename cases
+     * settings file to account for this.
+     */
+    public void test_1_MediaRename_Mob_Psycho(){
+        String originalFileName = "[AnimeRG]  Mob Psycho 100 - 01 [1080p] [HEVC] [TheBiscuitMan].mkv";
+        specialRenameCases.put("Mob Psycho 100","Mob Psycho 100");
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("Mob Psycho 100 S01E01.mkv", testMediaFile.toString());
+    }
+
+    /**
+     * Test case where filename is Mob Psycho 100.
+     * Title has number within. Uses special rename cases
+     * settings file to account for this.
+     * Path included in media name.
+     */
+    public void test_2_MediaRename_Mob_Psycho(){
+        String path = "C:\\test\\Media\\";
+        String originalFileName = path+"[AnimeRG]  Mob Psycho 100 - 01 [1080p] [HEVC] [TheBiscuitMan].mkv";
+        specialRenameCases.put("Mob Psycho 100","Mob Psycho 100");
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals(path+"Mob Psycho 100 S01E01.mkv", testMediaFile.toString());
     }
 }

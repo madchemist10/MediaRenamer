@@ -20,7 +20,7 @@ To achieve this goal there are three setting files:
 settings.txt
 specialEpisodes.txt
 specialRename.txt
-mediaDivison.txt
+mediaDivision.txt
 
 Contained within each of these files can be a series of user specified
 specific data that interacts with the core application.
@@ -110,6 +110,18 @@ Example:
 		{original title}: {new title}
 	This will denote that if the {original title} is extracted during the
 	renaming process, replace it with the {new title} found in this file.
+If the user has found a special case that contains numbers within the filename,
+the user can use this file to assist the algorithm in parsing out the edge
+case title.
+Example:
+    If the user's file was:
+        {stuff} {title} {###} - {episode}.{fileExt}
+    and the user wishes to ensure the {###} is not accidentally parsed
+    as the season or episode number, then the user should input:
+        {title ###}: {title ###}
+    into the file. Using the same entry as both the key and value,
+    will enable the algorithm to exchange the {###} while maintaining
+    the {title ###} intact.
 *************************************************
 mediaDivision.txt
 

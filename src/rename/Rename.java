@@ -71,6 +71,23 @@ public class Rename {
         //replace all smart quotes
         tempFileName = tempFileName.replaceAll("`","'");
 
+        /*It is possible that the show title is followed by numbers that
+        * are not apart of the episode or season numbers. Search through the special
+        * case settings files and determine if the show title contains numbers.
+        * If so, remove the numbers found in the show title exactly from the show
+        * title and continue parsing; otherwise, do not change the temporary filename.*/
+        for(String userShowTitle: specialRenameCases.keySet()){
+            //only use rename case if key and value are identical.
+            if(userShowTitle.equals(specialRenameCases.get(userShowTitle))){
+                String userNoNum = userShowTitle.replaceAll("\\d*","").trim();
+                if(tempFileName.contains(userNoNum)){
+                    String numbersInShowTitle = userShowTitle.replaceAll("[^0-9]+","");
+                    mediaFile.setMediaName(path+userShowTitle);
+                    tempFileName = tempFileName.replaceFirst(numbersInShowTitle,"");
+                }
+            }
+        }
+
         //assign episode number to mediaFile
         String UserMaxEpisodeCount = settings.get(Constants.DEFAULT_MAX_EPISODE_COUNT);
         int maxNum = 999;
@@ -118,7 +135,7 @@ public class Rename {
         /*Attempt to replace instance of episode number*/
         if(episodeNumber != null){
             tempFileName = tempFileName.replaceAll(episodeNumber,"");
-        }else{
+        }else if(year == null){
             /*It is possible that episode number could not be found because one of the
             * previous parsing algorithm components removed the numbers.
             * It is most likely that the numbers could have been a year and was
@@ -131,6 +148,11 @@ public class Rename {
             String originalFileName = mediaFile.getOriginalFileName();
             originalFileName = originalFileName.replaceFirst("\\(","");
             originalFileName = originalFileName.replaceFirst("\\)","");
+            //remove anything in [] or () and only leave numbers 0-9
+            String numbers = originalFileName.replaceAll("((\\([^)]*\\))|(\\[[^]]*\\]))","").replaceAll("[^0-9]+","").trim();
+            if(numbers.length() == 0){
+                return;
+            }
             if(!tempFileName.equals(originalFileName)) {
                 MediaFile tempMediaFile = new MediaFile(originalFileName);
                 rename(tempMediaFile);
@@ -156,8 +178,11 @@ public class Rename {
             tempFileName = path + tempFileName;
         }
 
-        //assign media name
-        mediaFile.setMediaName(tempFileName);
+        /*assign media name only if never set; could have been set
+        * in the above block that deals with retrieving from the user file.*/
+        if(mediaFile.getMediaName() == null) {
+            mediaFile.setMediaName(tempFileName);
+        }
 
         /*Attempt to replace current media file name with user specified filename.*/
         exchangeFileName(mediaFile);
