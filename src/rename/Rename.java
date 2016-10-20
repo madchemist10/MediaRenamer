@@ -135,7 +135,7 @@ public class Rename {
         * ###{stuff}
         * ####{stuff}
         */
-        tempFileName = tempFileName.replaceAll("(((S|E)\\d{1,2})+|\\d{3,4})[-\\w\\s']+","");
+        tempFileName = tempFileName.replaceAll("(((S|E|s|e)\\d{1,2})+|\\d{3,4})[-\\w\\s']+","");
 
         /*Replace all instances of the keyword "Episode "*/
         tempFileName = tempFileName.replaceAll("(Episode|episode)\\s*","");

@@ -680,4 +680,15 @@ public class TestMediaRenameTest extends TestCase{
         renameModule.rename(testMediaFile);
         assertEquals("Family Guy S02E01.avi", testMediaFile.toString());
     }
+
+    /**
+     * Test case where filename has season number and episode number bound within [].
+     */
+    public void test_MediaRename_GilliganIsland(){
+        String originalFileName = "Gilligans_Island_-_s01e02_Home_Sweet_Hut.avi";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("Gilligans Island S01E02.avi", testMediaFile.toString());
+    }
 }
