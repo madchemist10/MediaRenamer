@@ -76,7 +76,7 @@ public class Rename {
         * this case, we need to replace the {char} with a space so that the
         * episode and season number parser can handle the numbers properly.*/
         //Step 1: split filename by pattern {digit}{non-digit}{digit}
-        String[] tempRemove = tempFileName.split("(\\d+[^0-9]\\d+)");
+        String[] tempRemove = tempFileName.split("(\\d+[^0-9\\s]\\d+)");
         //if we have at least 1 value to remove (should be a word or set of words)
         if(tempRemove.length > 0){
             String numberReplacement = tempFileName;
@@ -169,6 +169,10 @@ public class Rename {
             String originalFileName = mediaFile.getOriginalFileName();
             originalFileName = originalFileName.replaceFirst("\\(","");
             originalFileName = originalFileName.replaceFirst("\\)","");
+            if(originalFileName.equals(mediaFile.getOriginalFileName())){
+                originalFileName = originalFileName.replaceFirst("\\[","");
+                originalFileName = originalFileName.replaceFirst("\\]","");
+            }
             //remove anything in [] or () and only leave numbers 0-9
             String numbers = originalFileName.replaceAll("((\\([^)]*\\))|(\\[[^]]*\\])|(\\{[^}]*\\}))","").replaceAll("[^0-9]+","").trim();
             if(numbers.length() == 0){
@@ -215,7 +219,7 @@ public class Rename {
             filename = filename.trim();
             /*if there is a "  " {double space} followed by a character and
             * other characters, remove everything following the "  "{Alpha}*/
-            filename = filename.replaceAll("\\s{2}[-\\s\\w']+","");
+            filename = filename.replaceAll("\\s{2}.+","");
             mediaFile.setMediaName(path+filename);
             //attempt to re-exchange the filename
             exchangeFileName(mediaFile);
