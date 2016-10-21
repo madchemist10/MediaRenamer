@@ -126,6 +126,14 @@ public class Rename {
         String year = parseYear(tempFileName);
         mediaFile.setYear(year);
 
+        /*Reset the year field to null as "" is effective null.*/
+        if("".equals(year)) {
+            year = null;
+        }
+        /*remove any keywords that relate to the word movie.*/
+        tempFileName = tempFileName.replaceAll("Movie|movie|Gekijouban|gekijouban","");
+
+
         /*Remove the following cases:
         * where stuff can be any alphabetic char, space, or "-"
         * S#{stuff}
@@ -175,10 +183,10 @@ public class Rename {
             }
             //remove anything in [] or () and only leave numbers 0-9
             String numbers = originalFileName.replaceAll("((\\([^)]*\\))|(\\[[^]]*\\])|(\\{[^}]*\\}))","").replaceAll("[^0-9]+","").trim();
-            if(numbers.length() == 0){
-                return;
-            }
-            if(!tempFileName.equals(originalFileName)) {
+
+            /*it is possible that there are no numbers in the case that a movie title has no
+             * year.*/
+            if(numbers.length() != 0 && !tempFileName.equals(originalFileName)) {
                 MediaFile tempMediaFile = new MediaFile(originalFileName);
                 rename(tempMediaFile);
                 if (tempMediaFile.toString() != null) {
@@ -405,6 +413,15 @@ public class Rename {
             if(tempYearFront != null && tempYearBack == null){
                 return tempYearFront;
             }
+        }
+        /*There is a chance that there is no year value but the filename contains
+        * the word movie in either english or japanese. Return empty string
+        * so that these cases are properly handled.*/
+        if(filename.contains("Movie") ||
+                filename.contains("movie") ||
+                filename.contains("Gekijouban") ||
+                filename.contains("gekijouban")){
+            return "";
         }
         return null;
     }

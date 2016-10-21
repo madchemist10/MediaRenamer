@@ -485,7 +485,7 @@ public class TestMediaRenameTest extends TestCase{
      * Test for parsing the year from a movie.
      */
     public void testMediaRenameMovieFileCorrectOutput(){
-        String originalFileName = "Movie 1999.mkv";
+        String originalFileName = "Sample 1999.mkv";
         MediaFile testMediaFile = new MediaFile(originalFileName);
         Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
         renameModule.rename(testMediaFile);
@@ -625,7 +625,7 @@ public class TestMediaRenameTest extends TestCase{
         MediaFile testMediaFile = new MediaFile(originalFileName);
         Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
         renameModule.rename(testMediaFile);
-        assertEquals("Gekijouban Steins Gate Fuka Ryouiki no Deja vu 2013.mkv", testMediaFile.toString());
+        assertEquals("Steins Gate Fuka Ryouiki no Deja vu 2013.mkv", testMediaFile.toString());
     }
 
     /**
@@ -682,7 +682,7 @@ public class TestMediaRenameTest extends TestCase{
     }
 
     /**
-     * Test case where filename has season number and episode number bound within [].
+     * Test case where filename is separated via underscores..
      */
     public void test_MediaRename_GilliganIsland(){
         String originalFileName = "Gilligans_Island_-_s01e02_Home_Sweet_Hut.avi";
@@ -690,5 +690,16 @@ public class TestMediaRenameTest extends TestCase{
         Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
         renameModule.rename(testMediaFile);
         assertEquals("Gilligans Island S01E02.avi", testMediaFile.toString());
+    }
+
+    /**
+     * Test case where filename is movie with plain text Movie but not a year.
+     */
+    public void test_MediaRename_MovieNoYear(){
+        String originalFileName = "Sample - Movie.avi";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("Sample.avi", testMediaFile.toString());
     }
 }

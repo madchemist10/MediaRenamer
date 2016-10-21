@@ -181,10 +181,15 @@ public class MediaFile {
             preBuiltMedia = preBuiltMedia.replace(Constants.FILE_EXT, getFileExt());
         }
         if(getMediaName() != null && getFileExt() != null && getYear() != null){
-            preBuiltMedia = Constants.DEFAULT_MEDIA_NAME;
-            preBuiltMedia = preBuiltMedia.replace(Constants.MEDIA_NAME, getMediaName());
-            preBuiltMedia = preBuiltMedia.replace("S"+Constants.XX+"E"+Constants.YYY, getYear());
-            preBuiltMedia = preBuiltMedia.replace(Constants.FILE_EXT, getFileExt());
+            //if year is empty string, build media name ourselves.
+            if(getYear().equals("")){
+                preBuiltMedia = getMediaName()+"."+getFileExt();
+            } else {
+                preBuiltMedia = Constants.DEFAULT_MEDIA_NAME;
+                preBuiltMedia = preBuiltMedia.replace(Constants.MEDIA_NAME, getMediaName());
+                preBuiltMedia = preBuiltMedia.replace("S" + Constants.XX + "E" + Constants.YYY, getYear());
+                preBuiltMedia = preBuiltMedia.replace(Constants.FILE_EXT, getFileExt());
+            }
         }
         return preBuiltMedia;
     }
