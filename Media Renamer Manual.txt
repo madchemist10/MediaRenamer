@@ -96,6 +96,15 @@ Example2:
 	This will denote that the first season associated with this title
 	only contained 12 episodes; therefore, should have an offset of 12.
 
+If the user has decided that they would like to specify a specific season number
+and still conduct an episode offset, the format to use is:
+    {title}: S{SNum}##E{ENum}
+    This will equate the following case:
+        Input to this file: {title}: S01##E12
+        {title} S02E14.{fileExt}
+        to
+        {title} S01E02.{fileExt}
+
 *************************************************
 specialRename.txt
 

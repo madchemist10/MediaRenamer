@@ -181,8 +181,15 @@ public class Rename {
                 originalFileName = originalFileName.replaceFirst("\\[","");
                 originalFileName = originalFileName.replaceFirst("\\]","");
             }
+            /*it is possible that the file extension contains a number as in the case
+            * of *.mp4 contains a 4.*/
+            String fileExt = getFileExt(originalFileName);
+            originalFileName = originalFileName.replaceAll(fileExt,"");
             //remove anything in [] or () and only leave numbers 0-9
             String numbers = originalFileName.replaceAll("((\\([^)]*\\))|(\\[[^]]*\\])|(\\{[^}]*\\}))","").replaceAll("[^0-9]+","").trim();
+
+            //add file extension back for rest of algorithm
+            originalFileName+="."+fileExt;
 
             /*it is possible that there are no numbers in the case that a movie title has no
              * year.*/
@@ -487,6 +494,14 @@ public class Rename {
                 String episodeNum = userSpecialCase.replaceAll("S\\d{2}","");
                 seasonNum = seasonNum.replaceAll("S","");
                 episodeNum = episodeNum.replaceAll("E","");
+                /*Special syntax notation for notating that we want an episode offset
+                * and use the given season number.*/
+                boolean userSpecifiedOffsetAndSeason = false;
+                if(userSpecialCase.contains("##")){
+                    userSpecifiedOffsetAndSeason = true;
+                    seasonNum = seasonNum.replaceAll("#","");
+                    episodeNum = episodeNum.replaceAll("#","");
+                }
                 /*Account for when S## is given for a specific title in the config settings.*/
                 if(episodeNum.equals("") && !seasonNum.equals("")){
                     mediaFile.setSeasonNumber(seasonNum);
@@ -504,6 +519,11 @@ public class Rename {
                 }
                 if(sNum == userS){
                     mediaFile.setSeasonNumber(Integer.toString(userS+1));
+                }
+                /*Special case to assign season number as user gave it.
+                * Episode offset has already been conducted by previous check.*/
+                if(userSpecifiedOffsetAndSeason){
+                    mediaFile.setSeasonNumber(Integer.toString(userS));
                 }
             }
         }

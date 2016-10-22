@@ -702,4 +702,34 @@ public class TestMediaRenameTest extends TestCase{
         renameModule.rename(testMediaFile);
         assertEquals("Sample.avi", testMediaFile.toString());
     }
+
+    /**
+     * Test case where filename is movie with plain text Movie
+     * and Gekijouban.
+     */
+    public void test_MediaRename_MovieGekijouban(){
+        String originalFileName = "[DeadFish] Ao no Exorcist Gekijouban - Movie [BD][720p][AAC].mkv";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("Ao no Exorcist.mkv", testMediaFile.toString());
+    }
+
+    /**
+     * Rename media file with offset for episode.
+     * Season is season 1.
+     * Specify specific season number and episode offset.
+     */
+    public void testHorribleSubsWithEpisodeOffset_Season1(){
+        String mediaName = "Bungou Stray Dogs";
+        String seasonNumber = "01";
+        String originalFileName = "[HorribleSubs] Bungou Stray Dogs - 13 [720p].mkv";
+        specialEpisodeCases.put(mediaName,"S01##E12");
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        String episodeNumber = "01";
+        String expectedFormattedMediaFile = mediaName+" S"+seasonNumber+"E"+episodeNumber+".mkv";
+        assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
+    }
 }
