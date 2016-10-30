@@ -732,4 +732,18 @@ public class TestMediaRenameTest extends TestCase{
         String expectedFormattedMediaFile = mediaName+" S"+seasonNumber+"E"+episodeNumber+".mkv";
         assertEquals(expectedFormattedMediaFile, testMediaFile.toString());
     }
+
+    /**
+     * Test case where season number and episode number are joined and
+     * the title contains a number.
+     */
+    public void test2BrokeGirlsSeasonNumEpisodeNumJoined(){
+        String originalFileName = "2.broke.girls.501.hdtv-lol[ettv].mp4";
+        specialRenameCases.put("2 broke girls","2 broke girls");
+        specialRenameCases.put("broke girls","2 Broke Girls");
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("2 Broke Girls S05E01.mp4", testMediaFile.toString());
+    }
 }

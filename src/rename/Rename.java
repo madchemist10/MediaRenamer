@@ -298,7 +298,9 @@ public class Rename {
             //check 3 digit first
             String potentialEpisode = numbersOnly.substring(1);
             if(filename.contains(potentialEpisode)){
-                return potentialEpisode;
+                if(Integer.parseInt(potentialEpisode) < maxEpisode) {
+                    return potentialEpisode;
+                }
             }
             //check 2 digit next
             potentialEpisode = numbersOnly.substring(2);
@@ -361,7 +363,9 @@ public class Rename {
             //check 3 digit first
             String potentialEpisode = numbersOnly.substring(1);
             if(filename.contains(potentialEpisode)){
-                return numbersOnly.substring(0,1);
+                if(Integer.parseInt(potentialEpisode) < maxEpisode) {
+                    return numbersOnly.substring(0, 1);
+                }
             }
             //check 2 digit next
             potentialEpisode = numbersOnly.substring(2);
@@ -461,6 +465,11 @@ public class Rename {
             }
             if(originalName.equalsIgnoreCase(filename)){
                 mediaFile.setMediaName(path+specialRenameCases.get(originalName));
+            }
+            /*The case where the user wants to replace a portion of the filename with
+            * something different.*/
+            else if(filename.contains(originalName)){
+                mediaFile.setMediaName(path+filename.replaceFirst(filename,specialRenameCases.get(originalName)));
             }
         }
     }
