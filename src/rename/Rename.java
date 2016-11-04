@@ -61,7 +61,7 @@ public class Rename {
         //replace everything enclosed in () or []
         tempFileName = tempFileName.replaceAll("(\\([^)]*\\))|(\\[[^]]*\\])|(\\{[^}]*\\})","");
         //replace all ". or _ or ;" followed by one or more spaces
-        tempFileName = tempFileName.replaceAll("[._;]\\s*"," ");
+        tempFileName = tempFileName.replaceAll("[._;,]\\s*"," ");
         //replace all " - " need minimum of one space on either side
         tempFileName = tempFileName.replaceAll("\\s+(-)\\s+"," ");
         //replace all x### {can be x264 or x265}

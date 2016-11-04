@@ -746,4 +746,15 @@ public class TestMediaRenameTest extends TestCase{
         renameModule.rename(testMediaFile);
         assertEquals("2 Broke Girls S05E01.mp4", testMediaFile.toString());
     }
+
+    /**
+     * Test case where filename has comma in filename
+     */
+    public void test_MediaRename_CommaInFilename(){
+        String originalFileName = "Family Guy - S02E08 - I Am Peter, Hear Me Roar [480p DVD x265][AAC 2.0][Sub][Ch].mkv";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("Family Guy S02E08.mkv", testMediaFile.toString());
+    }
 }
