@@ -757,4 +757,15 @@ public class TestMediaRenameTest extends TestCase{
         renameModule.rename(testMediaFile);
         assertEquals("Family Guy S02E08.mkv", testMediaFile.toString());
     }
+
+    /**
+     * Test case where filename has exclamation point in filename
+     */
+    public void test_MediaRename_ExclamationInFilename(){
+        String originalFileName = "Family Guy - S02E15 - Dammit, Janet! [480p DVD x265][AAC 2.0][Sub][Ch].mkv";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("Family Guy S02E15.mkv", testMediaFile.toString());
+    }
 }
