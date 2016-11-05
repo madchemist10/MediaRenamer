@@ -15,6 +15,9 @@ public class TestMediaCopyTest extends TestCase {
     /**Default test directory for these tests.*/
     private static String defaultTestDir = HelperMethodsTest.TESTDIR;
 
+    private static String ANIME = "Anime";
+    private static String TV_SHOWS = "TVShows";
+
     /**
      * Acquire the lock to begin test execution.
      * @throws Exception if setup failed.
@@ -87,5 +90,48 @@ public class TestMediaCopyTest extends TestCase {
         assertTrue(Utilities.fileExists(defaultTestDir+"\\copy\\Anime\\"+title+"\\"+title+" S01E01.mkv"));
         //old file does not exist
         assertTrue(!Utilities.fileExists(defaultTestDir+"\\test\\"+title+" S01E01.mkv"));
+    }
+
+    /**
+     * Test the copying of a single file using the predictive copy algorithm.
+     */
+    public void testCopyWithPreExistingFileStructure(){
+        ErrorHandler.printOutToFile(defaultTestDir+"\\mediaDivision.txt","Tokyo Ghoul: Anime");
+        String title = "Tokyo Ghoul";
+        HelperMethodsTest.generateTestDirectory(defaultTestDir,1, 1, title, HelperMethodsTest.FORMATS.HORRIBLESUBS);
+        Utilities.makeDirectory(defaultTestDir+"\\copy\\Anime\\");
+        Utilities.makeDirectory(defaultTestDir+"\\copy\\Anime\\"+title+"\\");
+        Utilities.makeDirectory(defaultTestDir+"\\copy\\Anime\\"+title+"\\"+title+" Season 1");
+        Utilities.makeDirectory(defaultTestDir+"\\copy\\Anime\\"+title+"\\"+title+" Season 2");
+        Runner.main(new String[]{defaultTestDir});
+        //new file exists
+        assertTrue(Utilities.fileExists(defaultTestDir+"\\copy\\Anime\\"+title+"\\"+title+" Season 1\\"+title+" S01E01.mkv"));
+        //old file does not exist
+        assertTrue(!Utilities.fileExists(defaultTestDir+"\\test\\"+title+" S01E01.mkv"));
+    }
+
+    public void testCopyWithMultipleFilesWithPreExistingFileStructure(){
+        String tokyoGhoulTitle = "Tokyo Ghoul";
+        String theBlacklistTitle = "The Blacklist";
+        int episodeMax = 5;
+        ErrorHandler.printOutToFile(defaultTestDir+"\\mediaDivision.txt",tokyoGhoulTitle+": "+ ANIME);
+        ErrorHandler.printOutToFile(defaultTestDir+"\\mediaDivision.txt",theBlacklistTitle+": "+ TV_SHOWS);
+        HelperMethodsTest.generateTestDirectory(defaultTestDir,episodeMax, 1, tokyoGhoulTitle, HelperMethodsTest.FORMATS.HORRIBLESUBS);
+        Utilities.makeDirectory(defaultTestDir+"\\copy\\"+ANIME+"\\");
+        Utilities.makeDirectory(defaultTestDir+"\\copy\\"+ANIME+"\\"+tokyoGhoulTitle+"\\");
+        Utilities.makeDirectory(defaultTestDir+"\\copy\\"+ANIME+"\\"+tokyoGhoulTitle+"\\"+tokyoGhoulTitle+" Season 1");
+        Utilities.makeDirectory(defaultTestDir+"\\copy\\"+ANIME+"\\"+tokyoGhoulTitle+"\\"+tokyoGhoulTitle+" Season 2");
+
+        HelperMethodsTest.generateTestDirectory(defaultTestDir,episodeMax, 1, tokyoGhoulTitle, HelperMethodsTest.FORMATS.HORRIBLESUBS);
+        Utilities.makeDirectory(defaultTestDir+"\\copy\\"+ANIME+"\\");
+        Utilities.makeDirectory(defaultTestDir+"\\copy\\"+ANIME+"\\"+tokyoGhoulTitle+"\\");
+        Utilities.makeDirectory(defaultTestDir+"\\copy\\"+ANIME+"\\"+tokyoGhoulTitle+"\\"+tokyoGhoulTitle+" Season 1");
+        Utilities.makeDirectory(defaultTestDir+"\\copy\\"+ANIME+"\\"+tokyoGhoulTitle+"\\"+tokyoGhoulTitle+" Season 2");
+        Runner.main(new String[]{defaultTestDir});
+
+        for(int i = 1; i <= episodeMax; i++) {
+            String episodeNumber = String.format("%2d", i).replace(" ","0");
+            assertTrue(Utilities.fileExists(defaultTestDir+"\\copy\\"+ANIME+"\\"+tokyoGhoulTitle+"\\"+tokyoGhoulTitle+" Season 1\\"+ " S01E"+episodeNumber+".mkv"));
+        }
     }
 }

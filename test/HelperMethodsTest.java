@@ -14,12 +14,12 @@ import java.util.Map;
 class HelperMethodsTest {
 
     /**TestDirectory that all test that need path use.*/
-    public static final String TESTDIR = "TestDir";
+    static final String TESTDIR = "TestDir";
 
     /**
      * Enum to represent possible formats that can be generated.
      */
-    public enum FORMATS{
+    enum FORMATS{
         HORRIBLESUBS,
         ETTV,
         SHAAIG,

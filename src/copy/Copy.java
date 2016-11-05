@@ -34,6 +34,15 @@ public class Copy {
         if(destination == null){
             return; //cannot continue if destination is null
         }
+        //predict where the file belongs.
+        predictiveCopyAlgorithm(mediaFile);
+
+        String copyLocation = mediaFile.getCopyLocation();
+        if(copyLocation != null){
+            executeCopy(mediaFile.getOriginalFileName(),copyLocation);
+            return;
+        }
+
         /*determine what the new folder should be
         * Should be the same as the media files name*/
         String mediaName = Utilities.parseFilenameFromPath(mediaFile.getMediaName());
@@ -64,18 +73,74 @@ public class Copy {
         if(!Utilities.fileExists(newPath)) {
             Utilities.makeDirectory(newPath);
         }
-        long originalFileSize = new File(mediaFile.toString().replace(mediaType,"")).length();
-        /*Execute the copy command.*/
-        Utilities.copyWithProgress(mediaFile.toString().replace(mediaType,""),dest);
+        copyLocation = dest;
+        String originalMediaLocation = mediaFile.toString().replace(mediaType,"");
 
-        long copiedFileSize = new File(dest).length();
+        executeCopy(originalMediaLocation,copyLocation);
+    }
+
+    /**
+     * Execute the copy and delete the old file if the new file exists
+     * and the file size of the original and new are equal.
+     * @param source of the file to copy.
+     * @param destination of where the file belongs.
+     */
+    private static void executeCopy(String source, String destination){
+        long originalFileSize = new File(source).length();
+        /*Execute the copy command.*/
+        Utilities.copyWithProgress(source, destination);
+        long copiedFileSize = new File(destination).length();
         /*If the transferred file exists and the file size
         * is equal to the original, and the original
         * still exists, delete the original.*/
-        if(Utilities.fileExists(dest) && originalFileSize == copiedFileSize) {
-            if (Utilities.fileExists(mediaFile.toString().replace(mediaType,""))) {
-                Utilities.deleteFile(mediaFile.toString().replace(mediaType,""));
+        if(Utilities.fileExists(destination) && originalFileSize == copiedFileSize){
+            if(Utilities.fileExists(source)){
+                Utilities.deleteFile(source);
             }
+        }
+    }
+
+    /**
+     * Locate where the media file should be copied to.
+     * Determines where the file belongs based on the current file structure.
+     * @param mediaFile that should be copied.
+     */
+    private void predictiveCopyAlgorithm(MediaFile mediaFile){
+        String destination = settings.get(Constants.DEFAULT_COPY_DIRECTORY);
+        //return if destination does not exist in the file structure.
+        if(!Utilities.fileExists(destination)){
+            return;
+        }
+        String mediaType = mediaFile.getMediaType();
+        //assign media type to destination.
+        destination += "\\"+mediaType;
+        //return if destination does not exist in the file structure.
+        if(!Utilities.fileExists(destination)){
+            return;
+        }
+        /*We have two cases where the file can be located.
+        * Either the file is located in:
+        * {title}\{title} Season {SNum}\
+        * or
+        * {title} Season {SNum}\
+        * or
+        * {title}\*/
+        String mediaName = Utilities.parseFilenameFromPath(mediaFile.getMediaName());
+        String seasonNumber = Integer.toString(Integer.parseInt(mediaFile.getSeasonNumber()));
+        String seasonFolder = destination+"\\"+mediaName+"\\"+mediaName+" Season "+seasonNumber;
+        String media = Utilities.parseFilenameFromPath(mediaFile.toString());
+        if(Utilities.fileExists(seasonFolder)){
+            mediaFile.setCopyLocation(seasonFolder+"\\"+media);
+            return;
+        }
+        seasonFolder = destination+"\\"+mediaName+" Season "+seasonNumber;
+        if(Utilities.fileExists(seasonFolder)){
+            mediaFile.setCopyLocation(seasonFolder+"\\"+media);
+            return;
+        }
+        seasonFolder = destination+"\\"+mediaName;
+        if(Utilities.fileExists(seasonFolder)){
+            mediaFile.setCopyLocation(seasonFolder+"\\"+media);
         }
     }
 }
