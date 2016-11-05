@@ -61,7 +61,7 @@ public class Rename {
         //replace everything enclosed in () or []
         tempFileName = tempFileName.replaceAll("(\\([^)]*\\))|(\\[[^]]*\\])|(\\{[^}]*\\})","");
         //replace all ". or _ or ;" followed by one or more spaces
-        tempFileName = tempFileName.replaceAll("[._;,!]\\s*"," ");
+        tempFileName = tempFileName.replaceAll("[._;,!&]\\s*"," ");
         //replace all " - " need minimum of one space on either side
         tempFileName = tempFileName.replaceAll("\\s+(-)\\s+"," ");
         //replace all x### {can be x264 or x265}
@@ -70,6 +70,9 @@ public class Rename {
         tempFileName = tempFileName.replaceAll("\\d{3,4}p","");
         //replace all smart quotes
         tempFileName = tempFileName.replaceAll("`","'");
+        /*it is possible that there is an extra number somewhere in the path
+        * the is pretexted with '#'.*/
+        tempFileName = tempFileName.replaceAll("[#]\\d*","");
 
         /*It is possible the season number and episode number could be separated
         * by an x in the case of S#xE##; or any letter for that matter. To handle
