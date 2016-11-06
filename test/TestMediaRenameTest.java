@@ -790,4 +790,16 @@ public class TestMediaRenameTest extends TestCase{
         renameModule.rename(testMediaFile);
         assertEquals("Family Guy S10E22.mkv", testMediaFile.toString());
     }
+
+    /**
+     * Test case where filename has 3 digit episode number in filename
+     */
+    public void test_MediaRenameInFilename(){
+        String originalFileName = "Bleach S01E008.mkv";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("Bleach S01E008.mkv", testMediaFile.toString());
+    }
+
 }

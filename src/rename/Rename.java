@@ -5,6 +5,8 @@ import utilities.Utilities;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Media rename core algorithms.
@@ -77,9 +79,11 @@ public class Rename {
         /*It is possible the season number and episode number could be separated
         * by an x in the case of S#xE##; or any letter for that matter. To handle
         * this case, we need to replace the {char} with a space so that the
-        * episode and season number parser can handle the numbers properly.*/
+        * episode and season number parser can handle the numbers properly.
+        * There is possibility that the pattern is S##E###, so do not remove 'E'
+        * from the filename if this is the case.*/
         //Step 1: split filename by pattern {digit}{non-digit}{digit}
-        String[] tempRemove = tempFileName.split("(\\d+[^0-9\\s]\\d+)");
+        String[] tempRemove = tempFileName.split("(\\d+[^0-9\\s^(E|S)]\\d+)");
         //if we have at least 1 value to remove (should be a word or set of words)
         if(tempRemove.length > 0){
             String numberReplacement = tempFileName;
@@ -111,20 +115,32 @@ public class Rename {
                 }
             }
         }
+        /*Try to match the episode and season number for the format:
+         *S#E#
+         *S#E##
+         *S#E###
+         *S##E#
+         *S##E###
+         */
+        String episodeNumber;
+        String seasonNumber;
+        if(!seasonEpisodeMatcher(mediaFile, tempFileName)){
+            //assign episode number to mediaFile
+            String UserMaxEpisodeCount = settings.get(Constants.DEFAULT_MAX_EPISODE_COUNT);
+            int maxNum = 999;
+            if(UserMaxEpisodeCount != null){
+                maxNum = Integer.parseInt(UserMaxEpisodeCount);
+            }
+            episodeNumber = parseEpisodeNumber(tempFileName, maxNum);
+            mediaFile.setEpisodeNumber(episodeNumber);
 
-        //assign episode number to mediaFile
-        String UserMaxEpisodeCount = settings.get(Constants.DEFAULT_MAX_EPISODE_COUNT);
-        int maxNum = 999;
-        if(UserMaxEpisodeCount != null){
-            maxNum = Integer.parseInt(UserMaxEpisodeCount);
+            //assign season number to mediaFile
+            seasonNumber = parseSeasonNumber(tempFileName, maxNum);
+            mediaFile.setSeasonNumber(seasonNumber);
+        } else{
+            episodeNumber = mediaFile.getEpisodeNumber();
+            seasonNumber = mediaFile.getSeasonNumber();
         }
-        String episodeNumber = parseEpisodeNumber(tempFileName, maxNum);
-        mediaFile.setEpisodeNumber(episodeNumber);
-
-        //assign season number to mediaFile
-        String seasonNumber = parseSeasonNumber(tempFileName, maxNum);
-        mediaFile.setSeasonNumber(seasonNumber);
-
         //assign year to mediaFile
         String year = parseYear(tempFileName);
         mediaFile.setYear(year);
@@ -539,5 +555,38 @@ public class Rename {
                 }
             }
         }
+    }
+
+    /**
+     * Helper method to determine if the pattern S{#}+E{#}+ exists
+     * somewhere in the filename. Assign the media file the
+     * season and episode numbers if the pattern is found.
+     * @param mediaFile that is being tested.
+     * @param tempFilename of the media file that is currently been
+     *                     parsed.
+     * @return true if match found, false otherwise.
+     */
+    private boolean seasonEpisodeMatcher(MediaFile mediaFile, String tempFilename){
+        String[] subParts = tempFilename.split(" ");
+        Pattern pattern = Pattern.compile("S\\d+E\\d+");
+        boolean match = false;
+        for(String part: subParts) {
+            Matcher matcher = pattern.matcher(part);
+            if(matcher.matches()){
+                match = true;
+                tempFilename = part;
+                break;
+            }
+        }
+        if(match){
+            String seasonNumber = tempFilename.replaceAll("E\\d+","");
+            String episodeNumber = tempFilename.replaceAll("S\\d+","");
+            seasonNumber = seasonNumber.replaceAll("S","");
+            episodeNumber = episodeNumber.replaceAll("E","");
+            mediaFile.setEpisodeNumber(episodeNumber);
+            mediaFile.setSeasonNumber(seasonNumber);
+            return true;
+        }
+        return false;
     }
 }
