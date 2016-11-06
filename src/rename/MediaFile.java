@@ -21,6 +21,8 @@ public class MediaFile {
     private String year = null;
     /**Media type of this mediaFile.*/
     private String mediaType = null;
+    /**Location to copy this media file to.*/
+    private String copyLocation = null;
 
     /**
      * Create a new MediaFile object with the original
@@ -118,7 +120,7 @@ public class MediaFile {
      * If not null, format for 2 digit season number.
      * @return formatted season number for this media file.
      */
-    String getSeasonNumber() {
+    public String getSeasonNumber() {
         if(seasonNumber == null){
             return null;
         }
@@ -147,6 +149,25 @@ public class MediaFile {
      */
     public String getMediaType() {
         return mediaType;
+    }
+
+    /**
+     * Assign the new copy location for this media file.
+     * @param copyLocation of where this media file belongs.
+     */
+    public void setCopyLocation(String copyLocation){
+        this.copyLocation = copyLocation;
+    }
+
+    /**
+     * Retrieve this media file's copy location.
+     * @return the copy location of this media file.
+     */
+    public String getCopyLocation(){
+        if("".equals(copyLocation)){
+            return null;
+        }
+        return copyLocation;
     }
 
     /**

@@ -128,17 +128,18 @@ public class Runner {
                         mediaFile.setMediaType(mediaType);
                     }
                 }
-                Utilities.getPrintStream().println(mediaFile.toString());
+                //generate the copy directory path
+                copyModule.copy(mediaFile);
+
+                Utilities.getPrintStream().println(mediaFile.getCopyLocation());
+                //default to true since the user specified the copy module to be enabled.
                 boolean copy = true;
                 if(Constants.TRUE.equals(userInteraction)){
-                    String destination = settings.get(Constants.DEFAULT_COPY_DIRECTORY);
-                    if(destination == null){
-                        destination = "";
-                    }
-                    copy = userDecisionOnCopy(mediaFile, destination);
+                    copy = userDecisionOnCopy(mediaFile);
                 }
                 if(copy) {
-                    copyModule.copy(mediaFile);
+                    //if the user selected to copy, the execute the copy.
+                    Copy.executeCopy(mediaFile.getOriginalFileName(), mediaFile.getCopyLocation());
                     /*Let the user know where the file was stored.*/
                     String filename = Utilities.parseFilenameFromPath(mediaFile.toString());
                     String path = Utilities.removeFilenameFromPath(mediaFile.toString());
@@ -195,21 +196,10 @@ public class Runner {
      * Helper method to determine copy based on user input.
      * @param mediaFile of the media file in question to be copied.
      */
-    private static boolean userDecisionOnCopy(MediaFile mediaFile, String destination){
+    private static boolean userDecisionOnCopy(MediaFile mediaFile){
         Utilities.getPrintStream().println(Constants.LINE_BREAK);
         Utilities.getPrintStream().println("The copy algorithm has determined the following path:");
-        String mediaType = "";
-        String tempMediaType = mediaFile.getMediaType();
-        if(tempMediaType != null){
-            mediaType = tempMediaType+"\\";
-        }
-        String path = mediaType +
-                Utilities.parseFilenameFromPath(mediaFile.getMediaName())+
-                "\\"+Utilities.parseFilenameFromPath(mediaFile.toString());
-        if(destination != null){
-            path = destination+"\\"+path;
-        }
-        Utilities.getPrintStream().println(path);
+        Utilities.getPrintStream().println(mediaFile.getCopyLocation());
         Utilities.getPrintStream().println("Is this correct? Y/N");
         String userInput = Utilities.userInput();
         switch(userInput){
