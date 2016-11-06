@@ -802,4 +802,58 @@ public class TestMediaRenameTest extends TestCase{
         assertEquals("Bleach S01E008.mkv", testMediaFile.toString());
     }
 
+    /**
+     * Test case where filename is in format of {title} S#E#
+     */
+    public void test_MediaRename_RenamedFormat_1(){
+        String originalFileName = "Bleach S1E1.mkv";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("Bleach S01E01.mkv", testMediaFile.toString());
+    }
+
+    /**
+     * Test case where filename is in format of {title} S##E#
+     */
+    public void test_MediaRename_RenamedFormat_2(){
+        String originalFileName = "Bleach S11E1.mkv";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("Bleach S11E01.mkv", testMediaFile.toString());
+    }
+
+    /**
+     * Test case where filename is in format of {title} S#E##
+     */
+    public void test_MediaRename_RenamedFormat_3(){
+        String originalFileName = "Bleach S1E11.mkv";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("Bleach S01E11.mkv", testMediaFile.toString());
+    }
+
+    /**
+     * Test case where filename is in format of {title} S##E##
+     */
+    public void test_MediaRename_RenamedFormat_4(){
+        String originalFileName = "Bleach S11E11.mkv";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("Bleach S11E11.mkv", testMediaFile.toString());
+    }
+
+    /**
+     * Test case where filename is in format of {title} S##E###
+     */
+    public void test_MediaRename_RenamedFormat_5(){
+        String originalFileName = "Bleach S11E111.mkv";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("Bleach S11E111.mkv", testMediaFile.toString());
+    }
 }
