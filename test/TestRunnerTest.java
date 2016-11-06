@@ -40,8 +40,8 @@ public class TestRunnerTest extends TestCase {
      */
     public void tearDown() throws Exception{
         HelperMethodsTest.destroyTestDirectory(testDir);
-        sequential.unlock();
         super.tearDown();
+        sequential.unlock();
     }
 
     /**
@@ -60,6 +60,15 @@ public class TestRunnerTest extends TestCase {
      */
     private Callable<Boolean> waitForCopyComplete(RunnerHelperThread runnerHelperThread){
         return () -> runnerHelperThread.copyComplete;
+    }
+
+    /**
+     * Wait for copyComplete flag to be set to true.
+     * @param runnerHelperThread thread reference for thread running.
+     * @return true or timeout.
+     */
+    private Callable<Boolean> waitForNoFilesToRename(RunnerHelperThread runnerHelperThread){
+        return () -> runnerHelperThread.noFilesToRename;
     }
 
     /**
@@ -86,6 +95,7 @@ public class TestRunnerTest extends TestCase {
         PrintStream myOut = new PrintStream(outputBuffer);
         System.setOut(myOut);
         RunnerHelperThread myRunner = new RunnerHelperThread(myIn,outputBuffer);
+        myRunner.setWaitCondition(RunnerHelperThread.Wait.DIRECTORY_NULL);
         Thread runnerHelper = new Thread(myRunner);
         runnerHelper.start();
         Runner.main(new String[]{testDir});
@@ -116,6 +126,7 @@ public class TestRunnerTest extends TestCase {
         PrintStream myOut = new PrintStream(outputBuffer);
         System.setOut(myOut);
         RunnerHelperThread myRunner = new RunnerHelperThread(myIn,outputBuffer);
+        myRunner.setWaitCondition(RunnerHelperThread.Wait.COPY_COMPLETE);
         Thread runnerHelper = new Thread(myRunner);
         runnerHelper.start();
         String title = "One Punch Man";
@@ -124,5 +135,27 @@ public class TestRunnerTest extends TestCase {
         Awaitility.await().until(waitForCopyComplete(myRunner));
         assertTrue(myRunner.copyComplete);
         assertTrue(Utilities.fileExists(testDir+"\\copy\\Anime\\One Punch Man\\One Punch Man S01E01.mkv"));
+    }
+
+    /**
+     * Test the program execution with no files to be copied.
+     */
+    public void testCopyWithNoFiles(){
+        HelperMethodsTest.generateTestSettingsFiles(testDir);
+        Utilities.makeDirectory(testDir+"\\copy");
+        Utilities.makeDirectory(testDir+"\\test");
+        byte[] buff = new byte[2048];
+        ByteArrayInputStream myIn = new ByteArrayInputStream(buff);
+        System.setIn(myIn);
+        ByteArrayOutputStream outputBuffer = new ByteArrayOutputStream();
+        PrintStream myOut = new PrintStream(outputBuffer);
+        System.setOut(myOut);
+        RunnerHelperThread myRunner = new RunnerHelperThread(myIn,outputBuffer);
+        myRunner.setWaitCondition(RunnerHelperThread.Wait.NO_FILES_TO_RENAME);
+        Thread runnerHelper = new Thread(myRunner);
+        runnerHelper.start();
+        Runner.main(new String[]{testDir});
+        Awaitility.await().until(waitForNoFilesToRename(myRunner));
+        assertTrue(myRunner.noFilesToRename);
     }
 }

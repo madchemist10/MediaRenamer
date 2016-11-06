@@ -45,7 +45,6 @@ public class TestMediaCopyTest extends TestCase {
         assertTrue(Utilities.fileExists(defaultTestDir+"\\copy\\"+title+"\\"+title+" S01E01.mkv"));
     }
 
-
     /**
      * Test the copying of a 3 files of the same season.
      */

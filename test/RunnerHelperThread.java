@@ -5,20 +5,33 @@ import java.io.ByteArrayOutputStream;
 
 /**
  */
-public class RunnerHelperThread implements Runnable {
+class RunnerHelperThread implements Runnable {
+
+    enum Wait{
+        DIRECTORY_NULL,
+        COPY_COMPLETE,
+        NO_FILES_TO_RENAME
+    }
+
     private final ByteArrayInputStream in;
     private final ByteArrayOutputStream out;
-    public boolean directoryNull = false;
-    public boolean copyComplete = false;
+    boolean directoryNull = false;
+    boolean copyComplete = false;
+    boolean noFilesToRename = false;
+    private Wait waitCondition = Wait.DIRECTORY_NULL;
 
-    public RunnerHelperThread(ByteArrayInputStream in, ByteArrayOutputStream out){
+    RunnerHelperThread(ByteArrayInputStream in, ByteArrayOutputStream out){
         this.in = in;
         this.out = out;
     }
+
+    void setWaitCondition(Wait waitCondition) {
+        this.waitCondition = waitCondition;
+    }
+
     @Override
     public void run() {
-        boolean continueThread = true;
-        while(continueThread){
+        while(true){
             String rawOutput = this.out.toString();
             this.out.reset();
             String[] outputArray = rawOutput.split("\r\n");
@@ -26,15 +39,20 @@ public class RunnerHelperThread implements Runnable {
             if(outputArray.length > 0){
                 output = outputArray[0];
             }
-            switch(output){
-                case Constants.DIRECTORY_NULL:
-                    continueThread = false;
-                    directoryNull = true;
-                    break;
-                case Constants.MEDIA_COPY_COMPLETE:
-                    continueThread = false;
-                    copyComplete = true;
-                    break;
+
+            if(Constants.DIRECTORY_NULL.equals(output) && waitCondition == Wait.DIRECTORY_NULL) {
+                directoryNull = true;
+                return;
+            }
+
+            if(Constants.MEDIA_COPY_COMPLETE.equals(output) && waitCondition == Wait.COPY_COMPLETE) {
+                copyComplete = true;
+                return;
+            }
+
+            if(Constants.NO_FILES_TO_RENAME.equals(output) && waitCondition == Wait.NO_FILES_TO_RENAME) {
+                noFilesToRename = true;
+                return;
             }
         }
     }
