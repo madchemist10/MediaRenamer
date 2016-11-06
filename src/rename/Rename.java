@@ -76,6 +76,9 @@ public class Rename {
         * the is pretexted with '#'.*/
         tempFileName = tempFileName.replaceAll("[#]\\d*","");
 
+        /*We have parsed all the items that we do not want in our filename.*/
+
+
         /*It is possible the season number and episode number could be separated
         * by an x in the case of S#xE##; or any letter for that matter. To handle
         * this case, we need to replace the {char} with a space so that the
@@ -152,6 +155,23 @@ public class Rename {
         /*remove any keywords that relate to the word movie.*/
         tempFileName = tempFileName.replaceAll("Movie|movie|Gekijouban|gekijouban","");
 
+        /*It is possible that the episode number parsing failed.*/
+        if(episodeNumber == null){
+            tempFileName = tempFileName.trim(); //remove extra spaces
+            String[] subParts = tempFileName.split(" ");
+            /*Look for 2 or 3 digit numbers separated by spaces from the
+            * sub part split.*/
+            Pattern episodePattern = Pattern.compile("\\d{2,3}");
+            for(String part: subParts){
+                Matcher episodeMatcher = episodePattern.matcher(part);
+                //if we found a match, assign the episode number.
+                if(episodeMatcher.matches()){
+                    episodeNumber = part;
+                    mediaFile.setEpisodeNumber(episodeNumber);
+                    break;
+                }
+            }
+        }
 
         /*Remove the following cases:
         * where stuff can be any alphabetic char, space, or "-"
@@ -566,19 +586,23 @@ public class Rename {
      *                     parsed.
      * @return true if match found, false otherwise.
      */
-    private boolean seasonEpisodeMatcher(MediaFile mediaFile, String tempFilename){
+    private static boolean seasonEpisodeMatcher(MediaFile mediaFile, String tempFilename){
+        /*Split the filename by spaces and evaluate each portion,
+        * compare against S##E## where # can be any length of numbers.*/
         String[] subParts = tempFilename.split(" ");
-        Pattern pattern = Pattern.compile("S\\d+E\\d+");
-        boolean match = false;
+        Pattern seasonEpisodePattern = Pattern.compile("S\\d+E\\d+");
+        boolean seasonEpisodeMatch = false;
         for(String part: subParts) {
-            Matcher matcher = pattern.matcher(part);
+            Matcher matcher = seasonEpisodePattern.matcher(part);
             if(matcher.matches()){
-                match = true;
+                seasonEpisodeMatch = true;
                 tempFilename = part;
                 break;
             }
         }
-        if(match){
+        /*If the pattern has been matched, the we can successfully
+        * determine what the season number and episode number are.*/
+        if(seasonEpisodeMatch){
             String seasonNumber = tempFilename.replaceAll("E\\d+","");
             String episodeNumber = tempFilename.replaceAll("S\\d+","");
             seasonNumber = seasonNumber.replaceAll("S","");

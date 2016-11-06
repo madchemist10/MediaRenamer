@@ -856,4 +856,27 @@ public class TestMediaRenameTest extends TestCase{
         renameModule.rename(testMediaFile);
         assertEquals("Bleach S11E111.mkv", testMediaFile.toString());
     }
+
+    /**
+     * Test case where filename has episode title given in the filename.
+     */
+    public void test_MediaRename_EpisodeNameGiven(){
+        String originalFileName = "[AnimeRG] Bleach - 042 - Yoruichi, Goddess of Flash, Dances! [480p] [x265] [pseudo].mkv";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("Bleach S01E042.mkv", testMediaFile.toString());
+    }
+
+    /**
+     * Test case where filename has episode title given in the filename,
+     * and the episode title contains a number.
+     */
+    public void test_MediaRename_EpisodeNameGivenWithNumber(){
+        String originalFileName = "[AnimeRG] Bleach - 075 - Earth-Shattering Event at 11th Squad! [480p] [x265] [pseudo].mkv";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("Bleach S01E075.mkv", testMediaFile.toString());
+    }
 }
