@@ -39,7 +39,6 @@ public class Copy {
 
         String copyLocation = mediaFile.getCopyLocation();
         if(copyLocation != null){
-            executeCopy(mediaFile.getOriginalFileName(),copyLocation);
             return;
         }
 
@@ -73,10 +72,8 @@ public class Copy {
         if(!Utilities.fileExists(newPath)) {
             Utilities.makeDirectory(newPath);
         }
-        copyLocation = dest;
-        String originalMediaLocation = mediaFile.toString().replace(mediaType,"");
 
-        executeCopy(originalMediaLocation,copyLocation);
+        mediaFile.setCopyLocation(dest);
     }
 
     /**
@@ -85,7 +82,7 @@ public class Copy {
      * @param source of the file to copy.
      * @param destination of where the file belongs.
      */
-    private static void executeCopy(String source, String destination){
+    public static void executeCopy(String source, String destination){
         long originalFileSize = new File(source).length();
         /*Execute the copy command.*/
         Utilities.copyWithProgress(source, destination);
@@ -103,6 +100,8 @@ public class Copy {
     /**
      * Locate where the media file should be copied to.
      * Determines where the file belongs based on the current file structure.
+     * This predictive algorithm only works with a pre-existing file structure of:
+     *  {title}\{title} Season {SNum} or {title}.
      * @param mediaFile that should be copied.
      */
     private void predictiveCopyAlgorithm(MediaFile mediaFile){
