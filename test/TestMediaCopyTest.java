@@ -1,8 +1,11 @@
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
+import constants.Constants;
 import errorHandle.ErrorHandler;
 import junit.framework.TestCase;
 import launch.Runner;
 import utilities.Utilities;
 
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -178,6 +181,63 @@ public class TestMediaCopyTest extends TestCase {
         for(int i = 1; i <= episodeMax; i++) {
             String episodeNumber = String.format("%2d", i).replace(" ","0");
             assertTrue(Utilities.fileExists(defaultTestDir+"\\copy\\"+ANIME+"\\"+tokyoGhoulTitle+" Season 1\\"+ tokyoGhoulTitle+" S01E"+episodeNumber+".mkv"));
+        }
+    }
+
+    /**
+     * Test the copying of a set of 5 files using the predictive copy algorithm.
+     * This test places each show in {title}\{title} Season {SNum}\.
+     */
+    public void testCopyWithMultipleFilesWithNonFileStructure(){
+        String tokyoGhoulTitle = "Tokyo Ghoul";
+        int episodeMax = 5;
+        ErrorHandler.printOutToFile(defaultTestDir+"\\mediaDivision.txt",tokyoGhoulTitle+": "+ ANIME);
+        ErrorHandler.printOutToFile(defaultTestDir+"\\"+ Constants.SETTINGS_FILE,Constants.COPY_FILE_STRUCTURE+": "+Constants.DEFAULT_COPY_FILE_STRUCTURE);
+        HelperMethodsTest.generateTestDirectory(defaultTestDir, episodeMax, 1, tokyoGhoulTitle, HelperMethodsTest.FORMATS.HORRIBLESUBS);
+
+        Runner.main(new String[]{defaultTestDir});
+
+        for(int i = 1; i <= episodeMax; i++) {
+            String episodeNumber = String.format("%2d", i).replace(" ","0");
+            assertTrue(Utilities.fileExists(defaultTestDir+"\\copy\\"+ANIME+"\\"+tokyoGhoulTitle+"\\"+tokyoGhoulTitle+" Season 1\\"+ tokyoGhoulTitle+" S01E"+episodeNumber+".mkv"));
+        }
+    }
+
+    /**
+     * Test the copying of a set of 5 files using the predictive copy algorithm.
+     * This test places each show in {title}\.
+     */
+    public void testCopyWithMultipleFilesWithNonFileStructure_2(){
+        String tokyoGhoulTitle = "Tokyo Ghoul";
+        int episodeMax = 5;
+        ErrorHandler.printOutToFile(defaultTestDir+"\\mediaDivision.txt",tokyoGhoulTitle+": "+ ANIME);
+        ErrorHandler.printOutToFile(defaultTestDir+"\\"+ Constants.SETTINGS_FILE,Constants.COPY_FILE_STRUCTURE+": {title}");
+        HelperMethodsTest.generateTestDirectory(defaultTestDir, episodeMax, 1, tokyoGhoulTitle, HelperMethodsTest.FORMATS.HORRIBLESUBS);
+
+        Runner.main(new String[]{defaultTestDir});
+
+        for(int i = 1; i <= episodeMax; i++) {
+            String episodeNumber = String.format("%2d", i).replace(" ","0");
+            assertTrue(Utilities.fileExists(defaultTestDir+"\\copy\\"+ANIME+"\\"+tokyoGhoulTitle+"\\"+tokyoGhoulTitle+" S01E"+episodeNumber+".mkv"));
+        }
+    }
+
+    /**
+     * Test the copying of a set of 5 files using the predictive copy algorithm.
+     * This test places each show in {title} {season}.
+     */
+    public void testCopyWithMultipleFilesWithNonFileStructure_3(){
+        String tokyoGhoulTitle = "Tokyo Ghoul";
+        int episodeMax = 5;
+        ErrorHandler.printOutToFile(defaultTestDir+"\\mediaDivision.txt",tokyoGhoulTitle+": "+ ANIME);
+        ErrorHandler.printOutToFile(defaultTestDir+"\\"+ Constants.SETTINGS_FILE,Constants.COPY_FILE_STRUCTURE+": {title} {season}");
+        HelperMethodsTest.generateTestDirectory(defaultTestDir, episodeMax, 1, tokyoGhoulTitle, HelperMethodsTest.FORMATS.HORRIBLESUBS);
+
+        Runner.main(new String[]{defaultTestDir});
+
+        for(int i = 1; i <= episodeMax; i++) {
+            String episodeNumber = String.format("%2d", i).replace(" ","0");
+            assertTrue(Utilities.fileExists(defaultTestDir+"\\copy\\"+ANIME+"\\"+tokyoGhoulTitle+" Season 1\\"+tokyoGhoulTitle+" S01E"+episodeNumber+".mkv"));
         }
     }
 }

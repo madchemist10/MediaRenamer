@@ -34,18 +34,33 @@ public class Copy {
         if(destination == null){
             return; //cannot continue if destination is null
         }
-        //predict where the file belongs.
-        predictiveCopyAlgorithm(mediaFile);
-
-        String copyLocation = mediaFile.getCopyLocation();
-        if(copyLocation != null){
-            return;
-        }
 
         /*determine what the new folder should be
         * Should be the same as the media files name*/
         String mediaName = Utilities.parseFilenameFromPath(mediaFile.getMediaName());
         String newFolder = mediaName.trim();
+
+        /*If the user has defined a file structure, user this user defined file structure.*/
+        String userCopyFileStructure = settings.get(Constants.COPY_FILE_STRUCTURE);
+        if(userCopyFileStructure != null && !userCopyFileStructure.equals("")){
+            String copyLocation = userCopyFileStructure.replace(Constants.TITLE_REPLACEMENT,newFolder);
+            String mediaType = mediaFile.getMediaType();
+            if(mediaType != null) {
+                String seasonNumber = Integer.toString(Integer.parseInt(mediaFile.getSeasonNumber()));
+                copyLocation = copyLocation.replace(Constants.SEASON_REPLACEMENT, Constants.SEASON + " " + seasonNumber);
+                mediaName = Utilities.parseFilenameFromPath(mediaFile.toString());
+                mediaFile.setCopyLocation(destination + "\\" + mediaType + "\\" + copyLocation + "\\" + mediaName);
+                return;
+            }
+        }
+
+        //predict where the file belongs.
+        predictiveCopyAlgorithm(mediaFile);
+
+        String predictiveCopyLocation = mediaFile.getCopyLocation();
+        if(predictiveCopyLocation != null){
+            return;
+        }
 
         /*Determine the new destination path from the user specified destination
         * plus the new folder determination.*/
@@ -126,13 +141,13 @@ public class Copy {
         * {title}\*/
         String mediaName = Utilities.parseFilenameFromPath(mediaFile.getMediaName());
         String seasonNumber = Integer.toString(Integer.parseInt(mediaFile.getSeasonNumber()));
-        String seasonFolder = destination+"\\"+mediaName+"\\"+mediaName+" Season "+seasonNumber;
+        String seasonFolder = destination+"\\"+mediaName+"\\"+mediaName+" "+Constants.SEASON+" "+seasonNumber;
         String media = Utilities.parseFilenameFromPath(mediaFile.toString());
         if(Utilities.fileExists(seasonFolder)){
             mediaFile.setCopyLocation(seasonFolder+"\\"+media);
             return;
         }
-        seasonFolder = destination+"\\"+mediaName+" Season "+seasonNumber;
+        seasonFolder = destination+"\\"+mediaName+" "+Constants.SEASON+" "+seasonNumber;
         if(Utilities.fileExists(seasonFolder)){
             mediaFile.setCopyLocation(seasonFolder+"\\"+media);
             return;

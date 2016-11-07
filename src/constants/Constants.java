@@ -46,11 +46,22 @@ public class Constants {
     /**Settings header to determine if the user would like to use the
      * error handler.*/
     public static final String ERROR_HANDLER = "ErrorHandler";
+    /**Settings header to determine how the file structure should be defaulted to.*/
+    public static final String COPY_FILE_STRUCTURE = "CopyFileStructure";
 
     /**String representation of "true" for setting flags in settings files.*/
     public static final String TRUE = "TRUE";
     /**String representation of "false" for setting flags in settings files.*/
     public static final String FALSE = "FALSE";
+    /**String representation of "Season" to be at end of folder name.*/
+    public static final String SEASON = "Season";
+    /**String replacement of season to be used in the settings file.*/
+    public static final String SEASON_REPLACEMENT = "{season}";
+    /**String replacement of title to be used in the settings file.*/
+    public static final String TITLE_REPLACEMENT = "{title}";
+    /**Default copy file structure to use.*/
+    public static final String DEFAULT_COPY_FILE_STRUCTURE =
+            TITLE_REPLACEMENT+"\\"+TITLE_REPLACEMENT+" "+SEASON_REPLACEMENT;
     /**Used to divide media files in output to screen.*/
     public static final String LINE_BREAK = "-----------------------------";
     /**Default byte buffer size for copying data.*/

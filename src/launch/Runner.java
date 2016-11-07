@@ -36,6 +36,8 @@ public class Runner {
             ErrorHandler.printOutToFile(offset+Constants.SETTINGS_FILE, Constants.COPY_FILES_FLAG+": "+Constants.FALSE);
             ErrorHandler.printOutToFile(offset+Constants.SETTINGS_FILE, Constants.MEDIA_DIVISION+": "+Constants.FALSE);
             ErrorHandler.printOutToFile(offset+Constants.SETTINGS_FILE, Constants.ERROR_HANDLER+": "+Constants.TRUE);
+            ErrorHandler.printOutToFile(offset+Constants.SETTINGS_FILE,
+                    Constants.COPY_FILE_STRUCTURE+": "+Constants.DEFAULT_COPY_FILE_STRUCTURE);
         }
 
         if(!Utilities.fileExists(offset+Constants.SPECIAL_RENAME_CASES_FILE)) {
@@ -137,7 +139,7 @@ public class Runner {
                 if(Constants.TRUE.equals(userInteraction)){
                     copy = userDecisionOnCopy(mediaFile);
                 }
-                if(copy) {
+                if(copy && ensureFileStructureExists(mediaFile.getCopyLocation())) {
                     //if the user selected to copy, the execute the copy.
                     Copy.executeCopy(mediaFile.getOriginalFileName(), mediaFile.getCopyLocation());
                     /*Let the user know where the file was stored.*/
@@ -232,6 +234,28 @@ public class Runner {
     private static String getMediaTypeFromUser(){
         Utilities.getPrintStream().println("What is the Media type?");
         return Utilities.userInput();
+    }
+
+    /**
+     * Determine if a file structure exists, if it does not, create it.
+     * @param filepath of where the end of the file structure should be.
+     * @return true if exists, false otherwise.
+     */
+    private static boolean ensureFileStructureExists(String filepath){
+        filepath = Utilities.removeFilenameFromPath(filepath);
+        if(Utilities.fileExists(filepath)){
+            return true;
+        }
+        String[] subFolders = filepath.split("\\\\");
+        String folderStructure = "";
+        for(String folder: subFolders){
+            folderStructure += folder;
+            if(!Utilities.fileExists(folderStructure)){
+                Utilities.makeDirectory(folderStructure);
+            }
+            folderStructure+="\\";
+        }
+        return Utilities.fileExists(filepath);
     }
 
 }

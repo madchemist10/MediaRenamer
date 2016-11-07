@@ -1,6 +1,6 @@
 Media Renamer Manual
 Author: MadKhemist
-Date:	10-10-16
+Date:	11-07-16
 
 Overview:
 This application is designed to rename media files to a strict format:
@@ -71,6 +71,12 @@ MaxEpisodeCount
 >>MediaDivision
 	This is a "TRUE"/"FALSE" flag that determines if the user would like the
 	copy algorithm to separate media based on mediaTypes.
+>>CopyFileStructure
+	This is a file path flag that determines how the user would like the
+	copy algorithm to structure the output on where the file should be located.
+	Available keywords for replacement:
+		{title}: will be replaced with the media title
+		{season}: will be replaced with 'Season {Snum}'
 
 *************************************************
 specialEpisodes.txt
