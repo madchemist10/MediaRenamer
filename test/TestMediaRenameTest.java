@@ -879,4 +879,16 @@ public class TestMediaRenameTest extends TestCase{
         renameModule.rename(testMediaFile);
         assertEquals("Bleach S01E075.mkv", testMediaFile.toString());
     }
+
+    /**
+     * Test case where filename has s##e## with rename replacement.
+     */
+    public void test_MediaRename_sNumNum(){
+        String originalFileName = "Family.guy.s15e04.720p.hdtv.x264-NBY (1).mkv";
+        specialRenameCases.put("Family guy", "Family Guy");
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("Family Guy S15E04.mkv", testMediaFile.toString());
+    }
 }
