@@ -14,14 +14,18 @@ import java.util.HashMap;
 public class Copy {
     /**Map of settings to the actual setting values.*/
     private HashMap<String, String> settings;
+    /**Map of original media names to preferred media names.*/
+    private HashMap<String, String> specialRenameCases;
 
     /**
      * Create a new copy module to copy the media file
      * to the user specified copy directory.
      * @param settings user specified settings for media copy.
+     * @param specialRenameCases special cases for assigning user specified names to determined names.
      */
-    public Copy(HashMap<String, String> settings) {
+    public Copy(HashMap<String, String> settings, HashMap<String, String> specialRenameCases) {
         this.settings = settings;
+        this.specialRenameCases = specialRenameCases;
     }
 
     /**
@@ -34,7 +38,6 @@ public class Copy {
         if(destination == null){
             return; //cannot continue if destination is null
         }
-
         /*determine what the new folder should be
         * Should be the same as the media files name*/
         String mediaName = Utilities.parseFilenameFromPath(mediaFile.getMediaName());
@@ -140,6 +143,25 @@ public class Copy {
         * or
         * {title}\*/
         String mediaName = Utilities.parseFilenameFromPath(mediaFile.getMediaName());
+        handleDefaultMediaFileStructureCases(mediaFile, mediaName, destination);
+        /*If we are unable to find a match, lets see if we can do a replacement
+        * on the name from the rename special case file.*/
+        for(String originalName: specialRenameCases.keySet()){
+            if(("$$"+mediaName).equals(originalName)){
+                mediaName = specialRenameCases.get(originalName);
+                break;
+            }
+        }
+        handleDefaultMediaFileStructureCases(mediaFile, mediaName, destination);
+    }
+
+    /**
+     * Helper method to determine where the file belongs in the default file structure.
+     * @param mediaFile of the file to determine placement.
+     * @param mediaName of what the media file folder is changed to. (Special Rename Case File)
+     * @param destination of where the parent directory of where the file belongs.
+     */
+    private static void handleDefaultMediaFileStructureCases(MediaFile mediaFile, String mediaName, String destination){
         String seasonNumber = Integer.toString(Integer.parseInt(mediaFile.getSeasonNumber()));
         String seasonFolder = destination+"\\"+mediaName+"\\"+mediaName+" "+Constants.SEASON+" "+seasonNumber;
         String media = Utilities.parseFilenameFromPath(mediaFile.toString());

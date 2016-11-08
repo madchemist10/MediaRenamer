@@ -1,11 +1,9 @@
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import constants.Constants;
 import errorHandle.ErrorHandler;
 import junit.framework.TestCase;
 import launch.Runner;
 import utilities.Utilities;
 
-import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -239,5 +237,26 @@ public class TestMediaCopyTest extends TestCase {
             String episodeNumber = String.format("%2d", i).replace(" ","0");
             assertTrue(Utilities.fileExists(defaultTestDir+"\\copy\\"+ANIME+"\\"+tokyoGhoulTitle+" Season 1\\"+tokyoGhoulTitle+" S01E"+episodeNumber+".mkv"));
         }
+    }
+
+    /**
+     * Test the copying of a single file.
+     * Test case has filename of :
+     *      Trickster Edogawa Ranpo
+     * but belongs in directory with title:
+     *      Trickster Edogawa Ranpo Shounen Tanteidan yori
+     */
+    public void testCopySingleFile_WithReplacement(){
+        String title = "Trickster";
+        String newTitle = "Trickster Edogawa Ranpo";
+        String folderTitle = "Trickster Edogawa Ranpo Shounen Tanteidan yori";
+        ErrorHandler.printOutToFile(defaultTestDir+"\\mediaDivision.txt",newTitle+": "+ ANIME);
+        ErrorHandler.printOutToFile(defaultTestDir+"\\"+ Constants.SPECIAL_RENAME_CASES_FILE,title+": "+newTitle);
+        ErrorHandler.printOutToFile(defaultTestDir+"\\"+ Constants.SPECIAL_RENAME_CASES_FILE,"$$"+newTitle+": "+folderTitle);
+        HelperMethodsTest.generateTestDirectory(defaultTestDir,1, 1, title, HelperMethodsTest.FORMATS.HORRIBLESUBS);
+        Utilities.makeDirectory(defaultTestDir+"\\copy\\"+ANIME+"\\");
+        Utilities.makeDirectory(defaultTestDir+"\\copy\\"+ANIME+"\\"+folderTitle+"\\");
+        Runner.main(new String[]{defaultTestDir});
+        assertTrue(Utilities.fileExists(defaultTestDir+"\\copy\\"+ANIME+"\\"+folderTitle+"\\"+newTitle+" S01E01.mkv"));
     }
 }

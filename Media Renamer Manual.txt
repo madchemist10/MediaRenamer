@@ -1,6 +1,6 @@
 Media Renamer Manual
 Author: MadKhemist
-Date:	11-07-16
+Date:	11-08-16
 
 Overview:
 This application is designed to rename media files to a strict format:
@@ -137,6 +137,11 @@ Example:
     into the file. Using the same entry as both the key and value,
     will enable the algorithm to exchange the {###} while maintaining
     the {title ###} intact.
+If the user desires a directory to be a different name than that of the mediaName
+derived from the file. Use the following format to notate the change:
+    $${mediaName}: {desiredFolderName}
+        The '$$' alert the copy algorithm to look for a different file structure
+        that is currently existing.
 *************************************************
 mediaDivision.txt
 

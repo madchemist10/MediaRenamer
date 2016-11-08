@@ -99,7 +99,7 @@ public class Runner {
         if(Constants.TRUE.equals(copyFlag)) {
             //Begin move
             /*Instantiate copy module and execute copy*/
-            Copy copyModule = new Copy(settings);
+            Copy copyModule = new Copy(settings, specialRenameCases);
             /*Remove all files in the list*/
             files.clear();
             listFiles(new File(directory).listFiles());
