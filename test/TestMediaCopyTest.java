@@ -19,6 +19,8 @@ public class TestMediaCopyTest extends TestCase {
     private static String ANIME = "Anime";
     /**Text string representation of TV Shows*/
     private static String TV_SHOWS = "TVShows";
+    /**Text string representation of Movies*/
+    private static String MOVIES = "Movies";
 
     /**
      * Acquire the lock to begin test execution.
@@ -258,5 +260,17 @@ public class TestMediaCopyTest extends TestCase {
         Utilities.makeDirectory(defaultTestDir+"\\copy\\"+ANIME+"\\"+folderTitle+"\\");
         Runner.main(new String[]{defaultTestDir});
         assertTrue(Utilities.fileExists(defaultTestDir+"\\copy\\"+ANIME+"\\"+folderTitle+"\\"+newTitle+" S01E01.mkv"));
+    }
+
+    /**
+     * Test the copying of a single movie file.
+     */
+    public void testCopySingleMovieFile(){
+        String title = "MyTitle";
+        int year = 2016;
+        ErrorHandler.printOutToFile(defaultTestDir+"\\mediaDivision.txt",title+": "+ MOVIES);
+        HelperMethodsTest.generateTestDirectory(defaultTestDir,1, year, title, HelperMethodsTest.FORMATS.MOVIE);
+        Runner.main(new String[]{defaultTestDir});
+        assertTrue(Utilities.fileExists(defaultTestDir+"\\copy\\"+MOVIES+"\\"+title+" "+year+".mkv"));
     }
 }

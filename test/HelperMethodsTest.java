@@ -23,7 +23,8 @@ class HelperMethodsTest {
         HORRIBLESUBS,
         ETTV,
         SHAAIG,
-        ANIMERG
+        ANIMERG,
+        MOVIE
     }
 
     /**
@@ -74,10 +75,21 @@ class HelperMethodsTest {
     }
 
     /**
+     * Construct a properly formatted movie file that has been renamed.
+     * @param mediaName of the original name.
+     * @param year of the original movie.
+     * @return formatted renamed movie title.
+     */
+    static String buildMovieOriginalName(String mediaName, String year){
+        return mediaName+" "+year+".mkv";
+    }
+
+    /**
      * Build the test directory
      * @param testDirectory of root level.
      * @param maxEp of number of iteration or number of files to generate.
      * @param season of the show to generate, only used if nonAnime.
+     *               if the user desires to format a movie, use this field for year value.
      * @param title of the show that we are generating.
      * @param format of the show that is to be generated, Must be from enum.
      */
@@ -102,6 +114,8 @@ class HelperMethodsTest {
                 case ANIMERG:
                     originalFilename = HelperMethodsTest.buildAnimeRGOriginalName(title, episodeNumber);
                     break;
+                case MOVIE:
+                    originalFilename = HelperMethodsTest.buildMovieOriginalName(title, seasonNumber);
             }
             if(originalFilename == null){
                 return;

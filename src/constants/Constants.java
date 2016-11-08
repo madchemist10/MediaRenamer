@@ -66,6 +66,8 @@ public class Constants {
     public static final String LINE_BREAK = "-----------------------------";
     /**Default byte buffer size for copying data.*/
     public static final int DEFAULT_BYTE_BUFFER_SIZE = 4096;
+    /**Media type of a movie, pulled from settings files.*/
+    public static final String MOVIES = "Movies";
 
     /*Runner constants*/
     public static final String DIRECTORY_NULL = "Directory is null.";

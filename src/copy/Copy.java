@@ -70,6 +70,13 @@ public class Copy {
         String mediaType = "";
         String tempMediaType = mediaFile.getMediaType();
         if(tempMediaType != null){
+            /*We can have a movie file*/
+            if(tempMediaType.equals(Constants.MOVIES)){
+                String media = Utilities.parseFilenameFromPath(mediaFile.toString());
+                String copyLocation = destination+"\\"+Constants.MOVIES+"\\"+media;
+                mediaFile.setCopyLocation(copyLocation);
+                return;
+            }
             mediaType = tempMediaType+"\\";
         }
         String preNewPath = destination+"\\"+mediaType;
