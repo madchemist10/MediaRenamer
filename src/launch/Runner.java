@@ -38,6 +38,7 @@ public class Runner {
             ErrorHandler.printOutToFile(offset+Constants.SETTINGS_FILE, Constants.ERROR_HANDLER+": "+Constants.TRUE);
             ErrorHandler.printOutToFile(offset+Constants.SETTINGS_FILE,
                     Constants.COPY_FILE_STRUCTURE+": "+Constants.DEFAULT_COPY_FILE_STRUCTURE);
+            ErrorHandler.printOutToFile(offset+Constants.SETTINGS_FILE, "#" + Constants.EXCLUDE_FILE_TYPES + ":");
         }
 
         if(!Utilities.fileExists(offset+Constants.SPECIAL_RENAME_CASES_FILE)) {
@@ -85,6 +86,9 @@ public class Runner {
         for(File file : files){
             MediaFile mediaFile = new MediaFile(file.toString());
             renameModule.rename(mediaFile);
+            if(mediaFile.toString() == null){
+                continue;
+            }
             /*If the settings file has determined that the user wants user interaction.*/
             if(Constants.TRUE.equals(userInteraction)){
                 userDecisionOnRename(mediaFile, file);
@@ -111,6 +115,9 @@ public class Runner {
             for (File file : files) {
                 MediaFile mediaFile = new MediaFile(file.toString());
                 renameModule.rename(mediaFile);
+                if(mediaFile.toString() == null){
+                    continue;
+                }
                 //get media name from complete filename
                 String mediaName = Utilities.parseFilenameFromPath(mediaFile.getMediaName());
                 //if user settings is to divide media based on type

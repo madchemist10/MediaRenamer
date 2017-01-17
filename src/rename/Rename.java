@@ -54,6 +54,13 @@ public class Rename {
 
         /*Assign file extension*/
         mediaFile.setFileExt(getFileExt(tempFileName));
+
+        /*Do not process files with excluded file types*/
+        String excludeFileTypes = settings.get(Constants.EXCLUDE_FILE_TYPES);
+        if(excludeFileTypes != null && excludeFileTypes.contains(mediaFile.getFileExt())){
+            return;
+        }
+
         //remove file extension from temp filename
         tempFileName = tempFileName.replace("."+mediaFile.getFileExt(),"");
 

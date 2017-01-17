@@ -48,6 +48,8 @@ public class Constants {
     public static final String ERROR_HANDLER = "ErrorHandler";
     /**Settings header to determine how the file structure should be defaulted to.*/
     public static final String COPY_FILE_STRUCTURE = "CopyFileStructure";
+    /**Settings header to determine what file types to exclude.*/
+    public static final String EXCLUDE_FILE_TYPES = "ExcludeFileTypes";
 
     /**String representation of "true" for setting flags in settings files.*/
     public static final String TRUE = "TRUE";

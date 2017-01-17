@@ -46,6 +46,8 @@ MaxEpisodeCount
 UserInteraction
 CopyFiles
 MediaDivision
+CopyFileStructure
+ExcludeFileTypes
 
 All flags must be given a value except:
 MaxEpisodeCount
@@ -77,6 +79,8 @@ MaxEpisodeCount
 	Available keywords for replacement:
 		{title}: will be replaced with the media title
 		{season}: will be replaced with 'Season {Snum}'
+>>ExcludeFileTypes
+    This is a comma separated list of file extensions that should not be parsed.
 
 *************************************************
 specialEpisodes.txt

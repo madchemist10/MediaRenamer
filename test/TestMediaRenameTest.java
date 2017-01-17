@@ -891,4 +891,16 @@ public class TestMediaRenameTest extends TestCase{
         renameModule.rename(testMediaFile);
         assertEquals("Family Guy S15E04.mkv", testMediaFile.toString());
     }
+
+    /**
+     * Test a media entry that has excluded file type.
+     */
+    public void testMediaRenameFileExcludedFileExt(){
+        String originalFileName = "Tokyo Ghoul S01E01.txt";
+        settings.put(Constants.EXCLUDE_FILE_TYPES, "txt");
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals(null, testMediaFile.toString());
+    }
 }
