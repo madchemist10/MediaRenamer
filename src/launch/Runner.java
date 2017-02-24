@@ -1,5 +1,6 @@
 package launch;
 
+import backup.Backup;
 import constants.Constants;
 import copy.Copy;
 import errorHandle.ErrorHandler;
@@ -10,6 +11,7 @@ import utilities.Utilities;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Top level class that kicks off the media rename application.
@@ -39,6 +41,7 @@ public class Runner {
             ErrorHandler.printOutToFile(offset+Constants.SETTINGS_FILE,
                     Constants.COPY_FILE_STRUCTURE+": "+Constants.DEFAULT_COPY_FILE_STRUCTURE);
             ErrorHandler.printOutToFile(offset+Constants.SETTINGS_FILE, "#" + Constants.EXCLUDE_FILE_TYPES + ":");
+            ErrorHandler.printOutToFile(offset+Constants.SETTINGS_FILE, "#" + Constants.BACKUP + ":");
         }
 
         if(!Utilities.fileExists(offset+Constants.SPECIAL_RENAME_CASES_FILE)) {
@@ -73,6 +76,51 @@ public class Runner {
             ErrorHandler.errorHandle = true;
         } else if(Constants.FALSE.equals(errorHandle)){
             ErrorHandler.errorHandle = false;
+        }
+
+        /*
+        *
+        * Integration of the Backup module
+        *
+        */
+        String backup = settings.get(Constants.BACKUP);
+        if(backup != null) {
+            String[] backupSplit = backup.split(",");
+            if (Constants.TRUE.equals(backupSplit[0])) {
+                Backup myBackup = new Backup(backupSplit[1], backupSplit[2], Long.parseLong(backupSplit[3]));
+                List<File> safeToBackup = myBackup.performBackup();
+                if(safeToBackup == null){
+                    return;
+                }
+                for(File file : safeToBackup){
+                    if(Utilities.fileExists(file.getAbsolutePath())){
+//                        String filename = file.getName();
+                        String srcDrive = file.getAbsolutePath().split("\\\\")[0];
+                        String destDrive = backupSplit[2].split("\\\\")[0];
+                        String destination = file.getAbsolutePath().replaceFirst(srcDrive, destDrive);
+//                        String destination = backupSplit[2]+"\\"+filename;
+                        boolean copy = false;
+                        Utilities.getPrintStream().println("SRC: "+file.getAbsoluteFile());
+                        Utilities.getPrintStream().println("DEST: "+destination);
+                        Utilities.getPrintStream().println("Y/N");
+                        String userInput = Utilities.userInput();
+                        switch(userInput){
+                            case "Y":
+                            case "y":
+                                copy = true;
+                                break;
+                            case "N":
+                            case "n":
+                                break;
+                        }
+                        if(copy) {
+                            Copy.executeCopy(file.getAbsolutePath(), destination);
+                        }
+                    }
+                }
+
+            }
+            return;
         }
 
         /*Instantiate rename module and execute rename.*/
