@@ -94,11 +94,9 @@ public class Runner {
                 }
                 for(File file : safeToBackup){
                     if(Utilities.fileExists(file.getAbsolutePath())){
-//                        String filename = file.getName();
                         String srcDrive = file.getAbsolutePath().split("\\\\")[0];
                         String destDrive = backupSplit[2].split("\\\\")[0];
                         String destination = file.getAbsolutePath().replaceFirst(srcDrive, destDrive);
-//                        String destination = backupSplit[2]+"\\"+filename;
                         boolean copy = false;
                         Utilities.getPrintStream().println("SRC: "+file.getAbsoluteFile());
                         Utilities.getPrintStream().println("DEST: "+destination);
@@ -114,7 +112,7 @@ public class Runner {
                                 break;
                         }
                         if(copy) {
-                            Copy.executeCopy(file.getAbsolutePath(), destination);
+                            Copy.executeCopy(file.getAbsolutePath(), destination, false);
                         }
                     }
                 }

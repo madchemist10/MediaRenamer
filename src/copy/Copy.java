@@ -102,20 +102,32 @@ public class Copy {
     }
 
     /**
-     * Execute the copy and delete the old file if the new file exists
-     * and the file size of the original and new are equal.
+     * Wrapper around execute copy.
+     * Default is to delete the file.
      * @param source of the file to copy.
      * @param destination of where the file belongs.
      */
     public static void executeCopy(String source, String destination){
+        executeCopy(source, destination, true);
+    }
+
+    /**
+     * Execute the copy and delete the old file if the new file exists
+     * and the file size of the original and new are equal.
+     * @param source of the file to copy.
+     * @param destination of where the file belongs.
+     * @param delete true if file should be deleted, false otherwise
+     */
+    public static void executeCopy(String source, String destination, boolean delete){
         long originalFileSize = new File(source).length();
         /*Execute the copy command.*/
         Utilities.copyWithProgress(source, destination);
         long copiedFileSize = new File(destination).length();
-        /*If the transferred file exists and the file size
+        /*If the file should be deleted and
+        * If the transferred file exists and the file size
         * is equal to the original, and the original
         * still exists, delete the original.*/
-        if(Utilities.fileExists(destination) && originalFileSize == copiedFileSize){
+        if(delete && (Utilities.fileExists(destination) && originalFileSize == copiedFileSize)){
             if(Utilities.fileExists(source)){
                 Utilities.deleteFile(source);
             }
