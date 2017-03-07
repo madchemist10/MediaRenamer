@@ -77,7 +77,7 @@ public class Runner {
         } else if(Constants.FALSE.equals(errorHandle)){
             ErrorHandler.errorHandle = false;
         }
-
+        String userInteraction = settings.get(Constants.USER_INTERACTION);
         /*
         *
         * Integration of the Backup module
@@ -101,7 +101,11 @@ public class Runner {
                         Utilities.getPrintStream().println("SRC: "+file.getAbsoluteFile());
                         Utilities.getPrintStream().println("DEST: "+destination);
                         Utilities.getPrintStream().println("Y/N");
-                        String userInput = Utilities.userInput();
+                        //default to "Y" unless user input is different
+                        String userInput = "Y";
+                        if(Constants.TRUE.equals(userInteraction)) {
+                            userInput = Utilities.userInput();
+                        }
                         switch(userInput){
                             case "Y":
                             case "y":
@@ -128,7 +132,6 @@ public class Runner {
             Utilities.getPrintStream().println(Constants.NO_FILES_TO_RENAME);
             return;
         }
-        String userInteraction = settings.get(Constants.USER_INTERACTION);
         for(File file : files){
             MediaFile mediaFile = new MediaFile(file.toString());
             renameModule.rename(mediaFile);
