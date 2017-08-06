@@ -50,6 +50,8 @@ public class Constants {
     public static final String COPY_FILE_STRUCTURE = "CopyFileStructure";
     /**Settings header to determine what file types to exclude.*/
     public static final String EXCLUDE_FILE_TYPES = "ExcludeFileTypes";
+    /**Settings header to determine if backup is desired.*/
+    public static final String BACKUP = "Backup";
 
     /**String representation of "true" for setting flags in settings files.*/
     public static final String TRUE = "TRUE";
