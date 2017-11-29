@@ -4,6 +4,9 @@ import junit.framework.TestCase;
 import launch.Runner;
 import utilities.Utilities;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -272,5 +275,33 @@ public class TestMediaCopyTest extends TestCase {
         HelperMethodsTest.generateTestDirectory(defaultTestDir,1, year, title, HelperMethodsTest.FORMATS.MOVIE);
         Runner.main(new String[]{defaultTestDir});
         assertTrue(Utilities.fileExists(defaultTestDir+"\\copy\\"+MOVIES+"\\"+title+" "+year+".mkv"));
+    }
+
+    /**
+     * Test the copying and renaming of a file
+     * with episode number handling as follows:
+     * Boku no Hero Academia: S02##E13
+     */
+    public void testCopyEpisodePassLastSeason(){
+        ErrorHandler.printOutToFile(defaultTestDir+"\\specialEpisodes.txt","Boku no Hero Academia: S02##E13");
+        String title = "Boku no Hero Academia";
+        String episodeNumber = "31";
+        String originalFilename = HelperMethodsTest.buildHorribleSubsOriginalName(title, episodeNumber);
+        Utilities.makeDirectory(defaultTestDir);
+        Utilities.makeDirectory(defaultTestDir+"\\copy");
+        Utilities.makeDirectory(defaultTestDir+"\\test");
+        try {
+            if(!Utilities.fileExists(defaultTestDir+"\\test\\"+originalFilename)) {
+                Files.createFile(Paths.get(defaultTestDir + "\\test\\" + originalFilename));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Utilities.makeDirectory(defaultTestDir+"\\copy\\Anime\\");
+        Runner.main(new String[]{defaultTestDir});
+        //new file exists
+        assertTrue(Utilities.fileExists(defaultTestDir+"\\copy\\"+title+"\\"+title+" S02E18.mkv"));
+        //old file does not exist
+        assertTrue(!Utilities.fileExists(defaultTestDir+"\\test\\"+title+" S01E18.mkv"));
     }
 }
