@@ -181,6 +181,8 @@ public class TestRunnerTest extends TestCase {
         Utilities.makeDirectory(testDirectory+"\\b");
         Utilities.makeDirectory(testDirectory+"\\a\\Anime");
         Utilities.makeDirectory(testDirectory+"\\b\\TVShows");
+        Utilities.makeDirectory(testDirectory+"\\b\\TVShows\\Gotham");
+        Utilities.makeDirectory(testDirectory+"\\b\\TVShows\\Gotham\\Gotham Season 1");
         ErrorHandler.printOutToFile(testDirectory+"\\mediaDivision.txt","One Punch Man: Anime");
         ErrorHandler.printOutToFile(testDirectory+"\\mediaDivision.txt","Gotham: TVShows");
         byte[] buff = new byte[2048];
@@ -203,6 +205,6 @@ public class TestRunnerTest extends TestCase {
         assertTrue(Utilities.fileExists(testDir+"\\a\\Anime\\One Punch Man\\One Punch Man S01E01.mkv"));
         Awaitility.await().until(waitForCopyComplete(myRunner));
         assertTrue(myRunner.copyComplete);
-        assertTrue(Utilities.fileExists(testDir+"\\b\\TVShows\\Gotham\\Gotham S01E01.mkv"));
+        assertTrue(Utilities.fileExists(testDir+"\\b\\TVShows\\Gotham\\Gotham Season 1\\Gotham S01E01.mkv"));
     }
 }

@@ -155,11 +155,16 @@ public class Copy {
      */
     private void predictiveCopyAlgorithm(MediaFile mediaFile){
         String destination = settings.get(Constants.DEFAULT_COPY_DIRECTORY);
+
+        String mediaType = mediaFile.getMediaType();
+        Map<String, String> copyLoc = Utilities.determineCopyLoc(destination);
+        if(copyLoc != null) {
+            destination = copyLoc.get(mediaType);
+        }
         //return if destination does not exist in the file structure.
-        if(!Utilities.fileExists(destination)){
+        if(destination == null || !Utilities.fileExists(destination)){
             return;
         }
-        String mediaType = mediaFile.getMediaType();
         //assign media type to destination.
         if(mediaType != null){
             destination += "\\"+mediaType;

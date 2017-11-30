@@ -34,7 +34,7 @@ public class Utilities {
     public static Map<String, String> determineCopyLoc(String input){
         Map<String, String> map = new HashMap<>();
         String[] locations = input.split(";");
-        if(locations.length == 0){
+        if(locations.length == 0 || locations[0].equals(input)){
             return null;
         }
         for(String loc: locations){
