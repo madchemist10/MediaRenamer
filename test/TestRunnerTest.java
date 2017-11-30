@@ -39,7 +39,7 @@ public class TestRunnerTest extends TestCase {
      * @throws Exception if tear down fails.
      */
     public void tearDown() throws Exception{
-//        HelperMethodsTest.destroyTestDirectory(testDir);
+        HelperMethodsTest.destroyTestDirectory(testDir);
         super.tearDown();
         sequential.unlock();
     }
