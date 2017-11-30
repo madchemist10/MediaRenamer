@@ -88,6 +88,8 @@ public class Copy {
                 return;
             }
             mediaType = tempMediaType+"\\";
+        } else {
+            mediaType = "";
         }
         String preNewPath = destination+"\\"+mediaType;
         if(!Utilities.fileExists(preNewPath)){
@@ -159,7 +161,9 @@ public class Copy {
         }
         String mediaType = mediaFile.getMediaType();
         //assign media type to destination.
-        destination += "\\"+mediaType;
+        if(mediaType != null){
+            destination += "\\"+mediaType;
+        }
         //return if destination does not exist in the file structure.
         if(!Utilities.fileExists(destination)){
             return;
