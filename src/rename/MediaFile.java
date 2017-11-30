@@ -23,6 +23,8 @@ public class MediaFile {
     private String mediaType = null;
     /**Location to copy this media file to.*/
     private String copyLocation = null;
+    /**Num times renamed.*/
+    private int renames = 0;
 
     /**
      * Create a new MediaFile object with the original
@@ -213,5 +215,21 @@ public class MediaFile {
             }
         }
         return preBuiltMedia;
+    }
+
+    /**
+     * Helper routine to mark that this media file has been renamed
+     * at least once.
+     */
+    public void renamed(){
+        renames++;
+    }
+
+    /**
+     * Retrieve number of renames this file has had.
+     * @return num renames.
+     */
+    public int getRenames(){
+        return renames;
     }
 }

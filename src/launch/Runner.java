@@ -163,6 +163,7 @@ public class Runner {
             }
             for (File file : files) {
                 MediaFile mediaFile = new MediaFile(file.toString());
+                mediaFile.renamed();
                 renameModule.rename(mediaFile);
                 if(mediaFile.toString() == null){
                     continue;

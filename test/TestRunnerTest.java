@@ -39,7 +39,7 @@ public class TestRunnerTest extends TestCase {
      * @throws Exception if tear down fails.
      */
     public void tearDown() throws Exception{
-        HelperMethodsTest.destroyTestDirectory(testDir);
+//        HelperMethodsTest.destroyTestDirectory(testDir);
         super.tearDown();
         sequential.unlock();
     }
@@ -157,5 +157,52 @@ public class TestRunnerTest extends TestCase {
         Runner.main(new String[]{testDir});
         Awaitility.await().until(waitForNoFilesToRename(myRunner));
         assertTrue(myRunner.noFilesToRename);
+    }
+
+
+    /**
+     * Test to validate that tv shows and anime may be separated
+     * via the default copy directory tag.
+     */
+    public void testCopyDifferentOutputs(){
+        String testDirectory = testDir;
+        Setup.setupSettingsFile(testDirectory + "\\" + Constants.SETTINGS_FILE);
+        Map<String, String> settingsMap = new HashMap<>();
+        String copyDir = "Anime-"+testDirectory+"\\a;TVShows-"+testDirectory+"\\b";
+        settingsMap.put(Constants.DEFAULT_RENAME_DIRECTORY, testDirectory+"\\test");
+        settingsMap.put(Constants.DEFAULT_COPY_DIRECTORY, copyDir);
+        settingsMap.put(Constants.USER_INTERACTION, Constants.FALSE);
+        settingsMap.put(Constants.COPY_FILES_FLAG, Constants.TRUE);
+        settingsMap.put(Constants.MEDIA_DIVISION, Constants.TRUE);
+        settingsMap.put(Constants.ERROR_HANDLER, Constants.TRUE);
+        HelperMethodsTest.generateSettingsFileFromMap(testDirectory, settingsMap);
+        HelperMethodsTest.generateTestSettingsFiles(testDirectory);
+        Utilities.makeDirectory(testDirectory+"\\a");
+        Utilities.makeDirectory(testDirectory+"\\b");
+        Utilities.makeDirectory(testDirectory+"\\a\\Anime");
+        Utilities.makeDirectory(testDirectory+"\\b\\TVShows");
+        ErrorHandler.printOutToFile(testDirectory+"\\mediaDivision.txt","One Punch Man: Anime");
+        ErrorHandler.printOutToFile(testDirectory+"\\mediaDivision.txt","Gotham: TVShows");
+        byte[] buff = new byte[2048];
+        ByteArrayInputStream myIn = new ByteArrayInputStream(buff);
+        System.setIn(myIn);
+        ByteArrayOutputStream outputBuffer = new ByteArrayOutputStream();
+        PrintStream myOut = new PrintStream(outputBuffer);
+        System.setOut(myOut);
+        RunnerHelperThread myRunner = new RunnerHelperThread(myIn,outputBuffer);
+        myRunner.setWaitCondition(RunnerHelperThread.Wait.COPY_COMPLETE);
+        Thread runnerHelper = new Thread(myRunner);
+        runnerHelper.start();
+        String title = "One Punch Man";
+        HelperMethodsTest.generateTestDirectory(testDir, 1, 1, title, HelperMethodsTest.FORMATS.HORRIBLESUBS);
+        title = "Gotham";
+        HelperMethodsTest.generateTestDirectory(testDir, 1, 1, title, HelperMethodsTest.FORMATS.HORRIBLESUBS);
+        Runner.main(new String[]{testDir});
+        Awaitility.await().until(waitForCopyComplete(myRunner));
+        assertTrue(myRunner.copyComplete);
+        assertTrue(Utilities.fileExists(testDir+"\\a\\Anime\\One Punch Man\\One Punch Man S01E01.mkv"));
+        Awaitility.await().until(waitForCopyComplete(myRunner));
+        assertTrue(myRunner.copyComplete);
+        assertTrue(Utilities.fileExists(testDir+"\\b\\TVShows\\Gotham\\Gotham S01E01.mkv"));
     }
 }

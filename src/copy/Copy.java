@@ -6,6 +6,7 @@ import utilities.Utilities;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This copy module is responsible for placing MediaFiles
@@ -35,20 +36,30 @@ public class Copy {
      */
     public void copy(MediaFile mediaFile){
         String destination = settings.get(Constants.DEFAULT_COPY_DIRECTORY);
+
         if(destination == null){
             return; //cannot continue if destination is null
         }
+
+        Map<String, String> copyLoc = Utilities.determineCopyLoc(destination); //possible to be null
+
         /*determine what the new folder should be
         * Should be the same as the media files name*/
         String mediaName = Utilities.parseFilenameFromPath(mediaFile.getMediaName());
         String newFolder = mediaName.trim();
+        String mediaType = mediaFile.getMediaType();
 
         /*If the user has defined a file structure, user this user defined file structure.*/
         String userCopyFileStructure = settings.get(Constants.COPY_FILE_STRUCTURE);
-        if(userCopyFileStructure != null && !userCopyFileStructure.equals("")){
-            String copyLocation = userCopyFileStructure.replace(Constants.TITLE_REPLACEMENT,newFolder);
-            String mediaType = mediaFile.getMediaType();
-            if(mediaType != null) {
+        if(mediaType != null) {
+            if (copyLoc != null) {
+                //reset destination to match for user specified copy loc
+                String tmp = copyLoc.get(mediaType);
+                //dest if null, tmp if !null
+                destination = (tmp == null ? destination : tmp);
+            }
+            if (userCopyFileStructure != null && !userCopyFileStructure.equals("")) {
+                String copyLocation = userCopyFileStructure.replace(Constants.TITLE_REPLACEMENT, newFolder);
                 String seasonNumber = Integer.toString(Integer.parseInt(mediaFile.getSeasonNumber()));
                 copyLocation = copyLocation.replace(Constants.SEASON_REPLACEMENT, Constants.SEASON + " " + seasonNumber);
                 mediaName = Utilities.parseFilenameFromPath(mediaFile.toString());
@@ -67,7 +78,6 @@ public class Copy {
 
         /*Determine the new destination path from the user specified destination
         * plus the new folder determination.*/
-        String mediaType = "";
         String tempMediaType = mediaFile.getMediaType();
         if(tempMediaType != null){
             /*We can have a movie file*/

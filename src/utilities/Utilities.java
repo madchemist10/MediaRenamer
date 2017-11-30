@@ -7,6 +7,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -19,6 +20,30 @@ public class Utilities {
      * Private constructor to defeat instantiation.
      */
     private Utilities(){
+    }
+
+    /**
+     * Helper routine to generate a hash map of all
+     * copy locations that are specified by the settings file
+     * input from {@link Constants#DEFAULT_COPY_DIRECTORY}.
+     * @param input String value that is pulled from the settings file,
+     *              this value should be in the following format:
+     *              #MediaType#-#Location#;...
+     * @return map of all locations that may have data copied.
+     */
+    public static Map<String, String> determineCopyLoc(String input){
+        Map<String, String> map = new HashMap<>();
+        String[] locations = input.split(";");
+        if(locations.length == 0){
+            return null;
+        }
+        for(String loc: locations){
+            String[] l = loc.split("-");
+            if(l.length == 2){
+                map.put(l[0], l[1]);
+            }
+        }
+        return map;
     }
 
     /**

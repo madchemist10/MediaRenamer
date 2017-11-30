@@ -60,35 +60,37 @@ public class Rename {
          * If the file is already renamed, no need to rename a second
          * time.
          */
-        boolean matchFound = false;
-        int numEpChars = 2;
-        Pattern renamedPattern = Pattern.compile(".+S\\d{2}E\\d{" + numEpChars + "}\\..{3}");
-        Matcher renamedMatcher = renamedPattern.matcher(filename);
-        if (renamedMatcher.matches()){
-            matchFound = true;
-        } else {
-            numEpChars++;
-        }
-        renamedPattern = Pattern.compile(".+S\\d{2}E\\d{" + numEpChars + "}\\..{3}");
-        renamedMatcher = renamedPattern.matcher(filename);
-        if (renamedMatcher.matches()){
-            matchFound = true;
-        }
-        if(matchFound){
-            String mediaName = filename.replaceAll("S\\d{2}E\\d{2,3}\\..{3}","");
-            mediaFile.setMediaName(mediaName.trim());
-            String noMediaName = filename.replace(mediaName, "");
-            noMediaName = noMediaName.replace("."+mediaFile.getFileExt(), "");
-            String s = noMediaName.substring(1,3);
-            mediaFile.setSeasonNumber(s);
-            String ep = noMediaName.substring(4, 4+numEpChars);
-            mediaFile.setEpisodeNumber(ep);
-            return;
+        if(mediaFile.getRenames() > 0) {
+            boolean matchFound = false;
+            int numEpChars = 2;
+            Pattern renamedPattern = Pattern.compile(".+S\\d{2}E\\d{" + numEpChars + "}\\..{3}");
+            Matcher renamedMatcher = renamedPattern.matcher(filename);
+            if (renamedMatcher.matches()) {
+                matchFound = true;
+            } else {
+                numEpChars++;
+            }
+            renamedPattern = Pattern.compile(".+S\\d{2}E\\d{" + numEpChars + "}\\..{3}");
+            renamedMatcher = renamedPattern.matcher(filename);
+            if (renamedMatcher.matches()) {
+                matchFound = true;
+            }
+            if (matchFound) {
+                String mediaName = filename.replaceAll("S\\d{2}E\\d{2,3}\\..{3}", "");
+                mediaFile.setMediaName(mediaName.trim());
+                String noMediaName = filename.replace(mediaName, "");
+                noMediaName = noMediaName.replace("." + mediaFile.getFileExt(), "");
+                String s = noMediaName.substring(1, 3);
+                mediaFile.setSeasonNumber(s);
+                String ep = noMediaName.substring(4, 4 + numEpChars);
+                mediaFile.setEpisodeNumber(ep);
+                return;
+            }
         }
 
         /*Do not process files with excluded file types*/
         String excludeFileTypes = settings.get(Constants.EXCLUDE_FILE_TYPES);
-        if(excludeFileTypes != null && excludeFileTypes.contains(mediaFile.getFileExt())){
+        if(excludeFileTypes != null && (mediaFile.getFileExt() != null && excludeFileTypes.contains(mediaFile.getFileExt()))){
             return;
         }
 
