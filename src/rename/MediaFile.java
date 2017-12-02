@@ -203,6 +203,23 @@ public class MediaFile {
             preBuiltMedia = preBuiltMedia.replace(Constants.YYY, getEpisodeNumber());
             preBuiltMedia = preBuiltMedia.replace(Constants.FILE_EXT, getFileExt());
         }
+        if(getMediaName() != null && getSeasonNumber() != null && getEpisodeNumber() != null && getFileExt() != null && getYear() != null){
+            /*
+             * This ensures that the year that is found does not match the season number and episode number that was also
+             * found. This is an edge case and may not be valid for all media.
+             */
+            if(!getYear().equals(seasonNumber+episodeNumber) && !("0"+getYear()).equals(getSeasonNumber()+getEpisodeNumber())) {
+                /*
+                 * We have a file that has both season number and year values.
+                 */
+                preBuiltMedia = Constants.DEFAULT_MEDIA_NAME;
+                preBuiltMedia = preBuiltMedia.replace(Constants.MEDIA_NAME, getMediaName() + " " + getYear());
+                preBuiltMedia = preBuiltMedia.replace(Constants.XX, getSeasonNumber());
+                preBuiltMedia = preBuiltMedia.replace(Constants.YYY, getEpisodeNumber());
+                preBuiltMedia = preBuiltMedia.replace(Constants.FILE_EXT, getFileExt());
+                return preBuiltMedia;
+            }
+        }
         if(getMediaName() != null && getFileExt() != null && getYear() != null){
             //if year is empty string, build media name ourselves.
             if(getYear().equals("")){

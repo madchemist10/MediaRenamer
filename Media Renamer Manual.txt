@@ -172,6 +172,11 @@ with the same media name, will use this defined media type.
 The rename module is the executable section that attempts to determine
 how to rename the media file in the format of {title} S{sNum}E{eNum}.{fileExt}.
 
+Assumption added in 1.0.4:
+    Media that contains year as well as calculated {sNum} and {eNum}, will
+    produce names that are in the format of {title} {year} S{sNum}E{eNum}.{fileExt},
+    unless the {sNum} and {eNum} are derived from the {year}.
+
 ============================
 =       Copy Module        =
 ============================

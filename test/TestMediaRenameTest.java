@@ -915,4 +915,15 @@ public class TestMediaRenameTest extends TestCase{
         renameModule.rename(testMediaFile);
         assertEquals("The Big Bang Theory S01E01.mp4", testMediaFile.toString());
     }
+
+    /**
+     * Test case where filename is tv show with year in filename.
+     */
+    public void test_MediaRename_drWho_2005(){
+        String originalFileName = "Doctor.Who.2005.S09E05.HDTV.x264-TASTETV.mp4";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("Doctor Who 2005 S09E05.mp4", testMediaFile.toString());
+    }
 }
