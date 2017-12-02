@@ -938,4 +938,18 @@ public class TestMediaRenameTest extends TestCase{
         renameModule.rename(testMediaFile);
         assertEquals("doctor who 2005 S09E02.mp4", testMediaFile.toString());
     }
+
+    /**
+     * Test case where filename is tv show with year in filename.
+     * Edge case with diff format. Contains x to separate ep
+     * and s nums.
+     */
+    public void test_MediaRename_drWho_2005_2(){
+        String originalFileName = "doctor_who_2005.10x02.720p_hdtv_x264-fov.mkv";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("doctor who 2005 S10E02.mkv", testMediaFile.toString());
+    }
+
 }

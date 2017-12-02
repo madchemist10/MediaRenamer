@@ -94,6 +94,12 @@ public class Rename {
             return;
         }
 
+        String UserMaxEpisodeCount = settings.get(Constants.DEFAULT_MAX_EPISODE_COUNT);
+        int maxNum = 999;
+        if(UserMaxEpisodeCount != null){
+            maxNum = Integer.parseInt(UserMaxEpisodeCount);
+        }
+
         //remove file extension from temp filename
         tempFileName = tempFileName.replace("."+mediaFile.getFileExt(),"");
 
@@ -137,9 +143,11 @@ public class Rename {
             numberReplacement = numberReplacement.trim();
             //Step 3: replace all elements that are not digits with spaces
             String newNumberToReplace = numberReplacement.replaceAll("[^0-9]"," ");
-            /*Step 4: replace first instance where the original pattern found in step 1
-            * with the new pattern that excludes the non-numerical character {# ##}*/
-            tempFileName = tempFileName.replaceFirst(numberReplacement,newNumberToReplace);
+            if(!parseSNumENumWithSpace(mediaFile, newNumberToReplace, maxNum)) {
+                /*Step 4: replace first instance where the original pattern found in step 1
+                * with the new pattern that excludes the non-numerical character {# ##}*/
+                tempFileName = tempFileName.replaceFirst(numberReplacement, newNumberToReplace);
+            }
         }
 
         /*It is possible that the show title is followed by numbers that
@@ -164,15 +172,13 @@ public class Rename {
          *S#E###
          *S##E#
          *S##E###
+         * Only try to find if they are not previously set.
          */
         String episodeNumber;
         String seasonNumber;
-        String UserMaxEpisodeCount = settings.get(Constants.DEFAULT_MAX_EPISODE_COUNT);
-        int maxNum = 999;
-        if(UserMaxEpisodeCount != null){
-            maxNum = Integer.parseInt(UserMaxEpisodeCount);
-        }
-        if(!seasonEpisodeMatcher(mediaFile, tempFileName)){
+        if(mediaFile.getSeasonNumber() == null &&
+                mediaFile.getEpisodeNumber() == null &&
+                !seasonEpisodeMatcher(mediaFile, tempFileName)){
             //assign episode number to mediaFile
 
             episodeNumber = parseEpisodeNumber(tempFileName, maxNum);
@@ -201,24 +207,10 @@ public class Rename {
             tempFileName = tempFileName.trim(); //remove extra spaces
             /*
              * Look for the Pattern {## ##} which could have been
-             * the season number and episode number.
+             * the season number and episode number. The continue
+             * processing if false return.
              */
-            Pattern epPat = Pattern.compile(".+\\d{2}\\s\\d{2}.+");
-            Matcher epPatMatch = epPat.matcher(tempFileName);
-            boolean foundEpPatMatch = false;
-            if(epPatMatch.matches()){
-                foundEpPatMatch = true;
-                String notEpMatch = tempFileName.replaceAll("\\d{2}\\s\\d{2}","").trim();
-                String temp = tempFileName;
-                String[] str = notEpMatch.split(" ");
-                for(String s : str){
-                    temp = temp.replaceAll(s, "").trim();
-                }
-                mediaFile.setEpisodeNumber(parseEpisodeNumber(temp, maxNum));
-                mediaFile.setSeasonNumber(parseSeasonNumber(temp, maxNum));
-            }
-
-            if(!foundEpPatMatch) {
+            if(!parseSNumENumWithSpace(mediaFile, tempFileName, maxNum)) {
                 String[] subParts = tempFileName.split(" ");
                 /*Look for 2 or 3 digit numbers separated by spaces from the
                 * sub part split.*/
@@ -343,6 +335,34 @@ public class Rename {
 
         /*Attempt to replace current episode number with user specified one.*/
         verifyEpisodeNumber(mediaFile);
+    }
+
+    /**
+     * Helper routine to aid in parsing season number and episode
+     * number that is separated by a single space.
+     * @param mediaFile that needs episode number and season number
+     * @param str that contains sNum and eNum in format {## ##}
+     */
+    private static boolean parseSNumENumWithSpace(MediaFile mediaFile, String str, int maxNum){
+        Pattern epPat = Pattern.compile(".+\\d{2}\\s\\d{2}.+");
+        Pattern epPatSimple = Pattern.compile("\\d{2}\\s\\d{2}");
+        Matcher epPatMatch = epPat.matcher(str);
+        Matcher epPatMatchSimple = epPatSimple.matcher(str);
+        boolean foundEpPatMatch = false;
+        if(epPatMatch.matches() || epPatMatchSimple.matches()){
+            foundEpPatMatch = true;
+            String notEpMatch = str.replaceAll("\\d{2}\\s\\d{2}","").trim();
+            String temp = str;
+            if(!notEpMatch.equals("")) {
+                String[] strSplit = notEpMatch.split(" ");
+                for (String s : strSplit) {
+                    temp = temp.replaceAll(s, "").trim();
+                }
+            }
+            mediaFile.setEpisodeNumber(parseEpisodeNumber(temp, maxNum));
+            mediaFile.setSeasonNumber(parseSeasonNumber(temp, maxNum));
+        }
+        return foundEpPatMatch;
     }
 
     /**
