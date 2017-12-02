@@ -903,4 +903,16 @@ public class TestMediaRenameTest extends TestCase{
         renameModule.rename(testMediaFile);
         assertEquals(null, testMediaFile.toString());
     }
+
+    /**
+     * Test case where filename is tv show with codec with
+     * capital X in filename.
+     */
+    public void test_MediaRename_bigBang_codec(){
+        String originalFileName = "The.Big.Bang.Theory.S01E01.720p.HDTV.X264-MRSK.mp4";
+        MediaFile testMediaFile = new MediaFile(originalFileName);
+        Rename renameModule = new Rename(settings, specialRenameCases, specialEpisodeCases);
+        renameModule.rename(testMediaFile);
+        assertEquals("The Big Bang Theory S01E01.mp4", testMediaFile.toString());
+    }
 }
