@@ -167,13 +167,14 @@ public class Rename {
          */
         String episodeNumber;
         String seasonNumber;
+        String UserMaxEpisodeCount = settings.get(Constants.DEFAULT_MAX_EPISODE_COUNT);
+        int maxNum = 999;
+        if(UserMaxEpisodeCount != null){
+            maxNum = Integer.parseInt(UserMaxEpisodeCount);
+        }
         if(!seasonEpisodeMatcher(mediaFile, tempFileName)){
             //assign episode number to mediaFile
-            String UserMaxEpisodeCount = settings.get(Constants.DEFAULT_MAX_EPISODE_COUNT);
-            int maxNum = 999;
-            if(UserMaxEpisodeCount != null){
-                maxNum = Integer.parseInt(UserMaxEpisodeCount);
-            }
+
             episodeNumber = parseEpisodeNumber(tempFileName, maxNum);
             mediaFile.setEpisodeNumber(episodeNumber);
 
@@ -198,17 +199,38 @@ public class Rename {
         /*It is possible that the episode number parsing failed.*/
         if(episodeNumber == null){
             tempFileName = tempFileName.trim(); //remove extra spaces
-            String[] subParts = tempFileName.split(" ");
-            /*Look for 2 or 3 digit numbers separated by spaces from the
-            * sub part split.*/
-            Pattern episodePattern = Pattern.compile("\\d{2,3}");
-            for(String part: subParts){
-                Matcher episodeMatcher = episodePattern.matcher(part);
-                //if we found a match, assign the episode number.
-                if(episodeMatcher.matches()){
-                    episodeNumber = part;
-                    mediaFile.setEpisodeNumber(episodeNumber);
-                    break;
+            /*
+             * Look for the Pattern {## ##} which could have been
+             * the season number and episode number.
+             */
+            Pattern epPat = Pattern.compile(".+\\d{2}\\s\\d{2}.+");
+            Matcher epPatMatch = epPat.matcher(tempFileName);
+            boolean foundEpPatMatch = false;
+            if(epPatMatch.matches()){
+                foundEpPatMatch = true;
+                String notEpMatch = tempFileName.replaceAll("\\d{2}\\s\\d{2}","").trim();
+                String temp = tempFileName;
+                String[] str = notEpMatch.split(" ");
+                for(String s : str){
+                    temp = temp.replaceAll(s, "").trim();
+                }
+                mediaFile.setEpisodeNumber(parseEpisodeNumber(temp, maxNum));
+                mediaFile.setSeasonNumber(parseSeasonNumber(temp, maxNum));
+            }
+
+            if(!foundEpPatMatch) {
+                String[] subParts = tempFileName.split(" ");
+                /*Look for 2 or 3 digit numbers separated by spaces from the
+                * sub part split.*/
+                Pattern episodePattern = Pattern.compile("\\d{2,3}");
+                for (String part : subParts) {
+                    Matcher episodeMatcher = episodePattern.matcher(part);
+                    //if we found a match, assign the episode number.
+                    if (episodeMatcher.matches()) {
+                        episodeNumber = part;
+                        mediaFile.setEpisodeNumber(episodeNumber);
+                        break;
+                    }
                 }
             }
         }
