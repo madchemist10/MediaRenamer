@@ -11,6 +11,7 @@ Table of Contents:
 1.  Settings
 2.  Rename Module
 3.  Copy Module
+4.  Backup
 
 
 =========================
@@ -56,6 +57,11 @@ MaxEpisodeCount
 	This is the directory the application will point to for renaming files.
 >>DefaultCopyDir
 	This is the directory the application will point to for copying files.
+	    Supports the following format:
+	        MEDIA_TYPE-DIR;MEDIA_TYPE-DIR
+	        The MEDIA_TYPE refers to the type of media defined in
+	        the mediaDivision.txt. The DIR is the location that the media
+	        should be stored when copied.
 >>MaxEpisodeCount
 	This is the maximum number of episodes that the user would like for
 	the application to recognize.
@@ -186,3 +192,15 @@ exists, then the original file is deleted.
 Modification to CopyModule:
 	If the user has specified mediaDivision, the destination of the copied file
 	will reflect the subdirectory set by the user.
+
+============================
+=      Backup Module       =
+============================
+
+The backup module is responsible for backing up one set of media to another
+directory.
+
+The settings.txt allows the new tag of:
+    Backup: TRUE,#SRC#,#DEST#,#EPOCH_TIME#
+    If this tag is present in the settings.txt then it takes priority over other
+    options.
